@@ -1,0 +1,85 @@
+---
+import '@flaviocodes/ui/styles/global.css';
+
+import BaseHead from '../components/BaseHead.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { type Locale, localeFromPath } from '../i18n/config';
+import { getTranslations } from '../i18n/t';
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  locale?: Locale;
+  ogImage?: string | undefined;
+  noindex?: boolean;
+}
+
+const { title, description, ogImage, noindex = false } = Astro.props;
+// Astro.currentLocale is set by the i18n routing config; the path is the fallback
+// for routes outside the locale tree (e.g. the 404 page).
+const locale = (Astro.props.locale ?? Astro.currentLocale ?? localeFromPath(Astro.url.pathname)) as Locale;
+const t = getTranslations(locale);
+
+const analyticsToken = site.analytics.cloudflareToken;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <BaseHead
+      title={title}
+      description={description}
+      locale={locale}
+      ogImage={ogImage}
+      noindex={noindex}
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t('nav.skipToContent')}</a>
+
+    <SiteHeader locale={locale} />
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <SiteFooter locale={locale} />
+
+    {
+      /*
+        Cloudflare Web Analytics: cookieless, so it needs no consent banner.
+        Empty token (the default) means no script at all — opt in per project by
+        filling in `analytics.cloudflareToken` in src/data/site.json.
+      */
+      analyticsToken && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={`{"token": "${analyticsToken}"}`}
+        />
+      )
+    }
+  </body>
+</html>
+
+<style>
+  .skip-link {
+    position: absolute;
+    inset-block-start: var(--space-xs);
+    inset-inline-start: var(--space-xs);
+    z-index: var(--z-modal);
+    padding: var(--space-xs) var(--space-md);
+    background-color: var(--color-accent);
+    color: var(--color-text-on-accent);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transform: translateY(-200%);
+  }
+
+  .skip-link:focus-visible {
+    transform: translateY(0);
+  }
+</style>

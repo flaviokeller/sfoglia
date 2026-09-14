@@ -1,0 +1,71 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import { inLocale } from '../../content.config';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactSection from '../../sections/ContactSection.astro';
+import Faq from '../../sections/Faq.astro';
+import Hero from '../../sections/Hero.astro';
+import OpeningHours from '../../sections/OpeningHours.astro';
+import ServiceGrid from '../../sections/ServiceGrid.astro';
+import Testimonials from '../../sections/Testimonials.astro';
+import TextImage from '../../sections/TextImage.astro';
+import { LOCALES, type Locale } from '../../i18n/config';
+import { getTranslations } from '../../i18n/t';
+
+export function getStaticPaths() {
+  return LOCALES.map((locale) => ({ params: { locale } }));
+}
+
+const locale = Astro.params.locale as Locale;
+const t = getTranslations(locale);
+
+const page = await getEntry('pages', `${locale}/home`);
+if (!page) {
+  // A missing home page is a build-time content error, not a runtime 404.
+  throw new Error(`Missing content: src/content/pages/${locale}/home.md`);
+}
+const { Content } = await render(page);
+
+const byOrder = <T extends { data: { order: number } }>(a: T, b: T) => a.data.order - b.data.order;
+const ofLocale = inLocale(locale);
+
+const services = (await getCollection('services', ofLocale)).sort(byOrder);
+const faq = (await getCollection('faq', ofLocale)).sort(byOrder);
+const testimonials = (await getCollection('testimonials', ofLocale)).sort(byOrder);
+---
+
+<BaseLayout
+  title={page.data.seo.title}
+  description={page.data.seo.description}
+  locale={locale}
+  noindex={page.data.seo.noindex}
+>
+  <Hero
+    eyebrow={page.data.eyebrow}
+    title={page.data.title}
+    lead={page.data.lead}
+    primaryCta={{ href: `/${locale}/kontakt/`, label: t('nav.contact') }}
+    secondaryCta={{ href: `/${locale}/leistungen/`, label: t('nav.services') }}
+  />
+
+  <TextImage title={page.data.title} surface>
+    <Content />
+  </TextImage>
+
+  <ServiceGrid
+    title={t('nav.services')}
+    services={services.map((entry) => ({
+      title: entry.data.title,
+      summary: entry.data.summary,
+    }))}
+    surface={false}
+  />
+
+  <Testimonials testimonials={testimonials.map((entry) => entry.data)} />
+
+  <OpeningHours locale={locale} />
+
+  <Faq title="FAQ" items={faq.map((entry) => entry.data)} />
+
+  <ContactSection locale={locale} />
+</BaseLayout>

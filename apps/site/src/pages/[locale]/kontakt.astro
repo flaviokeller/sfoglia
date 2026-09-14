@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactSection from '../../sections/ContactSection.astro';
+import OpeningHours from '../../sections/OpeningHours.astro';
+import { LOCALES, type Locale } from '../../i18n/config';
+import { getTranslations } from '../../i18n/t';
+import { site } from '../../data/site';
+
+export function getStaticPaths() {
+  return LOCALES.map((locale) => ({ params: { locale } }));
+}
+
+const locale = Astro.params.locale as Locale;
+const t = getTranslations(locale);
+---
+
+<BaseLayout
+  title={`${t('nav.contact')} — ${site.businessName}`}
+  description={`${site.businessName}, ${site.street}, ${site.postalCode} ${site.city}`}
+  locale={locale}
+>
+  <ContactSection locale={locale} />
+  <OpeningHours locale={locale} />
+</BaseLayout>

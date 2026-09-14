@@ -1,0 +1,37 @@
+{
+  "name": "sfoglia",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/site",
+    "build": "npm run build --workspaces --if-present",
+    "storybook": "npm run storybook --workspace=packages/ui",
+    "build-storybook": "npm run build-storybook --workspace=packages/ui",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test:e2e": "playwright test",
+    "prepare": "lefthook install"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.13",
+    "@playwright/test": "^1.63.0",
+    "lefthook": "^2.1.12",
+    "typescript": "^5.9.3"
+  },
+  "allowScripts": {
+    "lefthook@2.1.12": true,
+    "esbuild@0.28.2": true,
+    "sharp@0.34.5": true,
+    "sharp@0.35.4": true,
+    "esbuild@0.28.1": true,
+    "fsevents@2.3.3": true
+  }
+}

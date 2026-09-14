@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LOCALES, type Locale } from '../../i18n/config';
+import { getTranslations } from '../../i18n/t';
+import { site } from '../../data/site';
+
+export function getStaticPaths() {
+  return LOCALES.map((locale) => ({ params: { locale } }));
+}
+
+const locale = Astro.params.locale as Locale;
+const t = getTranslations(locale);
+---
+
+<BaseLayout title={`${t('footer.legal')} — ${site.businessName}`} description={t('footer.legal')} locale={locale}>
+  <section class="section">
+    <div class="container prose stack">
+      <h1 class="heading-1">{t('footer.legal')}</h1>
+
+      <!--
+        SETUP: have the client confirm these details before launch. See
+        docs/02-legal-privacy-checklist.md — an Impressum is expected for any
+        commercially operated Swiss site.
+      -->
+      <h2 class="heading-3">{locale === 'de' ? 'Verantwortlich' : 'Responsible'}</h2>
+      <p>
+        {site.legalName}<br />
+        {site.street}<br />
+        {site.postalCode} {site.city}
+      </p>
+
+      <p>
+        <a class="link" href={`mailto:${site.email}`}>{site.email}</a><br />
+        <a class="link" href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a>
+      </p>
+
+      <h2 class="heading-3">{locale === 'de' ? 'Handelsregister / UID' : 'Commercial register / UID'}</h2>
+      <p class="text-muted">CHE-000.000.000 — SETUP: replace with the real UID, or delete this block.</p>
+
+      <h2 class="heading-3">{locale === 'de' ? 'Haftungsausschluss' : 'Disclaimer'}</h2>
+      <p>
+        {
+          locale === 'de'
+            ? 'Die Inhalte dieser Website werden mit Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität kann jedoch keine Gewähr übernommen werden.'
+            : 'The content of this website is prepared with care. No guarantee is given as to its accuracy, completeness or timeliness.'
+        }
+      </p>
+    </div>
+  </section>
+</BaseLayout>

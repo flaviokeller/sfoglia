@@ -1,0 +1,45 @@
+---
+import { getCollection } from 'astro:content';
+import { inLocale } from '../../content.config';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LOCALES, type Locale } from '../../i18n/config';
+import { getTranslations } from '../../i18n/t';
+import { site } from '../../data/site';
+
+export function getStaticPaths() {
+  return LOCALES.map((locale) => ({ params: { locale } }));
+}
+
+const locale = Astro.params.locale as Locale;
+const t = getTranslations(locale);
+const team = (await getCollection('team', inLocale(locale))).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<BaseLayout title={`${t('nav.team')} — ${site.businessName}`} description={site.tagline} locale={locale}>
+  <section class="section">
+    <div class="container stack">
+      <h1 class="heading-1">{t('nav.team')}</h1>
+      <ul class="grid grid--auto team" role="list">
+        {
+          team.map((member) => (
+            <li>
+              <article class="card">
+                <h2 class="heading-4">{member.data.name}</h2>
+                <p class="text-muted">{member.data.role}</p>
+              </article>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .team {
+    margin-block-start: var(--space-xl);
+    padding: 0;
+  }
+</style>

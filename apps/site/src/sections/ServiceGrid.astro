@@ -1,0 +1,77 @@
+---
+interface Service {
+  title: string;
+  summary: string;
+  href?: string | undefined;
+}
+
+interface Props {
+  eyebrow?: string | undefined;
+  title: string;
+  lead?: string | undefined;
+  services: Service[];
+  surface?: boolean;
+}
+
+const { eyebrow, title, lead, services, surface = true } = Astro.props;
+---
+
+<section class:list={['section', surface && 'section--surface']}>
+  <div class="container stack">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h2 class="heading-2">{title}</h2>
+    {lead && <p class="lead">{lead}</p>}
+
+    <ul class="grid grid--auto service-grid" role="list">
+      {
+        services.map((service) => (
+          <li>
+            <article class:list={['card', service.href && 'card--interactive']}>
+              <h3 class="heading-4">
+                {service.href ? (
+                  <a class="service-grid__link" href={service.href}>
+                    {service.title}
+                  </a>
+                ) : (
+                  service.title
+                )}
+              </h3>
+              <p class="text-muted">{service.summary}</p>
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .service-grid {
+    margin-block-start: var(--space-xl);
+    padding: 0;
+  }
+
+  .service-grid > li {
+    display: flex;
+  }
+
+  .service-grid article {
+    inline-size: 100%;
+  }
+
+  .service-grid__link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Stretch the link's hit area over the whole card. */
+  .service-grid__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .service-grid article {
+    position: relative;
+  }
+</style>

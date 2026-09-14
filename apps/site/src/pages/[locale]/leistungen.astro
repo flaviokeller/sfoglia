@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import { inLocale } from '../../content.config';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ServiceGrid from '../../sections/ServiceGrid.astro';
+import { LOCALES, type Locale } from '../../i18n/config';
+import { getTranslations } from '../../i18n/t';
+import { site } from '../../data/site';
+
+export function getStaticPaths() {
+  return LOCALES.map((locale) => ({ params: { locale } }));
+}
+
+const locale = Astro.params.locale as Locale;
+const t = getTranslations(locale);
+const services = (await getCollection('services', inLocale(locale))).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<BaseLayout
+  title={`${t('nav.services')} — ${site.businessName}`}
+  description={site.tagline}
+  locale={locale}
+>
+  <ServiceGrid
+    eyebrow={site.businessName}
+    title={t('nav.services')}
+    services={services.map((entry) => ({ title: entry.data.title, summary: entry.data.summary }))}
+    surface={false}
+  />
+</BaseLayout>

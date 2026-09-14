@@ -1,0 +1,37 @@
+---
+/**
+ * Root entry. Because `prefixDefaultLocale: true`, `/` is not a real page —
+ * Astro requires this file in order to emit the redirect to `/de/`.
+ *
+ * The markup below is the no-JS / crawler fallback: a plain language chooser,
+ * so a visitor is never stranded if the redirect does not fire.
+ */
+import { DEFAULT_LOCALE, LOCALES, LOCALE_NAMES } from '../i18n/config';
+import { site } from '../data/site';
+---
+
+<!doctype html>
+<html lang={DEFAULT_LOCALE}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{site.businessName}</title>
+    <meta http-equiv="refresh" content={`0; url=/${DEFAULT_LOCALE}/`} />
+    <link rel="canonical" href={`/${DEFAULT_LOCALE}/`} />
+    <meta name="robots" content="noindex" />
+  </head>
+  <body>
+    <h1>{site.businessName}</h1>
+    <ul>
+      {
+        LOCALES.map((locale) => (
+          <li>
+            <a href={`/${locale}/`} hreflang={locale}>
+              {LOCALE_NAMES[locale]}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </body>
+</html>

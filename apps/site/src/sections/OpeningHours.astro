@@ -1,0 +1,107 @@
+---
+import type { Locale } from '../i18n/config';
+import { getTranslations } from '../i18n/t';
+import { DAY_NAMES, site } from '../data/site';
+
+interface Props {
+  locale: Locale;
+  surface?: boolean;
+}
+
+const { locale, surface = true } = Astro.props;
+const t = getTranslations(locale);
+const days = DAY_NAMES[locale];
+
+// NB: "today" must NOT be computed here. This is a static build — a build-time
+// date would freeze on whatever day the site was deployed. It is set at runtime
+// by the inline script below instead.
+---
+
+<section class:list={['section', surface && 'section--surface']}>
+  <div class="container hours">
+    <div class="stack">
+      <h2 class="heading-2">{t('hours.title')}</h2>
+      <address class="hours__address">
+        {site.street}<br />
+        {site.postalCode} {site.city}
+      </address>
+      <p>
+        <a class="link" href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a>
+      </p>
+      <p><a class="link" href={site.mapUrl} rel="noopener">{site.city} · Karte öffnen</a></p>
+    </div>
+
+    <table class="hours__table">
+      <tbody>
+        {
+          site.openingHours.map((entry) => (
+            <tr data-day={entry.day}>
+              <th scope="row">{days[entry.day]}</th>
+              <td>
+                {entry.opens && entry.closes ? (
+                  <>
+                    {entry.opens}&ndash;{entry.closes}
+                  </>
+                ) : (
+                  <span class="text-muted">{t('hours.closed')}</span>
+                )}
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+  // Highlights the current day. Runs on every page view, so it stays correct
+  // regardless of when the site was last built.
+  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  const today = days[new Date().getDay()];
+  for (const row of document.querySelectorAll<HTMLTableRowElement>('.hours__table tr[data-day]')) {
+    if (row.dataset.day === today) row.dataset.today = 'true';
+  }
+</script>
+
+<style>
+  .hours {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+    gap: var(--space-2xl);
+    align-items: start;
+  }
+
+  .hours__address {
+    font-style: normal;
+    color: var(--color-text-muted);
+  }
+
+  .hours__table {
+    inline-size: 100%;
+    border-collapse: collapse;
+  }
+
+  .hours__table th,
+  .hours__table td {
+    padding-block: var(--space-sm);
+    border-block-end: 1px solid var(--color-border);
+    text-align: start;
+  }
+
+  .hours__table th {
+    font-weight: var(--weight-normal);
+    color: var(--color-text-muted);
+  }
+
+  .hours__table td {
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hours__table tr[data-today='true'] th,
+  .hours__table tr[data-today='true'] td {
+    font-weight: var(--weight-semibold);
+    color: var(--color-text);
+  }
+</style>

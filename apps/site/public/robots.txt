@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /keystatic
+
+# SETUP: replace with the client's production domain.
+Sitemap: https://example.ch/sitemap-index.xml

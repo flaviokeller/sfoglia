@@ -1,0 +1,112 @@
+---
+import SiteNav from '@flaviocodes/ui/components/SiteNav.vue';
+
+import { LOCALE_NAMES, LOCALES, type Locale, withLocale } from '../i18n/config';
+import { getTranslations } from '../i18n/t';
+import { site } from '../data/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+const path = Astro.url.pathname;
+
+const links = [
+  { href: `/${locale}/`, label: t('nav.home') },
+  { href: `/${locale}/leistungen/`, label: t('nav.services') },
+  { href: `/${locale}/team/`, label: t('nav.team') },
+  { href: `/${locale}/kontakt/`, label: t('nav.contact') },
+];
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="site-header__brand" href={`/${locale}/`}>{site.businessName}</a>
+
+    <div class="site-header__right">
+      {/*
+        client:load rather than client:visible — the header is above the fold, and
+        a hamburger that does nothing for the first moments is worse than the few
+        extra kilobytes of eager hydration.
+      */}
+      <SiteNav
+        client:load
+        links={links}
+        current={path}
+        menuLabel={t('nav.menu')}
+        closeLabel={t('nav.close')}
+      />
+
+      <nav class="lang-switch" aria-label={t('language.switch')}>
+        {
+          LOCALES.map((code) => (
+            <a
+              class="lang-switch__link"
+              href={withLocale(path, code)}
+              hreflang={code}
+              aria-current={code === locale ? 'true' : 'false'}
+            >
+              <abbr title={LOCALE_NAMES[code]}>{code.toUpperCase()}</abbr>
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: var(--z-sticky);
+    background-color: color-mix(in oklab, var(--color-canvas) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+    padding-block: var(--space-sm);
+  }
+
+  .site-header__brand {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .site-header__right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .lang-switch {
+    display: flex;
+    gap: var(--space-2xs);
+  }
+
+  .lang-switch__link {
+    padding-inline: var(--space-2xs);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-subtle);
+    text-decoration: none;
+  }
+
+  .lang-switch__link[aria-current='true'] {
+    color: var(--color-accent-text);
+  }
+
+  .lang-switch abbr {
+    text-decoration: none;
+  }
+</style>

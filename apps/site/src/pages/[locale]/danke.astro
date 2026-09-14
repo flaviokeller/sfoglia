@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LOCALES, type Locale } from '../../i18n/config';
+import { getTranslations } from '../../i18n/t';
+
+export function getStaticPaths() {
+  return LOCALES.map((locale) => ({ params: { locale } }));
+}
+
+const locale = Astro.params.locale as Locale;
+const t = getTranslations(locale);
+---
+
+{/* Landing page for the no-JS form POST. Not useful to index. */}
+<BaseLayout title={t('contact.form.success')} description={t('contact.form.success')} locale={locale} noindex>
+  <section class="section">
+    <div class="container stack">
+      <h1 class="heading-1">{t('contact.form.success')}</h1>
+      <p><a class="button button--primary" href={`/${locale}/`}>{t('notFound.back')}</a></p>
+    </div>
+  </section>
+</BaseLayout>

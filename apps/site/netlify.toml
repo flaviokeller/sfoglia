@@ -1,0 +1,58 @@
+# Netlify config for the CLIENT SITE.
+#
+# In the Netlify UI this site must have **Base directory = apps/site**, so that
+# this file is picked up and the adapter's function output lines up. The
+# Storybook site is a SECOND Netlify site from the same repo, with
+# Base directory = packages/ui. See SETUP.md.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# --------------------------------------------------------------------------- #
+# Root redirect
+#
+# `/` is not a real page (all locales are prefixed). Redirecting here at the CDN
+# is much better than the meta-refresh Astro emits — it is instant and costs no
+# render. Language-conditional rules are evaluated in order; the last is the
+# catch-all fallback to the default locale.
+# --------------------------------------------------------------------------- #
+[[redirects]]
+  from = "/"
+  to = "/en/"
+  status = 302
+  force = true
+  conditions = { Language = ["en"] }
+
+[[redirects]]
+  from = "/"
+  to = "/de/"
+  status = 302
+  force = true
+
+# --------------------------------------------------------------------------- #
+# Headers
+# --------------------------------------------------------------------------- #
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    # Lock down what the site may do. Deliberately restrictive: this site needs
+    # no camera, mic or geolocation. Widen only when a feature actually requires it.
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+
+# Astro fingerprints these filenames, so they can be cached forever.
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

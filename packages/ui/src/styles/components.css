@@ -1,0 +1,295 @@
+/*
+ * Styles for the Lit components.
+ *
+ * These live here rather than in each component's `static styles` because the
+ * components render to light DOM — so their markup is crawlable, styleable by
+ * the page, and visible before hydration. Shadow DOM would isolate them from
+ * the design tokens, which is exactly what we do not want.
+ */
+
+/* ------------------------------------------------------------------ *
+ * fk-nav
+ * ------------------------------------------------------------------ */
+.nav {
+  display: flex;
+  align-items: center;
+}
+
+.nav__bar {
+  display: flex;
+  gap: var(--space-lg);
+}
+
+.nav__link {
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: var(--weight-medium);
+  padding-block: var(--space-2xs);
+  border-block-end: 2px solid transparent;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.nav__link:hover {
+  color: var(--color-accent-text);
+}
+
+.nav__link[aria-current="page"] {
+  color: var(--color-accent-text);
+  border-block-end-color: var(--color-accent);
+}
+
+.nav__toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2xs);
+  background: none;
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  cursor: pointer;
+  position: relative;
+  z-index: var(--z-modal);
+}
+
+.nav__drawer,
+.nav__backdrop {
+  display: none;
+}
+
+/* Mobile drawer. The one media query in the system — a drawer genuinely is a
+   different layout, not a resized one. */
+@media (width < 48rem) {
+  .nav__bar {
+    display: none;
+  }
+
+  .nav__toggle {
+    display: inline-flex;
+  }
+
+  .nav__drawer:not([hidden]) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    position: fixed;
+    inset-block: 0;
+    inset-inline-end: 0;
+    inline-size: min(20rem, 80vw);
+    padding: var(--space-4xl) var(--space-xl) var(--space-xl);
+    background-color: var(--color-surface-raised);
+    border-inline-start: 1px solid var(--color-border);
+    box-shadow: var(--shadow-lg);
+    z-index: var(--z-overlay);
+    animation: fk-slide-in var(--duration-base) var(--ease-out);
+  }
+
+  .nav__drawer .nav__link {
+    font-size: var(--text-lg);
+  }
+
+  .nav__backdrop:not([hidden]) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background-color: oklch(0% 0 0 / 0.4);
+    z-index: var(--z-sticky);
+  }
+}
+
+@keyframes fk-slide-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * fk-accordion
+ * ------------------------------------------------------------------ */
+.accordion {
+  border-block-start: 1px solid var(--color-border);
+}
+
+.accordion__item {
+  border-block-end: 1px solid var(--color-border);
+}
+
+.accordion__heading {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.accordion__trigger {
+  inline-size: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-block: var(--space-md);
+  background: none;
+  border: none;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  text-align: start;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.accordion__trigger:hover {
+  color: var(--color-accent-text);
+}
+
+.accordion__icon {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.accordion__item[data-open] .accordion__icon {
+  transform: rotate(180deg);
+}
+
+.accordion__content {
+  padding-block-end: var(--space-md);
+  color: var(--color-text-muted);
+  max-inline-size: var(--measure);
+}
+
+/* ------------------------------------------------------------------ *
+ * fk-contact-form
+ * ------------------------------------------------------------------ */
+.form {
+  max-inline-size: 32rem;
+  --flow-space: var(--space-md);
+}
+
+.form__status {
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  font-weight: var(--weight-medium);
+}
+
+.form__status--success {
+  background-color: var(--color-success-surface);
+  color: var(--color-success);
+}
+
+.form__status--error {
+  background-color: var(--color-danger-surface);
+  color: var(--color-danger);
+}
+
+/* ------------------------------------------------------------------ *
+ * fk-gallery
+ * ------------------------------------------------------------------ */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(14rem, 100%), 1fr));
+  gap: var(--space-sm);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.gallery__trigger {
+  display: block;
+  inline-size: 100%;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface-sunken);
+  cursor: zoom-in;
+}
+
+.gallery__trigger img {
+  inline-size: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+
+.gallery__trigger:hover img {
+  transform: scale(1.04);
+}
+
+.lightbox {
+  padding: 0;
+  border: none;
+  background: transparent;
+  max-inline-size: 100vw;
+  max-block-size: 100svb;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.lightbox::backdrop {
+  background-color: oklch(0% 0 0 / 0.85);
+}
+
+.lightbox__inner {
+  position: relative;
+  display: grid;
+  place-items: center;
+  block-size: 100%;
+  padding: var(--space-xl);
+}
+
+.lightbox__figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-block-size: 100%;
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: the higher-specificity rule
+   is `.gallery__trigger:hover img` (a grid thumbnail). These two never match the
+   same element — one is in the grid, one inside the dialog — so there is no
+   cascade conflict to resolve. */
+.lightbox__figure img {
+  max-block-size: 80svb;
+  max-inline-size: 100%;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+}
+
+.lightbox__caption {
+  color: oklch(90% 0 0);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+.lightbox__close,
+.lightbox__nav {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm);
+  background-color: oklch(100% 0 0 / 0.12);
+  border: none;
+  border-radius: var(--radius-full);
+  color: oklch(100% 0 0);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.lightbox__close:hover,
+.lightbox__nav:hover {
+  background-color: oklch(100% 0 0 / 0.25);
+}
+
+.lightbox__close {
+  inset-block-start: var(--space-md);
+  inset-inline-end: var(--space-md);
+}
+
+.lightbox__nav--prev {
+  inset-inline-start: var(--space-md);
+}
+
+.lightbox__nav--next {
+  inset-inline-end: var(--space-md);
+}

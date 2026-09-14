@@ -1,0 +1,71 @@
+---
+interface Testimonial {
+  quote: string;
+  author: string;
+  context?: string | undefined;
+}
+
+interface Props {
+  title?: string | undefined;
+  testimonials: Testimonial[];
+}
+
+const { title, testimonials } = Astro.props;
+---
+
+<section class="section">
+  <div class="container stack">
+    {title && <h2 class="heading-2">{title}</h2>}
+
+    <ul class="grid grid--auto testimonials" role="list">
+      {
+        testimonials.map((item) => (
+          <li>
+            <figure class="card testimonials__item">
+              <blockquote class="testimonials__quote">
+                <p>{item.quote}</p>
+              </blockquote>
+              <figcaption class="testimonials__author">
+                <span>{item.author}</span>
+                {item.context && <span class="text-muted"> · {item.context}</span>}
+              </figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .testimonials {
+    margin-block-start: var(--space-xl);
+    padding: 0;
+  }
+
+  .testimonials__item {
+    block-size: 100%;
+    margin: 0;
+    justify-content: space-between;
+  }
+
+  .testimonials__quote {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    line-height: var(--leading-snug);
+  }
+
+  .testimonials__quote p::before {
+    content: '\201C';
+  }
+
+  .testimonials__quote p::after {
+    content: '\201D';
+  }
+
+  .testimonials__author {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+  }
+</style>

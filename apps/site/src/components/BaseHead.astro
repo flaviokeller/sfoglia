@@ -1,0 +1,74 @@
+---
+import { LOCALES, type Locale, withLocale } from '../i18n/config';
+import { openingHoursSpecification, site } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  locale: Locale;
+  ogImage?: string | undefined;
+  noindex?: boolean;
+}
+
+const { title, description, locale, ogImage, noindex = false } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
+
+// hreflang alternates. Search engines need every locale listed on every page,
+// including the page pointing at itself.
+const alternates = LOCALES.map((code) => ({
+  code,
+  href: new URL(withLocale(Astro.url.pathname, code), Astro.site).href,
+}));
+
+/**
+ * LocalBusiness structured data. This is the single highest-value SEO item for a
+ * small business site: it is what puts opening hours and the address into the
+ * Google side panel. Swap @type for the client's actual category
+ * (Dentist, VeterinaryCare, Restaurant …) — see schema.org/LocalBusiness.
+ */
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: site.businessName,
+  legalName: site.legalName,
+  description,
+  url: Astro.site?.href,
+  email: site.email,
+  telephone: site.phone,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.street,
+    postalCode: site.postalCode,
+    addressLocality: site.city,
+    addressCountry: site.country,
+  },
+  openingHoursSpecification: openingHoursSpecification(),
+};
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical.href} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+{alternates.map(({ code, href }) => <link rel="alternate" hreflang={code} href={href} />)}
+<link rel="alternate" hreflang="x-default" href={alternates[0]?.href} />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical.href} />
+<meta property="og:locale" content={locale} />
+<meta property="og:site_name" content={site.businessName} />
+{ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+<meta name="twitter:card" content={ogImageUrl ? 'summary_large_image' : 'summary'} />
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)" />
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} is:inline />

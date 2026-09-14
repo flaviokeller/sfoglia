@@ -1,0 +1,254 @@
+---
+/**
+ * The client-facing design artifact.
+ *
+ * Storybook documents the Lit layer for development; this page shows tokens and
+ * Astro sections *in context*, on the real site, in the real typography. It is
+ * what you send a client to agree a look before content exists.
+ *
+ * Deliberately noindex — it is a working document, not a page for the public.
+ */
+import ImageGallery from '@flaviocodes/ui/components/ImageGallery.vue';
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { placeholderImage } from '../lib/placeholder';
+import Faq from '../sections/Faq.astro';
+import Hero from '../sections/Hero.astro';
+import OpeningHours from '../sections/OpeningHours.astro';
+import ServiceGrid from '../sections/ServiceGrid.astro';
+import Testimonials from '../sections/Testimonials.astro';
+import TextImage from '../sections/TextImage.astro';
+import { DEFAULT_LOCALE } from '../i18n/config';
+
+const colourRoles = [
+  'color-canvas',
+  'color-surface',
+  'color-surface-raised',
+  'color-surface-sunken',
+  'color-text',
+  'color-text-muted',
+  'color-text-subtle',
+  'color-accent',
+  'color-accent-hover',
+  'color-accent-soft',
+  'color-border',
+  'color-border-strong',
+  'color-success',
+  'color-danger',
+];
+
+const spaceSteps = ['3xs', '2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'];
+
+const galleryImages = [
+  { src: placeholderImage('Empfang', 250), alt: 'Empfangsbereich', caption: 'Unser Empfang' },
+  { src: placeholderImage('Behandlung', 160), alt: 'Behandlungszimmer', caption: 'Behandlungszimmer 1' },
+  { src: placeholderImage('Team', 30), alt: 'Das Team der Praxis' },
+];
+---
+
+<BaseLayout title="Styleguide" description="Design system reference" locale={DEFAULT_LOCALE} noindex>
+  <section class="section">
+    <div class="container stack">
+      <p class="eyebrow">Styleguide</p>
+      <h1 class="heading-hero">Design system</h1>
+      <p class="lead">
+        Every colour, size and component on this site comes from{' '}
+        <code>packages/ui/src/tokens/theme.css</code>. Change that one file and this whole page —
+        and the client's site — changes with it.
+      </p>
+      <p>
+        <button class="button button--secondary" id="theme-toggle" type="button">
+          Toggle dark mode
+        </button>
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--surface">
+    <div class="container stack">
+      <h2 class="heading-2">Colour roles</h2>
+      <div class="grid grid--auto sg-swatches">
+        {
+          colourRoles.map((role) => (
+            <div class="sg-swatch">
+              <div class="sg-swatch__chip" style={`background: var(--${role})`} />
+              <code>--{role}</code>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container stack">
+      <h2 class="heading-2">Type scale</h2>
+      <p class="eyebrow">Eyebrow</p>
+      <p class="heading-hero">Hero heading</p>
+      <p class="heading-1">Heading 1</p>
+      <p class="heading-2">Heading 2</p>
+      <p class="heading-3">Heading 3</p>
+      <p class="heading-4">Heading 4</p>
+      <p class="lead">Lead paragraph, used to open a section.</p>
+      <p style="max-inline-size: var(--measure)">
+        Body copy capped at <code>--measure</code>. Inter Variable for text, Fraunces Variable
+        for headings — both self-hosted, so the page makes no third-party font requests.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--surface">
+    <div class="container stack">
+      <h2 class="heading-2">Spacing</h2>
+      {
+        spaceSteps.map((step) => (
+          <div class="sg-space">
+            <code>--space-{step}</code>
+            <div class="sg-space__bar" style={`inline-size: var(--space-${step})`} />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container stack">
+      <h2 class="heading-2">Primitives</h2>
+      <div class="sg-row">
+        <button class="button button--primary">Primary</button>
+        <button class="button button--secondary">Secondary</button>
+        <button class="button button--ghost">Ghost</button>
+        <button class="button button--primary" disabled>Disabled</button>
+      </div>
+      <div class="sg-row">
+        <span class="badge">Accent</span>
+        <span class="badge badge--neutral">Neutral</span>
+        <span class="badge badge--success">Success</span>
+      </div>
+      <div class="grid grid--auto">
+        <div class="card"><h3 class="heading-4">Card</h3><p class="text-muted">Static card.</p></div>
+        <div class="card card--interactive">
+          <h3 class="heading-4">Interactive card</h3><p class="text-muted">Hover me.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="sg-divider" />
+
+  <div class="container">
+    <h2 class="heading-2">Sections, in context</h2>
+  </div>
+
+  <Hero
+    as="h2"
+    eyebrow="Eyebrow"
+    title="Hero section"
+    lead="The hero carries the LCP image and the primary call to action."
+    primaryCta={{ href: '#0', label: 'Primary action' }}
+    secondaryCta={{ href: '#0', label: 'Secondary' }}
+  />
+
+  <TextImage eyebrow="Text + image" title="A split section" surface>
+    <p>Body copy sits beside an image. On narrow viewports the text always leads.</p>
+  </TextImage>
+
+  <ServiceGrid
+    title="Service grid"
+    lead="Auto-fitting columns — no breakpoints, cards reflow when they get too narrow."
+    services={[
+      { title: 'Service one', summary: 'A short, plain-language summary.' },
+      { title: 'Service two', summary: 'A short, plain-language summary.' },
+      { title: 'Service three', summary: 'A short, plain-language summary.' },
+    ]}
+    surface={false}
+  />
+
+  <Testimonials
+    title="Testimonials"
+    testimonials={[
+      { quote: 'A short quote from a real person.', author: 'M. Keller', context: 'Since 2019' },
+      { quote: 'Another short quote.', author: 'B. Wyss', context: 'Zurich' },
+    ]}
+  />
+
+  <OpeningHours locale={DEFAULT_LOCALE} />
+
+  <section class="section section--surface">
+    <div class="container stack">
+      <h2 class="heading-2">Gallery</h2>
+      <p class="lead">Click a tile — the lightbox is a native <code>&lt;dialog&gt;</code>.</p>
+      <ImageGallery client:visible images={galleryImages} />
+    </div>
+  </section>
+
+  <Faq
+    title="FAQ accordion"
+    items={[
+      { question: 'Is this the real component?', answer: 'Yes — the same one the site uses.' },
+      { question: 'Does it work without JavaScript?', answer: 'Yes, it falls back to <details>.' },
+    ]}
+  />
+</BaseLayout>
+
+<script>
+  // Local-only theme toggle for reviewing both modes. The real site follows the
+  // OS preference and ships no toggle.
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark =
+      root.dataset.theme === 'dark' ||
+      (!root.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
+    root.dataset.theme = isDark ? 'light' : 'dark';
+  });
+</script>
+
+<style>
+  .sg-swatches {
+    margin-block-start: var(--space-lg);
+  }
+
+  .sg-swatch {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .sg-swatch__chip {
+    inline-size: 3rem;
+    block-size: 3rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
+  }
+
+  .sg-space {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .sg-space code {
+    inline-size: 8rem;
+    font-size: var(--text-sm);
+  }
+
+  .sg-space__bar {
+    block-size: 1rem;
+    background: var(--color-accent);
+    border-radius: var(--radius-sm);
+  }
+
+  .sg-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    align-items: center;
+  }
+
+  .sg-divider {
+    margin-block: var(--space-2xl);
+    border: none;
+    border-block-start: 1px solid var(--color-border);
+  }
+</style>

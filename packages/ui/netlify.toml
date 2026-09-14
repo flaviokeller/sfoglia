@@ -1,0 +1,22 @@
+# Netlify config for the STORYBOOK site (the design-system showcase).
+#
+# In the Netlify UI this site must have **Base directory = packages/ui**.
+# It is a separate Netlify site from the client site, deployed from the same repo.
+
+[build]
+  command = "npm run build-storybook"
+  publish = "storybook-static"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

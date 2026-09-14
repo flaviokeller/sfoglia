@@ -1,0 +1,38 @@
+---
+import ContactForm from '@flaviocodes/ui/components/ContactForm.vue';
+
+import type { Locale } from '../i18n/config';
+import { contactFormLabels, getTranslations } from '../i18n/t';
+
+interface Props {
+  locale: Locale;
+  formName?: string;
+}
+
+const { locale, formName = 'contact' } = Astro.props;
+const t = getTranslations(locale);
+const labels = contactFormLabels(locale);
+---
+
+<section class="section" id="kontakt">
+  <div class="container">
+    <h2 class="heading-2">{t('contact.title')}</h2>
+
+    {/*
+      Netlify discovers forms by parsing the STATIC HTML at deploy time. The Vue
+      component is hydrated client-side and posts via fetch, so Netlify would
+      never register it — hence this hidden plain-HTML twin. It must keep the
+      same `name` and the same field names as ContactForm.vue, or submissions 404.
+      Ref: https://docs.netlify.com/manage/forms/setup/
+    */}
+    <form name={formName} data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value={formName} />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <textarea name="message"></textarea>
+      <input type="text" name="bot-field" />
+    </form>
+
+    <ContactForm client:visible formName={formName} labels={labels} />
+  </div>
+</section>

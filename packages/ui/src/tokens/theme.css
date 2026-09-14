@@ -1,0 +1,253 @@
+/*
+ * theme.css — the design system.
+ *
+ * This is the ONE file you edit to re-theme a client site.
+ *
+ * Two layers:
+ *   1. Private ramps (--_*)  — raw values. Never referenced outside this file.
+ *   2. Public roles          — semantic names. This is all the rest of the codebase
+ *                              is allowed to use. Never write a raw colour or px
+ *                              value in a component.
+ *
+ * Dark mode works because the roles are semantic: only the role->ramp mapping
+ * changes below, never the component CSS.
+ */
+
+:root {
+  /* ---------------------------------------------------------------- *
+   * 1. Private ramps — swap these per client
+   * ---------------------------------------------------------------- */
+
+  /* Brand hue. Generated as an OKLCH ramp for perceptually even steps. */
+  --_brand-50: oklch(97% 0.02 250);
+  --_brand-100: oklch(93% 0.045 250);
+  --_brand-200: oklch(87% 0.08 250);
+  --_brand-300: oklch(78% 0.12 250);
+  --_brand-400: oklch(68% 0.16 250);
+  --_brand-500: oklch(58% 0.19 250);
+  --_brand-600: oklch(50% 0.18 250);
+  --_brand-700: oklch(42% 0.15 250);
+  --_brand-800: oklch(34% 0.11 250);
+  --_brand-900: oklch(26% 0.07 250);
+
+  /* Neutrals. Slightly hue-shifted toward the brand so greys feel intentional. */
+  --_neutral-0: oklch(100% 0 0);
+  --_neutral-50: oklch(98% 0.004 250);
+  --_neutral-100: oklch(96% 0.006 250);
+  --_neutral-200: oklch(92% 0.008 250);
+  --_neutral-300: oklch(86% 0.01 250);
+  --_neutral-400: oklch(70% 0.012 250);
+  --_neutral-500: oklch(58% 0.012 250);
+  --_neutral-600: oklch(48% 0.012 250);
+  --_neutral-700: oklch(38% 0.01 250);
+  --_neutral-800: oklch(27% 0.008 250);
+  --_neutral-900: oklch(19% 0.006 250);
+  --_neutral-950: oklch(14% 0.005 250);
+
+  /* Status ramps */
+  --_success: oklch(58% 0.15 150);
+  --_success-soft: oklch(95% 0.04 150);
+  --_danger: oklch(56% 0.19 27);
+  --_danger-soft: oklch(95% 0.04 27);
+
+  /* ---------------------------------------------------------------- *
+   * 2. Public roles — use ONLY these downstream
+   * ---------------------------------------------------------------- */
+
+  /* Surfaces, from furthest back to nearest front */
+  --color-canvas: var(--_neutral-0);
+  --color-surface: var(--_neutral-50);
+  --color-surface-raised: var(--_neutral-0);
+  --color-surface-sunken: var(--_neutral-100);
+  --color-surface-inverted: var(--_neutral-900);
+
+  /* Text */
+  --color-text: var(--_neutral-900);
+  --color-text-muted: var(--_neutral-600);
+  --color-text-subtle: var(--_neutral-500);
+  --color-text-inverted: var(--_neutral-0);
+  --color-text-on-accent: var(--_neutral-0);
+
+  /* Accent / interactive */
+  --color-accent: var(--_brand-600);
+  --color-accent-hover: var(--_brand-700);
+  --color-accent-active: var(--_brand-800);
+  --color-accent-soft: var(--_brand-50);
+  --color-accent-text: var(--_brand-700);
+
+  /* Lines */
+  --color-border: var(--_neutral-200);
+  --color-border-strong: var(--_neutral-300);
+  --color-focus-ring: var(--_brand-500);
+
+  /* Status */
+  --color-success: var(--_success);
+  --color-success-surface: var(--_success-soft);
+  --color-danger: var(--_danger);
+  --color-danger-surface: var(--_danger-soft);
+
+  /* ---------------------------------------------------------------- *
+   * Typography — fluid, viewport-responsive, no breakpoints needed
+   * ---------------------------------------------------------------- */
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Fraunces Variable", ui-serif, Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+
+  /* Scale is ~1.25 (major third) at mobile, widening to ~1.333 at desktop. */
+  --text-xs: clamp(0.75rem, 0.73rem + 0.1vw, 0.8rem);
+  --text-sm: clamp(0.875rem, 0.85rem + 0.12vw, 0.95rem);
+  --text-base: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1.06rem + 0.33vw, 1.375rem);
+  --text-xl: clamp(1.375rem, 1.25rem + 0.6vw, 1.75rem);
+  --text-2xl: clamp(1.65rem, 1.45rem + 1vw, 2.25rem);
+  --text-3xl: clamp(2rem, 1.65rem + 1.75vw, 3rem);
+  --text-4xl: clamp(2.4rem, 1.85rem + 2.75vw, 4rem);
+
+  --leading-tight: 1.1;
+  --leading-snug: 1.3;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.75;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.04em;
+
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Measure — cap line length for readability */
+  --measure: 65ch;
+  --measure-narrow: 45ch;
+
+  /* ---------------------------------------------------------------- *
+   * Space — a 4px-based scale
+   * ---------------------------------------------------------------- */
+  --space-3xs: 0.125rem;
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+
+  /* Vertical rhythm between page sections — fluid */
+  --space-section: clamp(3rem, 2rem + 5vw, 7rem);
+
+  /* ---------------------------------------------------------------- *
+   * Layout
+   * ---------------------------------------------------------------- */
+  --width-content: 72rem;
+  --width-prose: 42rem;
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+
+  /* ---------------------------------------------------------------- *
+   * Shape & depth
+   * ---------------------------------------------------------------- */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.25rem;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.05), 0 1px 3px oklch(0% 0 0 / 0.06);
+  --shadow-md: 0 2px 4px oklch(0% 0 0 / 0.05), 0 4px 12px oklch(0% 0 0 / 0.08);
+  --shadow-lg: 0 4px 8px oklch(0% 0 0 / 0.05), 0 12px 32px oklch(0% 0 0 / 0.1);
+
+  /* ---------------------------------------------------------------- *
+   * Motion
+   * ---------------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 120ms;
+  --duration-base: 220ms;
+  --duration-slow: 400ms;
+
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+
+  color-scheme: light;
+}
+
+/*
+ * Dark mode. ONLY role->ramp remappings live here — if you find yourself adding
+ * a new token name in this block, the light theme is missing a role.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-canvas: var(--_neutral-950);
+    --color-surface: var(--_neutral-900);
+    --color-surface-raised: var(--_neutral-800);
+    --color-surface-sunken: var(--_neutral-950);
+    --color-surface-inverted: var(--_neutral-100);
+
+    --color-text: var(--_neutral-100);
+    --color-text-muted: var(--_neutral-400);
+    --color-text-subtle: var(--_neutral-500);
+    --color-text-inverted: var(--_neutral-950);
+    --color-text-on-accent: var(--_neutral-950);
+
+    --color-accent: var(--_brand-400);
+    --color-accent-hover: var(--_brand-300);
+    --color-accent-active: var(--_brand-200);
+    --color-accent-soft: oklch(30% 0.06 250);
+    --color-accent-text: var(--_brand-300);
+
+    --color-border: var(--_neutral-800);
+    --color-border-strong: var(--_neutral-700);
+    --color-focus-ring: var(--_brand-400);
+
+    --color-success: oklch(72% 0.15 150);
+    --color-success-surface: oklch(28% 0.05 150);
+    --color-danger: oklch(70% 0.17 27);
+    --color-danger-surface: oklch(28% 0.06 27);
+
+    --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.3), 0 1px 3px oklch(0% 0 0 / 0.4);
+    --shadow-md: 0 2px 4px oklch(0% 0 0 / 0.35), 0 4px 12px oklch(0% 0 0 / 0.45);
+    --shadow-lg: 0 4px 8px oklch(0% 0 0 / 0.4), 0 12px 32px oklch(0% 0 0 / 0.5);
+
+    color-scheme: dark;
+  }
+}
+
+/* Explicit toggle wins over the OS preference, in both directions. */
+:root[data-theme="dark"] {
+  --color-canvas: var(--_neutral-950);
+  --color-surface: var(--_neutral-900);
+  --color-surface-raised: var(--_neutral-800);
+  --color-surface-sunken: var(--_neutral-950);
+  --color-surface-inverted: var(--_neutral-100);
+
+  --color-text: var(--_neutral-100);
+  --color-text-muted: var(--_neutral-400);
+  --color-text-subtle: var(--_neutral-500);
+  --color-text-inverted: var(--_neutral-950);
+  --color-text-on-accent: var(--_neutral-950);
+
+  --color-accent: var(--_brand-400);
+  --color-accent-hover: var(--_brand-300);
+  --color-accent-active: var(--_brand-200);
+  --color-accent-soft: oklch(30% 0.06 250);
+  --color-accent-text: var(--_brand-300);
+
+  --color-border: var(--_neutral-800);
+  --color-border-strong: var(--_neutral-700);
+  --color-focus-ring: var(--_brand-400);
+
+  --color-success: oklch(72% 0.15 150);
+  --color-success-surface: oklch(28% 0.05 150);
+  --color-danger: oklch(70% 0.17 27);
+  --color-danger-surface: oklch(28% 0.06 27);
+
+  --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.3), 0 1px 3px oklch(0% 0 0 / 0.4);
+  --shadow-md: 0 2px 4px oklch(0% 0 0 / 0.35), 0 4px 12px oklch(0% 0 0 / 0.45);
+  --shadow-lg: 0 4px 8px oklch(0% 0 0 / 0.4), 0 12px 32px oklch(0% 0 0 / 0.5);
+
+  color-scheme: dark;
+}

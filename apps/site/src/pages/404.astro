@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { DEFAULT_LOCALE } from '../i18n/config';
+import { getTranslations } from '../i18n/t';
+
+// A 404 can be hit at any path, so there is no locale to read — fall back to the default.
+const locale = DEFAULT_LOCALE;
+const t = getTranslations(locale);
+---
+
+<BaseLayout title={t('notFound.title')} description={t('notFound.body')} locale={locale} noindex>
+  <section class="section">
+    <div class="container stack">
+      <h1 class="heading-1">{t('notFound.title')}</h1>
+      <p class="lead">{t('notFound.body')}</p>
+      <p><a class="button button--primary" href={`/${locale}/`}>{t('notFound.back')}</a></p>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,45 @@
+---
+import FaqAccordion from '@flaviocodes/ui/components/FaqAccordion.vue';
+
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  title: string;
+  items: FaqItem[];
+}
+
+const { title, items } = Astro.props;
+
+/*
+ * FAQPage structured data — this is what produces the expandable Q&A blocks in
+ * Google results. It is built from the same `items` the component renders, so
+ * the markup and the structured data cannot drift apart.
+ */
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+---
+
+<section class="section">
+  <div class="container stack" style="max-inline-size: 48rem">
+    <h2 class="heading-2">{title}</h2>
+
+    {/*
+      Astro server-renders the accordion, so the questions and answers are in the
+      HTML source for crawlers; client:visible only adds the open/close behaviour
+      once it scrolls into view.
+    */}
+    <FaqAccordion client:visible items={items} />
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />
+</section>
