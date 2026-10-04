@@ -21,9 +21,9 @@
     "prepare": "lefthook install || true"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.13",
+    "@biomejs/biome": "^2.5.15",
     "@playwright/test": "^1.63.0",
-    "lefthook": "^2.1.12",
+    "lefthook": "^2.1.15",
     "typescript": "^5.9.3"
   },
   "allowScripts": {
