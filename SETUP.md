@@ -51,7 +51,7 @@ This is where the visual identity actually happens.
 - [ ] `npm run storybook` → check every component in **light and dark**
 - [ ] <http://localhost:4321/styleguide> → check the sections in context
 - [ ] Optional, when the client can't name a look: send them
-      `/styleguide?direction=<a-m>` (arrow keys cycle). The catalog lives in
+      `/styleguide?direction=<a-o>` (arrow keys cycle). The catalog lives in
       `packages/ui/src/tokens/theme-directions.css`, loaded only by the
       styleguide. Ask colour (the direction) and shape (button shape/shadow,
       eyebrow, heading decoration, photo treatment, depth, border weight,

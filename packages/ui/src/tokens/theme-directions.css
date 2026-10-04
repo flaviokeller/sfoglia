@@ -16,10 +16,10 @@
  * a client may like one direction's colours and another's buttons.
  *
  * Catalog: A shipped | B dark blue, amber accent | C bold poster | D dark
- * green, magenta accent, italic Archivo | E1/E2/E3 hand-tinted cream with
- * cobalt / rust / plum accents, Fraunces | F quiet minimal | G zine ink, hot
- * pink | H pastel blue, pills, soft lift | I sage, dashed | J brick rose |
- * K dark red | L light teal | M dark teal.
+ * green, magenta accent, italic Archivo | E/F/G hand-tinted cream with
+ * cobalt / rust / plum accents, Fraunces | H quiet minimal | I zine ink, hot
+ * pink | J pastel blue, pills, soft lift | K sage, dashed | L brick rose |
+ * M dark red | N light teal | O dark teal.
  *
  * Only remap existing public roles here. If a direction needs a token that
  * doesn't exist yet, add it to theme.css first. Per-direction component rules
@@ -121,12 +121,10 @@
 }
 
 /*
- * Direction D — after-hours. Same register as a comedy-club poster (bold,
- * stage-persona energy) as gregorstaeheli.ch, but deliberately not that
- * site's specific recipe: a true dark-green ground (not a black/brownish
- * anthracite) with a magenta-red accent — 150°'s actual wheel complement
- * (was coral at 42°, which sat in a triadic-ish gap rather than a clean
- * harmony), mixed-case italic display instead of blocky uppercase caps,
+ * Direction D — after-hours. A comedy-club poster register (bold,
+ * stage-persona energy): a true dark-green ground (not a black/brownish
+ * anthracite) with a magenta-red accent — 150°'s actual wheel complement,
+ * mixed-case italic display instead of blocky uppercase caps,
  * sharp offset-shadow buttons instead of pill outlines.
  */
 :root[data-direction="d"] {
@@ -189,22 +187,17 @@
 }
 
 /*
- * Direction E — hand-tinted archive. Same permission as ianiquesaegesser.ch
- * to be playful and warm, but a different recipe: apricot-cream instead of
- * pink, a wonky ink-trap serif instead of underlined headings — the accent
+ * Directions E/F/G — hand-tinted archive. Playful and warm: apricot-cream
+ * ground, a wonky ink-trap serif instead of underlined headings — the accent
  * lives in a heading-side rule and a single asymmetric corner on buttons,
  * not a pill.
  *
- * The background tested well; the accent hadn't been settled. First pass
- * (teal/mustard/violet) didn't land except violet, kept but muted here.
- * Second pass swaps the other two: slate-blue and rust instead of
- * teal/mustard. Three sibling variants (E1/E2/E3) share the exact same
- * background and structure and only change the accent hue, for a direct
- * side-by-side. Once one wins, collapse back down to a single "e".
+ * Three sibling variants (E, F, G) share the exact same background and
+ * structure and only change the accent hue, for a direct side-by-side.
  */
-:root[data-direction="e1"],
-:root[data-direction="e2"],
-:root[data-direction="e3"] {
+:root[data-direction="e"],
+:root[data-direction="f"],
+:root[data-direction="g"] {
   --color-canvas: oklch(94% 0.025 58);
   --color-surface: oklch(97% 0.018 58);
   --color-surface-raised: oklch(99% 0.008 58);
@@ -218,8 +211,8 @@
   --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
 }
 
-/* E1 — cobalt-blue accent (was slate-blue, too close to E3's plum). */
-:root[data-direction="e1"] {
+/* E — cobalt-blue accent. */
+:root[data-direction="e"] {
   --color-text: oklch(26% 0.06 230);
   --color-text-muted: oklch(45% 0.055 230);
   --color-text-subtle: oklch(58% 0.03 230);
@@ -235,8 +228,8 @@
   --color-focus-ring: oklch(38% 0.13 230);
 }
 
-/* E2 — rust/terracotta accent (was mustard). */
-:root[data-direction="e2"] {
+/* F — rust/terracotta accent. */
+:root[data-direction="f"] {
   --color-text: oklch(27% 0.05 35);
   --color-text-muted: oklch(46% 0.06 35);
   --color-text-subtle: oklch(58% 0.04 35);
@@ -252,8 +245,8 @@
   --color-focus-ring: oklch(46% 0.13 35);
 }
 
-/* E3 — muted plum-violet accent (kept from the first pass, toned down). */
-:root[data-direction="e3"] {
+/* G — muted plum-violet accent. */
+:root[data-direction="g"] {
   --color-text: oklch(28% 0.05 300);
   --color-text-muted: oklch(46% 0.045 300);
   --color-text-subtle: oklch(58% 0.025 300);
@@ -269,34 +262,34 @@
   --color-focus-ring: oklch(36% 0.1 300);
 }
 
-:root[data-direction="e1"] .heading-hero,
-:root[data-direction="e1"] .heading-1,
-:root[data-direction="e1"] .heading-2,
-:root[data-direction="e2"] .heading-hero,
-:root[data-direction="e2"] .heading-1,
-:root[data-direction="e2"] .heading-2,
-:root[data-direction="e3"] .heading-hero,
-:root[data-direction="e3"] .heading-1,
-:root[data-direction="e3"] .heading-2 {
+:root[data-direction="e"] .heading-hero,
+:root[data-direction="e"] .heading-1,
+:root[data-direction="e"] .heading-2,
+:root[data-direction="f"] .heading-hero,
+:root[data-direction="f"] .heading-1,
+:root[data-direction="f"] .heading-2,
+:root[data-direction="g"] .heading-hero,
+:root[data-direction="g"] .heading-1,
+:root[data-direction="g"] .heading-2 {
   border-inline-start: 0.2em solid var(--color-accent);
   padding-inline-start: var(--space-sm);
 }
 
-:root[data-direction="e1"] .button--primary,
-:root[data-direction="e1"] .button--secondary,
-:root[data-direction="e2"] .button--primary,
-:root[data-direction="e2"] .button--secondary,
-:root[data-direction="e3"] .button--primary,
-:root[data-direction="e3"] .button--secondary {
+:root[data-direction="e"] .button--primary,
+:root[data-direction="e"] .button--secondary,
+:root[data-direction="f"] .button--primary,
+:root[data-direction="f"] .button--secondary,
+:root[data-direction="g"] .button--primary,
+:root[data-direction="g"] .button--secondary {
   border-radius: var(--radius-lg) 0 var(--radius-lg) 0;
 }
 
 /*
- * Direction F — quiet minimal. The restrained contrast to everything else
+ * Direction H — quiet minimal. The restrained contrast to everything else
  * here: near-monochrome, colour used so sparingly it barely registers, extra
  * air between sections. An art-gallery placard rather than a flyer.
  */
-:root[data-direction="f"] {
+:root[data-direction="h"] {
   --color-canvas: oklch(98.5% 0.002 90);
   --color-surface: oklch(97.5% 0.002 90);
   --color-surface-raised: oklch(99% 0.001 90);
@@ -324,18 +317,18 @@
   --shadow-lg: none;
 }
 
-:root[data-direction="f"] .eyebrow {
+:root[data-direction="h"] .eyebrow {
   letter-spacing: 0.12em;
   opacity: 0.65;
 }
 
 /*
- * Direction G — zine ink. Punk gig-flyer register: stark black on newsprint
+ * Direction I — zine ink. Punk gig-flyer register: stark black on newsprint
  * white, a single hot-pink spot colour, no serif at all — the sans display
  * face pushed to its heaviest weight instead. Dates/labels go monospace, like
  * a stamped flyer.
  */
-:root[data-direction="g"] {
+:root[data-direction="i"] {
   --color-canvas: oklch(97.5% 0.006 85);
   --color-surface: oklch(95% 0.008 85);
   --color-surface-raised: oklch(99% 0.003 85);
@@ -368,28 +361,28 @@
   --shadow-lg: none;
 }
 
-:root[data-direction="g"] .heading-hero,
-:root[data-direction="g"] .heading-1,
-:root[data-direction="g"] .heading-2 {
+:root[data-direction="i"] .heading-hero,
+:root[data-direction="i"] .heading-1,
+:root[data-direction="i"] .heading-2 {
   text-transform: uppercase;
 }
 
-:root[data-direction="g"] .eyebrow {
+:root[data-direction="i"] .eyebrow {
   font-family: var(--font-mono);
   letter-spacing: var(--tracking-wide);
 }
 
-:root[data-direction="g"] .button--primary,
-:root[data-direction="g"] .card {
+:root[data-direction="i"] .button--primary,
+:root[data-direction="i"] .card {
   border: 2px solid var(--color-border);
 }
 
 /*
- * Direction H — soft archive, blue. Pastel ground carries the colour itself
- * (not just the accent), like E/I/J — a library-card quiet blue, deep indigo
+ * Direction J — soft archive, blue. Pastel ground carries the colour itself
+ * (not just the accent), like E–G and K/L — a library-card quiet blue, deep indigo
  * ink, rounded and slightly lifted rather than sharp.
  */
-:root[data-direction="h"] {
+:root[data-direction="j"] {
   --color-canvas: oklch(95% 0.02 235);
   --color-surface: oklch(97% 0.014 235);
   --color-surface-raised: oklch(99% 0.006 235);
@@ -414,27 +407,27 @@
   --shadow-lg: 0 16px 36px oklch(38% 0.12 255 / 0.16);
 }
 
-:root[data-direction="h"] .eyebrow {
+:root[data-direction="j"] .eyebrow {
   font-variant-caps: all-small-caps;
   letter-spacing: var(--tracking-normal);
 }
 
-:root[data-direction="h"] .hero__media img,
-:root[data-direction="h"] .text-image__media img {
+:root[data-direction="j"] .hero__media img,
+:root[data-direction="j"] .text-image__media img {
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
 }
 
-:root[data-direction="h"] .button--primary,
-:root[data-direction="h"] .button--secondary {
+:root[data-direction="j"] .button--primary,
+:root[data-direction="j"] .button--secondary {
   border-radius: var(--radius-full);
 }
 
 /*
- * Direction I — sage. A near-monochrome green, field-notes quiet — dashed
- * underlines instead of E's solid rule or G's uppercase block.
+ * Direction K — sage. A near-monochrome green, field-notes quiet — dashed
+ * underlines instead of E–G's solid rule or I's uppercase block.
  */
-:root[data-direction="i"] {
+:root[data-direction="k"] {
   --color-canvas: oklch(95% 0.02 150);
   --color-surface: oklch(97% 0.014 150);
   --color-surface-raised: oklch(99% 0.006 150);
@@ -455,28 +448,28 @@
   --color-focus-ring: oklch(34% 0.07 150);
 }
 
-:root[data-direction="i"] .heading-hero,
-:root[data-direction="i"] .heading-1,
-:root[data-direction="i"] .heading-2 {
+:root[data-direction="k"] .heading-hero,
+:root[data-direction="k"] .heading-1,
+:root[data-direction="k"] .heading-2 {
   text-decoration: underline;
   text-decoration-style: dashed;
   text-decoration-color: var(--color-accent);
   text-underline-offset: 0.15em;
 }
 
-:root[data-direction="i"] .eyebrow {
+:root[data-direction="k"] .eyebrow {
   border: 1px dashed var(--color-accent);
   display: inline-block;
   padding: var(--space-3xs) var(--space-xs);
 }
 
 /*
- * Direction J — brick rose. Warmer and more saturated than E's apricot,
+ * Direction L — brick rose. Warmer and more saturated than the E–G apricot,
  * distinct from C's paper-plus-red-block by carrying the colour in the
  * ground itself — a ticket-stub device (top rule, pill badge) instead of
  * either.
  */
-:root[data-direction="j"] {
+:root[data-direction="l"] {
   --color-canvas: oklch(94% 0.03 18);
   --color-surface: oklch(96% 0.024 18);
   --color-surface-raised: oklch(99% 0.01 18);
@@ -499,14 +492,14 @@
   --radius-full: 9999px;
 }
 
-:root[data-direction="j"] .heading-hero,
-:root[data-direction="j"] .heading-1,
-:root[data-direction="j"] .heading-2 {
+:root[data-direction="l"] .heading-hero,
+:root[data-direction="l"] .heading-1,
+:root[data-direction="l"] .heading-2 {
   border-block-start: 0.15em solid var(--color-accent);
   padding-block-start: var(--space-sm);
 }
 
-:root[data-direction="j"] .eyebrow {
+:root[data-direction="l"] .eyebrow {
   color: var(--color-accent-text);
   background: var(--color-accent-soft);
   border: 1px solid var(--color-accent);
@@ -516,11 +509,11 @@
 }
 
 /*
- * Direction K — dark red. Completes the light/dark pairs: J is the light
- * (brick-rose) twin, K is the dark one — same hue family, a warm gold accent
- * instead of J's own brick tone, for a wine-label register.
+ * Direction M — dark red. Completes the light/dark pairs: L is the light
+ * (brick-rose) twin, M is the dark one — same hue family, a warm gold accent
+ * instead of L's own brick tone, for a wine-label register.
  */
-:root[data-direction="k"] {
+:root[data-direction="m"] {
   --color-canvas: oklch(16% 0.05 18);
   --color-surface: oklch(20% 0.055 18);
   --color-surface-raised: oklch(24% 0.06 18);
@@ -549,17 +542,17 @@
   color-scheme: dark;
 }
 
-:root[data-direction="k"] .eyebrow {
+:root[data-direction="m"] .eyebrow {
   color: var(--color-accent-text);
   letter-spacing: var(--tracking-wide);
 }
 
 /*
- * Direction L — light teal. A fourth colour family (not yet in the catalog),
+ * Direction N — light teal. A distinct colour family,
  * paired with a burnt-orange accent for a warm/cool complementary contrast.
- * L is the light twin; M below is the dark one.
+ * N is the light twin; O below is the dark one.
  */
-:root[data-direction="l"] {
+:root[data-direction="n"] {
   --color-canvas: oklch(95% 0.025 190);
   --color-surface: oklch(97% 0.018 190);
   --color-surface-raised: oklch(99% 0.008 190);
@@ -584,22 +577,22 @@
   --shadow-lg: 0 16px 36px oklch(28% 0.04 190 / 0.16);
 }
 
-:root[data-direction="l"] .hero__media img,
-:root[data-direction="l"] .text-image__media img {
+:root[data-direction="n"] .hero__media img,
+:root[data-direction="n"] .text-image__media img {
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
 }
 
-:root[data-direction="l"] .button--primary,
-:root[data-direction="l"] .button--secondary {
+:root[data-direction="n"] .button--primary,
+:root[data-direction="n"] .button--secondary {
   border-radius: var(--radius-full);
 }
 
 /*
- * Direction M — dark teal. Dark twin of L, same hue family and accent so the
+ * Direction O — dark teal. Dark twin of N, same hue family and accent so the
  * pair reads as one colour choice at two different depths.
  */
-:root[data-direction="m"] {
+:root[data-direction="o"] {
   --color-canvas: oklch(15% 0.04 190);
   --color-surface: oklch(19% 0.045 190);
   --color-surface-raised: oklch(23% 0.05 190);

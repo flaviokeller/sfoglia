@@ -47,23 +47,23 @@ const galleryImages = [
   { src: placeholderImage('Team', 30), alt: 'Das Team der Praxis' },
 ];
 
-/** PROTOTYPE — ticket 009. Keys must match the `data-direction` blocks in theme-directions.css. */
+/** Keys must match the `data-direction` blocks in theme-directions.css. */
 const directions = [
   { key: 'a', label: 'A — shipped theme (no overrides)' },
   { key: 'b', label: 'B — dark, stage-lit' },
   { key: 'c', label: 'C — bold poster/flyer' },
   { key: 'd', label: 'D — after-hours (dark green)' },
-  { key: 'e1', label: 'E1 — hand-tinted archive, cobalt' },
-  { key: 'e2', label: 'E2 — hand-tinted archive, rust' },
-  { key: 'e3', label: 'E3 — hand-tinted archive, muted plum' },
-  { key: 'f', label: 'F — quiet minimal' },
-  { key: 'g', label: 'G — zine ink' },
-  { key: 'h', label: 'H — soft archive, blue (light)' },
-  { key: 'i', label: 'I — sage (light)' },
-  { key: 'j', label: 'J — brick rose (light)' },
-  { key: 'k', label: 'K — dark red' },
-  { key: 'l', label: 'L — light teal' },
-  { key: 'm', label: 'M — dark teal' },
+  { key: 'e', label: 'E — hand-tinted archive, cobalt' },
+  { key: 'f', label: 'F — hand-tinted archive, rust' },
+  { key: 'g', label: 'G — hand-tinted archive, muted plum' },
+  { key: 'h', label: 'H — quiet minimal' },
+  { key: 'i', label: 'I — zine ink' },
+  { key: 'j', label: 'J — soft archive, blue (light)' },
+  { key: 'k', label: 'K — sage (light)' },
+  { key: 'l', label: 'L — brick rose (light)' },
+  { key: 'm', label: 'M — dark red' },
+  { key: 'n', label: 'N — light teal' },
+  { key: 'o', label: 'O — dark teal' },
 ];
 
 ---
@@ -256,8 +256,8 @@ const directions = [
     else params.set('direction', key);
     history.replaceState(null, '', `${location.pathname}${params.size ? `?${params}` : ''}`);
 
-    // B and C fix their own colour-scheme; the light/dark toggle only makes
-    // sense for direction A.
+    // Dark directions fix their own colour-scheme; the light/dark toggle only
+    // makes sense for direction A.
     if (themeToggle) themeToggle.disabled = key !== 'a';
   }
 
