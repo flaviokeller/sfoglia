@@ -30,8 +30,9 @@ export type SiteSettings = {
   country: string;
   /** Swiss UID (CHE-…). Empty hides the Impressum block — never invent one. */
   uid: string;
-  mapUrl: string;
-  openingHours: OpeningHour[];
+  /** Optional: a client without premises (schemaType Person) omits both. */
+  mapUrl?: string;
+  openingHours?: OpeningHour[];
   /** Footer profile links. Their hrefs double as schema.org `sameAs`. */
   socials: { icon: SocialIcon; label: string; href: string }[];
   analytics: { cloudflareToken: string };
@@ -73,7 +74,7 @@ const SCHEMA_DAYS: Record<OpeningHour['day'], string> = {
 };
 
 export function openingHoursSpecification() {
-  return site.openingHours
+  return (site.openingHours ?? [])
     .filter((entry) => entry.opens && entry.closes)
     .map((entry) => ({
       '@type': 'OpeningHoursSpecification',
@@ -85,7 +86,10 @@ export function openingHoursSpecification() {
 
 /** schema.org JSON-LD for the whole site, shaped by `site.schemaType`. */
 export function structuredData(description: string, url?: string) {
-  const sameAs = site.socials.map((social) => social.href).filter(Boolean);
+  // Absolute URLs only: a placeholder like "#" is not a profile.
+  const sameAs = site.socials
+    .map((social) => social.href)
+    .filter((href) => /^https?:\/\//.test(href));
   const common = {
     '@context': 'https://schema.org',
     '@type': site.schemaType,
