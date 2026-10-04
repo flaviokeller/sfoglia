@@ -12,6 +12,7 @@ import ImageGallery from '@flaviocodes/sfoglia-ui/components/ImageGallery.vue';
 
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { placeholderImage } from '../lib/placeholder';
+import EventsSection from '../sections/EventsSection.astro';
 import Faq from '../sections/Faq.astro';
 import Hero from '../sections/Hero.astro';
 import OpeningHours from '../sections/OpeningHours.astro';
@@ -173,6 +174,15 @@ const galleryImages = [
   />
 
   <OpeningHours locale={DEFAULT_LOCALE} />
+
+  <EventsSection
+    locale={DEFAULT_LOCALE}
+    events={[
+      { date: '2027-03-11', time: '19:00', title: 'Infoabend', venue: 'Praxis am See', town: 'Zürich' },
+      { date: '2027-05-08', title: 'Tag der offenen Tür', town: 'Zürich', url: 'https://example.ch' },
+      { date: '2020-01-01', title: 'Längst vorbei — fällt aus der Liste' },
+    ]}
+  />
 
   <section class="section section--surface">
     <div class="container stack">

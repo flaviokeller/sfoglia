@@ -108,6 +108,34 @@ function localisedCollections() {
         }),
       ],
       [
+        `events_${locale}`,
+        collection({
+          label: `Termine (${locale.toUpperCase()})`,
+          slugField: 'title',
+          path: `src/content/events/${locale}/*`,
+          format: { data: 'yaml' },
+          schema: {
+            title: fields.slug({ name: { label: 'Titel' } }),
+            // Text, not fields.date: the date must stay a string (see content.config.ts).
+            date: fields.text({
+              label: 'Datum (JJJJ-MM-TT)',
+              description: 'Genau in diesem Format, z. B. 2026-10-09.',
+              validation: {
+                isRequired: true,
+                pattern: {
+                  regex: /^\d{4}-\d{2}-\d{2}$/,
+                  message: 'Format JJJJ-MM-TT, z. B. 2026-10-09',
+                },
+              },
+            }),
+            time: fields.text({ label: 'Uhrzeit (z. B. 19:00)' }),
+            venue: fields.text({ label: 'Ort / Lokal' }),
+            town: fields.text({ label: 'Stadt' }),
+            url: fields.text({ label: 'Link (Anmeldung oder Details)' }),
+          },
+        }),
+      ],
+      [
         `faq_${locale}`,
         collection({
           label: `FAQ (${locale.toUpperCase()})`,

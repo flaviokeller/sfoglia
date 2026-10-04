@@ -307,3 +307,98 @@
 .lightbox__nav--next {
   inset-inline-end: var(--space-md);
 }
+
+/* ------------------------------------------------------------------ *
+ * Events — Termine
+ * ------------------------------------------------------------------ */
+.events__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.events__item {
+  display: grid;
+  grid-template-columns: minmax(12rem, auto) 1fr;
+  gap: var(--space-md) var(--space-xl);
+  padding-block: var(--space-lg);
+  border-block-start: 1px solid var(--color-border);
+  align-items: baseline;
+}
+
+.events__list > .events__item:last-child {
+  border-block-end: 1px solid var(--color-border);
+}
+
+@media (max-width: 40rem) {
+  .events__item {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xs);
+  }
+}
+
+.events__date {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+}
+
+.events__detail {
+  min-inline-size: 0;
+}
+
+.events__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+  color: var(--color-text);
+  text-wrap: balance;
+}
+
+.events__where {
+  margin-block-start: var(--space-2xs);
+  margin-block-end: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.events__link {
+  color: inherit;
+  text-decoration-color: var(--color-accent);
+  text-underline-offset: 0.2em;
+}
+
+.events__link:hover {
+  color: var(--color-accent-text);
+}
+
+.events__empty {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  font-style: italic;
+  color: var(--color-text-muted);
+  max-inline-size: var(--measure-narrow);
+  margin: 0;
+}
+
+.events__past-heading {
+  margin-block: var(--space-3xl) var(--space-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+}
+
+.events__list--past {
+  /* Present but subordinate: credibility, not the headline. */
+  opacity: 0.72;
+}
+
+.events__list--past .events__title {
+  font-size: var(--text-base);
+}

@@ -3,6 +3,7 @@ import { getCollection, getEntry, render } from 'astro:content';
 import { inLocale } from '../../content.config';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ContactSection from '../../sections/ContactSection.astro';
+import EventsSection from '../../sections/EventsSection.astro';
 import Faq from '../../sections/Faq.astro';
 import Hero from '../../sections/Hero.astro';
 import OpeningHours from '../../sections/OpeningHours.astro';
@@ -33,6 +34,7 @@ const ofLocale = inLocale(locale);
 const services = (await getCollection('services', ofLocale)).sort(byOrder);
 const faq = (await getCollection('faq', ofLocale)).sort(byOrder);
 const testimonials = (await getCollection('testimonials', ofLocale)).sort(byOrder);
+const events = await getCollection('events', ofLocale);
 
 // Keystatic saves untouched SEO fields as empty strings, which would ship an
 // empty <title>. Fall back to the page's own title and the site tagline.
@@ -74,6 +76,8 @@ const seoDescription = seo.description.trim() || page.data.lead || site.tagline;
   <Testimonials testimonials={testimonials.map((entry) => entry.data)} />
 
   <OpeningHours locale={locale} />
+
+  <EventsSection locale={locale} events={events.map((entry) => entry.data)} surface />
 
   <Faq title="FAQ" items={faq.map((entry) => entry.data)} />
 

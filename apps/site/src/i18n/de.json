@@ -27,6 +27,9 @@
   "gallery.close": "Schliessen",
   "gallery.prev": "Vorheriges Bild",
   "gallery.next": "Nächstes Bild",
+  "events.title": "Termine",
+  "events.past": "Vergangene Termine",
+  "events.empty": "Zurzeit sind keine Termine geplant. Für Fragen erreichen Sie uns jederzeit über das Kontaktformular.",
   "notFound.title": "Seite nicht gefunden",
   "notFound.body": "Diese Seite existiert nicht (mehr).",
   "notFound.back": "Zur Startseite"
