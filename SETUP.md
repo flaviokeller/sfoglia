@@ -50,6 +50,13 @@ This is where the visual identity actually happens.
       the family names in `theme.css`
 - [ ] `npm run storybook` → check every component in **light and dark**
 - [ ] <http://localhost:4321/styleguide> → check the sections in context
+- [ ] Optional, when the client can't name a look: send them
+      `/styleguide?direction=<a-m>` (arrow keys cycle). The catalog lives in
+      `packages/ui/src/tokens/theme-directions.css`, loaded only by the
+      styleguide. Ask colour (the direction) and shape (button shape/shadow,
+      eyebrow, heading decoration, photo treatment, depth, border weight,
+      heading face) as separate questions, then fold the winning *values* into
+      `theme.css` / `client.css` and drop the import once they have picked.
 
 Never write a raw colour or size outside `theme.css`. If you need one, add a
 role.
