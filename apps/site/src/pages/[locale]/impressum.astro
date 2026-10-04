@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { LOCALES, type Locale } from '../../i18n/config';
 import { getTranslations } from '../../i18n/t';
-import { site } from '../../data/site';
+import { site, telHref } from '../../data/site';
 
 export function getStaticPaths() {
   return LOCALES.map((locale) => ({ params: { locale } }));
@@ -10,6 +10,32 @@ export function getStaticPaths() {
 
 const locale = Astro.params.locale as Locale;
 const t = getTranslations(locale);
+const locality = [site.postalCode, site.city].filter(Boolean).join(' ');
+
+/**
+ * Legal copy per locale. Kept here rather than in i18n/*.json: it is prose that
+ * must stay accurate to this stack, not UI copy. `satisfies` makes a newly
+ * added locale a type error until its copy exists, instead of a silent
+ * fallback to another language.
+ */
+const copy = {
+  de: {
+    responsible: 'Verantwortlich',
+    uidTitle: 'Handelsregister / UID',
+    disclaimerTitle: 'Haftungsausschluss',
+    disclaimer:
+      'Die Inhalte dieser Website werden mit Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität kann jedoch keine Gewähr übernommen werden.',
+  },
+  en: {
+    responsible: 'Responsible',
+    uidTitle: 'Commercial register / UID',
+    disclaimerTitle: 'Disclaimer',
+    disclaimer:
+      'The content of this website is prepared with care. No guarantee is given as to its accuracy, completeness or timeliness.',
+  },
+} satisfies Record<Locale, Record<string, string>>;
+
+const c = copy[locale];
 ---
 
 <BaseLayout title={`${t('footer.legal')} — ${site.businessName}`} description={t('footer.legal')} locale={locale}>
@@ -22,29 +48,31 @@ const t = getTranslations(locale);
         docs/02-legal-privacy-checklist.md — an Impressum is expected for any
         commercially operated Swiss site.
       -->
-      <h2 class="heading-3">{locale === 'de' ? 'Verantwortlich' : 'Responsible'}</h2>
+      <h2 class="heading-3">{c.responsible}</h2>
       <p>
-        {site.legalName}<br />
-        {site.street}<br />
-        {site.postalCode} {site.city}
+        {site.legalName || site.businessName}
+        {site.street && <><br />{site.street}</>}
+        {locality && <><br />{locality}</>}
       </p>
 
       <p>
-        <a class="link" href={`mailto:${site.email}`}>{site.email}</a><br />
-        <a class="link" href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a>
+        {site.email && <a class="link" href={`mailto:${site.email}`}>{site.email}</a>}
+        {site.email && site.phone && <br />}
+        {site.phone && <a class="link" href={telHref(site.phone)}>{site.phone}</a>}
       </p>
 
-      <h2 class="heading-3">{locale === 'de' ? 'Handelsregister / UID' : 'Commercial register / UID'}</h2>
-      <p class="text-muted">CHE-000.000.000 — SETUP: replace with the real UID, or delete this block.</p>
+      {/* Only for clients in the Handelsregister. An invented UID is worse than none. */}
+      {
+        site.uid && (
+          <>
+            <h2 class="heading-3">{c.uidTitle}</h2>
+            <p>{site.uid}</p>
+          </>
+        )
+      }
 
-      <h2 class="heading-3">{locale === 'de' ? 'Haftungsausschluss' : 'Disclaimer'}</h2>
-      <p>
-        {
-          locale === 'de'
-            ? 'Die Inhalte dieser Website werden mit Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität kann jedoch keine Gewähr übernommen werden.'
-            : 'The content of this website is prepared with care. No guarantee is given as to its accuracy, completeness or timeliness.'
-        }
-      </p>
+      <h2 class="heading-3">{c.disclaimerTitle}</h2>
+      <p>{c.disclaimer}</p>
     </div>
   </section>
 </BaseLayout>

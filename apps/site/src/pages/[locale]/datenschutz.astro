@@ -10,8 +10,61 @@ export function getStaticPaths() {
 
 const locale = Astro.params.locale as Locale;
 const t = getTranslations(locale);
-const de = locale === 'de';
 const analyticsEnabled = Boolean(site.analytics.cloudflareToken);
+const controller = [
+  site.legalName || site.businessName,
+  site.street,
+  [site.postalCode, site.city].filter(Boolean).join(' '),
+]
+  .filter(Boolean)
+  .join(', ');
+
+/**
+ * Legal copy per locale. Kept here rather than in i18n/*.json: it is prose that
+ * must stay accurate to how THIS stack behaves (docs/02-legal-privacy-checklist.md),
+ * not UI copy. `satisfies` makes a newly added locale a type error until its
+ * copy exists, instead of a silent fallback to another language.
+ */
+const copy = {
+  de: {
+    controller: 'Verantwortliche Stelle',
+    cookiesTitle: 'Cookies',
+    cookies:
+      'Diese Website setzt keine Cookies und verwendet keine Tracking-Technologien, die eine Einwilligung erfordern.',
+    fontsTitle: 'Schriftarten',
+    fonts:
+      'Alle Schriftarten werden von unserem eigenen Server ausgeliefert. Es werden keine Daten an Google Fonts oder ein anderes CDN übertragen.',
+    formTitle: 'Kontaktformular',
+    form: 'Wenn Sie uns über das Kontaktformular schreiben, werden Name, E-Mail-Adresse und Nachricht über unseren Hosting-Anbieter Netlify (Netlify, Inc., USA) übermittelt und uns per E-Mail zugestellt. Netlify prüft eingehende Nachrichten automatisiert auf Spam mithilfe von Akismet (Automattic Inc., USA). Wir verwenden Ihre Angaben ausschliesslich zur Beantwortung Ihrer Anfrage. Anfragen werden nach 90 Tagen gelöscht.',
+    hostingTitle: 'Hosting',
+    hosting:
+      'Diese Website wird bei Netlify gehostet. Netlify speichert Server-Logdaten (u.a. IP-Adresse, Zeitpunkt, abgerufene Seite) zur Sicherstellung des Betriebs.',
+    analyticsTitle: 'Statistik',
+    analytics:
+      'Wir verwenden Cloudflare Web Analytics. Dabei werden keine Cookies gesetzt und keine Besucherinnen und Besucher über Websites hinweg verfolgt.',
+    rightsTitle: 'Ihre Rechte',
+    rights:
+      'Sie haben das Recht auf Auskunft, Berichtigung und Löschung Ihrer Daten. Melden Sie sich dazu unter der oben genannten Adresse.',
+  },
+  en: {
+    controller: 'Data controller',
+    cookiesTitle: 'Cookies',
+    cookies: 'This website sets no cookies and uses no tracking technologies that would require consent.',
+    fontsTitle: 'Fonts',
+    fonts: 'All fonts are served from our own server. No data is transmitted to Google Fonts or any other CDN.',
+    formTitle: 'Contact form',
+    form: 'If you write to us through the contact form, your name, email address and message are transmitted via our hosting provider Netlify (Netlify, Inc., USA) and delivered to us by email. Netlify automatically screens incoming messages for spam using Akismet (Automattic Inc., USA). We use this information solely to answer your enquiry. Enquiries are deleted after 90 days.',
+    hostingTitle: 'Hosting',
+    hosting:
+      'This website is hosted by Netlify. Netlify stores server log data (including IP address, timestamp and requested page) to keep the service running.',
+    analyticsTitle: 'Analytics',
+    analytics: 'We use Cloudflare Web Analytics. It sets no cookies and does not track visitors across websites.',
+    rightsTitle: 'Your rights',
+    rights: 'You have the right to access, correct and delete your data. Please contact us at the address above.',
+  },
+} satisfies Record<Locale, Record<string, string>>;
+
+const c = copy[locale];
 ---
 
 <BaseLayout title={`${t('footer.privacy')} — ${site.businessName}`} description={t('footer.privacy')} locale={locale}>
@@ -22,69 +75,36 @@ const analyticsEnabled = Boolean(site.analytics.cloudflareToken);
       <!--
         SETUP: this template reflects how THIS stack actually behaves. If you add
         a third-party embed (maps, video, booking widget, chat), you must extend
-        this page — see docs/02-legal-privacy-checklist.md.
+        this page — see docs/02-legal-privacy-checklist.md. The 90-day deletion
+        is a promise the client has to keep: confirm it with them.
       -->
 
-      <h2 class="heading-3">{de ? 'Verantwortliche Stelle' : 'Data controller'}</h2>
-      <p>{site.legalName}, {site.street}, {site.postalCode} {site.city}</p>
+      <h2 class="heading-3">{c.controller}</h2>
+      <p>{controller}</p>
 
-      <h2 class="heading-3">{de ? 'Cookies' : 'Cookies'}</h2>
-      <p>
-        {
-          de
-            ? 'Diese Website setzt keine Cookies und verwendet keine Tracking-Technologien, die eine Einwilligung erfordern.'
-            : 'This website sets no cookies and uses no tracking technologies that would require consent.'
-        }
-      </p>
+      <h2 class="heading-3">{c.cookiesTitle}</h2>
+      <p>{c.cookies}</p>
 
-      <h2 class="heading-3">{de ? 'Schriftarten' : 'Fonts'}</h2>
-      <p>
-        {
-          de
-            ? 'Alle Schriftarten werden von unserem eigenen Server ausgeliefert. Es werden keine Daten an Google Fonts oder ein anderes CDN übertragen.'
-            : 'All fonts are served from our own server. No data is transmitted to Google Fonts or any other CDN.'
-        }
-      </p>
+      <h2 class="heading-3">{c.fontsTitle}</h2>
+      <p>{c.fonts}</p>
 
-      <h2 class="heading-3">{de ? 'Kontaktformular' : 'Contact form'}</h2>
-      <p>
-        {
-          de
-            ? 'Wenn Sie uns über das Kontaktformular schreiben, werden Name, E-Mail-Adresse und Nachricht über unseren Hosting-Anbieter Netlify (Netlify Inc., USA) übermittelt und uns per E-Mail zugestellt. Wir verwenden diese Angaben ausschliesslich zur Beantwortung Ihrer Anfrage.'
-            : 'If you write to us through the contact form, your name, email address and message are transmitted via our hosting provider Netlify (Netlify Inc., USA) and delivered to us by email. We use this information solely to answer your enquiry.'
-        }
-      </p>
+      <h2 class="heading-3">{c.formTitle}</h2>
+      <p>{c.form}</p>
 
-      <h2 class="heading-3">{de ? 'Hosting' : 'Hosting'}</h2>
-      <p>
-        {
-          de
-            ? 'Diese Website wird bei Netlify gehostet. Netlify speichert Server-Logdaten (u.a. IP-Adresse, Zeitpunkt, abgerufene Seite) zur Sicherstellung des Betriebs.'
-            : 'This website is hosted by Netlify. Netlify stores server log data (including IP address, timestamp and requested page) to keep the service running.'
-        }
-      </p>
+      <h2 class="heading-3">{c.hostingTitle}</h2>
+      <p>{c.hosting}</p>
 
       {
         analyticsEnabled && (
           <>
-            <h2 class="heading-3">{de ? 'Statistik' : 'Analytics'}</h2>
-            <p>
-              {de
-                ? 'Wir verwenden Cloudflare Web Analytics. Dabei werden keine Cookies gesetzt und keine Besucherinnen und Besucher über Websites hinweg verfolgt.'
-                : 'We use Cloudflare Web Analytics. It sets no cookies and does not track visitors across websites.'}
-            </p>
+            <h2 class="heading-3">{c.analyticsTitle}</h2>
+            <p>{c.analytics}</p>
           </>
         )
       }
 
-      <h2 class="heading-3">{de ? 'Ihre Rechte' : 'Your rights'}</h2>
-      <p>
-        {
-          de
-            ? 'Sie haben das Recht auf Auskunft, Berichtigung und Löschung Ihrer Daten. Melden Sie sich dazu unter der oben genannten Adresse.'
-            : 'You have the right to access, correct and delete your data. Please contact us at the address above.'
-        }
-      </p>
+      <h2 class="heading-3">{c.rightsTitle}</h2>
+      <p>{c.rights}</p>
     </div>
   </section>
 </BaseLayout>

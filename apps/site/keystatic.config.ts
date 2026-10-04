@@ -165,15 +165,27 @@ export default config({
       path: 'src/data/site',
       format: { data: 'json' },
       schema: {
+        schemaType: fields.text({
+          label: 'Typ für Suchmaschinen',
+          description:
+            'schema.org-Typ: LocalBusiness oder eine Unterart (Dentist, Restaurant …) — oder Person für Einzelpersonen.',
+          defaultValue: 'LocalBusiness',
+        }),
         businessName: fields.text({ label: 'Name' }),
         legalName: fields.text({ label: 'Firma (rechtlich)' }),
         tagline: fields.text({ label: 'Slogan' }),
+        jobTitle: fields.text({ label: 'Beruf (nur bei Typ Person)' }),
         email: fields.text({ label: 'E-Mail' }),
         phone: fields.text({ label: 'Telefon' }),
         street: fields.text({ label: 'Strasse' }),
         postalCode: fields.text({ label: 'PLZ' }),
         city: fields.text({ label: 'Ort' }),
         country: fields.text({ label: 'Land (2 Buchstaben)', defaultValue: 'CH' }),
+        uid: fields.text({
+          label: 'UID (CHE-…)',
+          description:
+            'Nur falls im Handelsregister eingetragen. Leer = wird im Impressum nicht angezeigt.',
+        }),
         mapUrl: fields.url({ label: 'Link zur Karte' }),
         openingHours: fields.array(
           fields.object({
@@ -194,6 +206,22 @@ export default config({
             closes: fields.text({ label: 'Bis (z. B. 17:00)' }),
           }),
           { label: 'Öffnungszeiten', itemLabel: (props) => props.fields.day.value },
+        ),
+        socials: fields.array(
+          fields.object({
+            icon: fields.select({
+              label: 'Symbol',
+              options: [
+                { label: 'Instagram', value: 'instagram' },
+                { label: 'YouTube', value: 'youtube' },
+                { label: 'Anderer Link', value: 'link' },
+              ],
+              defaultValue: 'instagram',
+            }),
+            label: fields.text({ label: 'Bezeichnung (für Screenreader)' }),
+            href: fields.url({ label: 'Profil-URL' }),
+          }),
+          { label: 'Social-Media-Profile', itemLabel: (props) => props.fields.label.value },
         ),
         analytics: fields.object(
           {
