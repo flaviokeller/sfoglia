@@ -9,6 +9,7 @@
   "footer.legal": "Legal notice",
   "footer.privacy": "Privacy",
   "footer.rights": "All rights reserved.",
+  "footer.social": "Social media",
   "language.switch": "Switch language",
   "hours.title": "Opening hours",
   "hours.closed": "Closed",
@@ -26,6 +27,9 @@
   "gallery.close": "Close",
   "gallery.prev": "Previous image",
   "gallery.next": "Next image",
+  "events.title": "Events",
+  "events.past": "Past events",
+  "events.empty": "No events are currently planned. You can always reach us through the contact form.",
   "notFound.title": "Page not found",
   "notFound.body": "This page does not exist (any more).",
   "notFound.back": "Back to the homepage"

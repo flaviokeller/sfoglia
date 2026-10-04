@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(ts|tsx)'],
-  addons: [],
+  addons: ['@storybook/addon-docs'],
   core: { disableTelemetry: true },
   framework: {
     name: '@storybook/vue3-vite',

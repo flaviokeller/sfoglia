@@ -68,8 +68,10 @@ client-facing equivalent — same tokens, real Astro sections, in context.
 
 ## i18n
 
-`apps/site/src/i18n/config.ts` is the single source of truth — nothing else
-in the codebase enumerates locales. `LOCALES` currently ships `['de', 'en']`
+`apps/site/src/i18n/config.ts` is the single source of truth. Per-locale
+tables elsewhere (`t.ts` dictionaries, legal page copy, day names) are typed
+`Record<Locale, …>`, so changing `LOCALES` fails `astro check` until they
+match; `netlify.toml`'s `/` redirects are the one untyped list. `LOCALES` currently ships `['de', 'en']`
 with `de` as default. Routing uses `prefixDefaultLocale: true` with Astro's
 i18n `routing: 'manual'`, because Astro's automatic i18n middleware would 404
 every non-locale route including Keystatic's admin —
@@ -78,6 +80,13 @@ exception for `/keystatic` and other non-localized routes. When touching
 routing or adding pages, check this middleware.
 
 ## Known sharp edges
+
+- **Two content schemas.** `apps/site/src/content.config.ts` (Zod, validates
+  at build) and `apps/site/keystatic.config.ts` (the editor form that writes
+  the files) must change together. Keystatic saves untouched text fields as
+  `''`, so optional Zod fields must accept an empty string. The same goes for
+  the `settings` singleton and `src/data/site.json`: a key missing from the
+  singleton schema is dropped the first time the client saves.
 
 - **Vue/React Fast Refresh conflict.** React exists only for the Keystatic
   admin. `@vitejs/plugin-react`'s Fast Refresh transform runs over `.vue`

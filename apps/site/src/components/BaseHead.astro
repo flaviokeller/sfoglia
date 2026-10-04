@@ -1,6 +1,6 @@
 ---
 import { LOCALES, type Locale, withLocale } from '../i18n/config';
-import { openingHoursSpecification, site } from '../data/site';
+import { site, structuredData } from '../data/site';
 import { jsonLd } from '../lib/json-ld';
 
 interface Props {
@@ -24,29 +24,11 @@ const alternates = LOCALES.map((code) => ({
 }));
 
 /**
- * LocalBusiness structured data. This is the single highest-value SEO item for a
- * small business site: it is what puts opening hours and the address into the
- * Google side panel. Swap @type for the client's actual category
- * (Dentist, VeterinaryCare, Restaurant …) — see schema.org/LocalBusiness.
+ * Structured data — the single highest-value SEO item for a small site: for a
+ * business it puts opening hours and the address into the Google side panel.
+ * The type comes from `schemaType` in site.json (see data/site.ts).
  */
-const structuredData = {
-  '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
-  name: site.businessName,
-  legalName: site.legalName,
-  description,
-  url: Astro.site?.href,
-  email: site.email,
-  telephone: site.phone,
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: site.street,
-    postalCode: site.postalCode,
-    addressLocality: site.city,
-    addressCountry: site.country,
-  },
-  openingHoursSpecification: openingHoursSpecification(),
-};
+const schema = structuredData(description, Astro.site?.href);
 ---
 
 <meta charset="utf-8" />
@@ -72,7 +54,7 @@ const structuredData = {
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)" />
 
-<script type="application/ld+json" set:html={jsonLd(structuredData)} is:inline />
+<script type="application/ld+json" set:html={jsonLd(schema)} is:inline />
 
 {/*
   Without JavaScript the Vue islands never hydrate, so their server-rendered

@@ -53,11 +53,11 @@ const locality = [site.postalCode, site.city].filter(Boolean).join(' ');
 
     {/* No hours entered yet: the address block stands alone. */}
     {
-      site.openingHours.length > 0 && (
+      (site.openingHours ?? []).length > 0 && (
         <table class="hours__table">
           <tbody>
             {
-              site.openingHours.map((entry) => (
+              (site.openingHours ?? []).map((entry) => (
                 <tr data-day={entry.day}>
                   <th scope="row">{days[entry.day]}</th>
                   <td>

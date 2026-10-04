@@ -18,6 +18,12 @@
 
 .prose {
   inline-size: min(100%, var(--width-prose));
+  hyphens: auto;
+}
+
+/* German compounds strand a line on their own at this measure; let them break. */
+.prose:lang(de) {
+  hyphenate-limit-chars: 8 4 4;
 }
 
 .prose > * + * {
@@ -52,6 +58,7 @@
   font-weight: var(--weight-semibold);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
   color: var(--color-text);
 }
 
@@ -79,6 +86,8 @@
 }
 
 .eyebrow {
+  /* Chrome, not reading text: stays sans even when --font-body is a serif. */
+  font-family: var(--font-sans);
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-wide);
@@ -115,6 +124,7 @@
  * Buttons
  * ------------------------------------------------------------------ */
 .button {
+  font-family: var(--font-sans);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -250,6 +260,7 @@
 }
 
 .field__label {
+  font-family: var(--font-sans);
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
 }

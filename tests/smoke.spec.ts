@@ -124,6 +124,12 @@ test.describe('components', () => {
     await expect(email).toHaveAccessibleDescription(/gültige E-Mail/);
   });
 
+  test('events list is server-rendered with machine-readable dates', async ({ request }) => {
+    const html = await (await request.get('/de/')).text();
+    expect(html).toContain('Tag der offenen Tür');
+    expect(html).toMatch(/<time class="events__date" datetime="\d{4}-\d{2}-\d{2}"/);
+  });
+
   test('opening hours highlights the current day at runtime', async ({ page }) => {
     await page.goto('/de/');
     await expect(page.locator('.hours__table tr[data-today="true"]')).toHaveCount(1);
@@ -142,13 +148,25 @@ test.describe('navigation', () => {
     test.skip(!isMobile, 'mobile-only layout');
     await page.goto('/de/');
 
-    const toggle = page.locator('.nav__toggle');
+    /*
+     * Wait for hydration before clicking. client:load only schedules it: the
+     * server-rendered toggle is visible a moment before Vue attaches, and a
+     * click in that window does nothing.
+     */
+    const toggle = await hydrated(page, '.nav__toggle');
     await expect(toggle).toBeVisible();
     await toggle.click();
 
     const drawer = page.locator('.nav__drawer');
     await expect(drawer).toBeVisible();
     await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+
+    // The backdrop is position:fixed. If an ancestor gets a filter or
+    // backdrop-filter it becomes the containing block and the overlay shrinks
+    // to that ancestor's box (it happened with the frosted sticky header).
+    const viewport = page.viewportSize();
+    const backdrop = await page.locator('.nav__backdrop').boundingBox();
+    expect(backdrop?.height).toBe(viewport?.height);
 
     await page.keyboard.press('Escape');
     await expect(drawer).toBeHidden();

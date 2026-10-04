@@ -1,0 +1,49 @@
+---
+import EventList from '@flaviocodes/sfoglia-ui/components/EventList.vue';
+import type { EventItem } from '@flaviocodes/sfoglia-ui';
+
+import { INTL_LOCALES, type Locale } from '../i18n/config';
+import { getTranslations } from '../i18n/t';
+
+interface Props {
+  /** Anchor target, for one-page navigation. */
+  id?: string | undefined;
+  locale: Locale;
+  events: EventItem[];
+  surface?: boolean;
+}
+
+const { id, locale, events, surface = false } = Astro.props;
+const t = getTranslations(locale);
+
+/*
+ * "Today" for the server render only. EventList gets `live`, so it re-derives
+ * today from the visitor's clock on hydration and the upcoming/past split is
+ * right on every load, not just as of the last deploy.
+ */
+const today = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Zurich' });
+---
+
+{/* A site that never entered an event has no Termine section. One between
+    seasons keeps it, with the empty-state message. */}
+{events.length > 0 && (
+  <section id={id} class:list={['section', surface && 'section--surface']}>
+    <div class="container stack events-section">
+      <h2 class="heading-2">{t('events.title')}</h2>
+      <EventList
+        client:visible
+        events={events}
+        today={today}
+        live
+        locale={INTL_LOCALES[locale]}
+        labels={{ past: t('events.past'), empty: t('events.empty') }}
+      />
+    </div>
+  </section>
+)}
+
+<style>
+  .events-section {
+    max-inline-size: var(--width-prose);
+  }
+</style>

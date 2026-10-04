@@ -11,7 +11,11 @@ rots between projects, a checklist does not.
 ## 1. Rename and install
 
 - [ ] `apps/site/package.json` → `name`
-- [ ] `packages/ui/package.json` → `name` (keep the scope, change the suffix)
+- [ ] Leave `packages/ui` named `@flaviocodes/sfoglia-ui`. Every client keeps the
+      same import paths, so a fix in the template ports by copying the file
+      instead of rewriting imports in a dozen places.
+- [ ] Note the sfoglia commit you started from in the client README, as the
+      base for the next sync
 - [ ] `npm install`
 - [ ] `npm run dev` → <http://localhost:4321/de/> should render
 
@@ -21,35 +25,51 @@ The template ships **DE + EN**. Retrofitting a second language is painful;
 removing one is trivial. So: keep both if there is any chance the client wants a
 second language, and delete one only when you are sure.
 
-To remove EN:
-- [ ] `apps/site/src/i18n/config.ts` → drop `'en'` from `LOCALES`
-- [ ] delete `apps/site/src/i18n/en.json`
-- [ ] delete the `en/` folder inside each `apps/site/src/content/*/`
-- [ ] delete the `*_en` collections from `apps/site/keystatic.config.ts`
+To remove or add a locale:
+- [ ] `apps/site/src/i18n/config.ts` → edit `LOCALES` (and `LOCALE_NAMES`)
+- [ ] `apps/site/src/i18n/<locale>.json` → delete, or copy `de.json` and translate
+- [ ] the `<locale>/` folder inside each `apps/site/src/content/*/`
+- [ ] `apps/site/netlify.toml` → the `Language` redirect rules for `/`
+- [ ] `npm run typecheck` → every remaining per-locale table (`t.ts`
+      dictionaries, legal page copy, day names) is typed against `LOCALES`
+      and fails until it matches
 
-Nothing else enumerates locales.
+Keystatic builds its per-locale collections from `LOCALES`, so it needs no edit.
 
 ## 3. Theme the site
 
 This is where the visual identity actually happens.
 
 - [ ] `packages/ui/src/tokens/theme.css` → change the `--_brand-*` ramp hue, the
-      neutrals, `--font-sans` / `--font-display`, and the radii
+      neutrals, `--font-sans` / `--font-display` / `--font-body`, and the radii
+- [ ] Re-derive the dark-mode `--color-accent-soft` in `theme.css` (it is a
+      literal, not a ramp step) and the two `theme-color` hexes in
+      `apps/site/src/components/BaseHead.astro` (meta tags cannot read tokens)
 - [ ] Swap the fonts: `npm i @fontsource-variable/<family>` in `packages/ui`,
       then update the `@import` lines in `packages/ui/src/styles/global.css` and
       the family names in `theme.css`
 - [ ] `npm run storybook` → check every component in **light and dark**
 - [ ] <http://localhost:4321/styleguide> → check the sections in context
+- [ ] Optional, when the client can't name a look: send them
+      `/styleguide?direction=<a-o>` (arrow keys cycle). The catalog lives in
+      `packages/ui/src/tokens/theme-directions.css`, loaded only by the
+      styleguide. Ask colour (the direction) and shape (button shape/shadow,
+      eyebrow, heading decoration, photo treatment, depth, border weight,
+      heading face) as separate questions, then fold the winning *values* into
+      `theme.css` / `client.css` and drop the import once they have picked.
 
 Never write a raw colour or size outside `theme.css`. If you need one, add a
 role.
 
 ## 4. Business details and content
 
-- [ ] `apps/site/src/data/site.json` — name, address, phone, email, opening hours
+- [ ] `apps/site/src/data/site.json` — name, address, phone, email, opening hours,
+      socials, and `schemaType`: the schema.org type (`Dentist`, `Restaurant` …,
+      or `Person` for an individual with no premises — then set `jobTitle`)
 - [ ] `apps/site/src/content/**` — replace the sample content
 - [ ] `apps/site/public/favicon.svg`
-- [ ] `apps/site/src/pages/[locale]/impressum.astro` — real UID or delete the block
+- [ ] `uid` in `site.json` — only if the client is in the Handelsregister;
+      empty hides the Impressum block. Never invent one.
 - [ ] `apps/site/src/pages/[locale]/datenschutz.astro` — read it end to end; it
       describes how *this* stack behaves, so any third-party embed you add makes
       it wrong
@@ -84,7 +104,9 @@ your filesystem, no login. Production uses **GitHub mode**, which needs a GitHub
 App — once per repo, about five minutes.
 
 - [ ] Open `/keystatic` on the deployed site; it walks you through creating the app
-- [ ] Set `repo` in `apps/site/keystatic.config.ts` to the client's repo
+- [ ] Set `repo` in `apps/site/keystatic.config.ts` to the client's repo. Keep
+      `pathPrefix: 'apps/site/'` — without it every collection reads as empty
+      in production
 - [ ] Add the env vars Keystatic gives you to Netlify:
       `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`,
       `KEYSTATIC_SECRET`

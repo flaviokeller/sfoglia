@@ -1,23 +1,55 @@
 {
+  "schemaType": "LocalBusiness",
   "businessName": "Praxis am See",
   "legalName": "Praxis am See AG",
   "tagline": "Zahnmedizin mit Ruhe und Zeit",
+  "jobTitle": "",
   "email": "hallo@example.ch",
   "phone": "+41 44 123 45 67",
   "street": "Seestrasse 12",
   "postalCode": "8002",
   "city": "Zürich",
   "country": "CH",
+  "uid": "",
   "mapUrl": "https://www.openstreetmap.org/?mlat=47.3644&mlon=8.5361#map=17/47.3644/8.5361",
   "openingHours": [
-    { "day": "monday", "opens": "08:00", "closes": "17:00" },
-    { "day": "tuesday", "opens": "08:00", "closes": "17:00" },
-    { "day": "wednesday", "opens": "08:00", "closes": "17:00" },
-    { "day": "thursday", "opens": "08:00", "closes": "19:00" },
-    { "day": "friday", "opens": "08:00", "closes": "16:00" },
-    { "day": "saturday", "opens": "", "closes": "" },
-    { "day": "sunday", "opens": "", "closes": "" }
+    {
+      "day": "monday",
+      "opens": "08:00",
+      "closes": "17:00"
+    },
+    {
+      "day": "tuesday",
+      "opens": "08:00",
+      "closes": "17:00"
+    },
+    {
+      "day": "wednesday",
+      "opens": "08:00",
+      "closes": "17:00"
+    },
+    {
+      "day": "thursday",
+      "opens": "08:00",
+      "closes": "19:00"
+    },
+    {
+      "day": "friday",
+      "opens": "08:00",
+      "closes": "16:00"
+    },
+    {
+      "day": "saturday",
+      "opens": "",
+      "closes": ""
+    },
+    {
+      "day": "sunday",
+      "opens": "",
+      "closes": ""
+    }
   ],
+  "socials": [],
   "analytics": {
     "cloudflareToken": ""
   }

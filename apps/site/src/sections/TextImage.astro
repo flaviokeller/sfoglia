@@ -3,6 +3,8 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 interface Props {
+  /** Anchor target, for one-page navigation. */
+  id?: string | undefined;
   eyebrow?: string | undefined;
   title: string;
   image?: ImageMetadata | undefined;
@@ -12,10 +14,10 @@ interface Props {
   surface?: boolean;
 }
 
-const { eyebrow, title, image, imageAlt = '', reversed = false, surface = false } = Astro.props;
+const { id, eyebrow, title, image, imageAlt = '', reversed = false, surface = false } = Astro.props;
 ---
 
-<section class:list={['section', surface && 'section--surface']}>
+<section id={id} class:list={['section', surface && 'section--surface']}>
   <div class="container text-image" data-reversed={reversed ? 'true' : 'false'}>
     <div class="text-image__body stack">
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
