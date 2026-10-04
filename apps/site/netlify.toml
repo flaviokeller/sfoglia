@@ -6,14 +6,19 @@
 # Base directory = packages/ui. See SETUP.md.
 
 [build]
-  command = "npm run build"
+  # Force a from-scratch install on every build instead of trusting Netlify's
+  # dependency cache. lightningcss and rolldown both ship platform-specific
+  # native binaries as optional deps, and this monorepo has hit flaky, cache-
+  # dependent resolution failures for both that a clean `npm ci` never
+  # reproduces locally. Slower, but deterministic.
+  command = "rm -rf ../../node_modules && npm ci --prefix ../.. && npm run build"
   publish = "dist"
 
 [build.environment]
   NODE_VERSION = "22"
 
 # --------------------------------------------------------------------------- #
-# Root redirect
+# Root redirect — one Language rule per non-default locale in LOCALES
 #
 # `/` is not a real page (all locales are prefixed). Redirecting here at the CDN
 # is much better than the meta-refresh Astro emits — it is instant and costs no

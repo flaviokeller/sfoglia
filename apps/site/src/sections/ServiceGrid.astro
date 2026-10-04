@@ -6,6 +6,8 @@ interface Service {
 }
 
 export interface Props {
+  /** Anchor target, for one-page navigation. */
+  id?: string | undefined;
   eyebrow?: string | undefined;
   title: string;
   /** h1 when the grid is the page itself (Leistungen), h2 as a section of a longer page. */
@@ -15,7 +17,7 @@ export interface Props {
   surface?: boolean;
 }
 
-const { eyebrow, title, as: Heading = 'h2', lead, services, surface = true } = Astro.props;
+const { id, eyebrow, title, as: Heading = 'h2', lead, services, surface = true } = Astro.props;
 
 // As a section, an empty grid would be a heading over nothing, so it drops out.
 // As the page itself it keeps its heading, so the page is never blank.
@@ -23,7 +25,7 @@ const visible = services.length > 0 || Heading === 'h1';
 ---
 
 {visible && (
-  <section class:list={['section', surface && 'section--surface']}>
+  <section id={id} class:list={['section', surface && 'section--surface']}>
     <div class="container stack">
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
       <Heading class:list={[Heading === 'h1' ? 'heading-1' : 'heading-2']}>{title}</Heading>
