@@ -1,7 +1,7 @@
 ---
 import type { Locale } from '../i18n/config';
 import { getTranslations } from '../i18n/t';
-import { site } from '../data/site';
+import { site, telHref } from '../data/site';
 
 interface Props {
   locale: Locale;
@@ -10,22 +10,32 @@ interface Props {
 const { locale } = Astro.props;
 const t = getTranslations(locale);
 const year = new Date().getFullYear();
+const locality = [site.postalCode, site.city].filter(Boolean).join(' ');
 ---
 
 <footer class="site-footer">
   <div class="container site-footer__inner">
     <div class="site-footer__block">
       <p class="site-footer__brand">{site.businessName}</p>
-      <address class="site-footer__address">
-        {site.street}<br />
-        {site.postalCode} {site.city}
-      </address>
+      {
+        (site.street || locality) && (
+          <address class="site-footer__address">
+            {site.street}
+            {site.street && locality && <br />}
+            {locality}
+          </address>
+        )
+      }
     </div>
 
-    <div class="site-footer__block">
-      <a class="link" href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a>
-      <a class="link" href={`mailto:${site.email}`}>{site.email}</a>
-    </div>
+    {
+      (site.phone || site.email) && (
+        <div class="site-footer__block">
+          {site.phone && <a class="link" href={telHref(site.phone)}>{site.phone}</a>}
+          {site.email && <a class="link" href={`mailto:${site.email}`}>{site.email}</a>}
+        </div>
+      )
+    }
 
     <nav class="site-footer__block" aria-label={t('footer.legal')}>
       <a class="link" href={`/${locale}/impressum/`}>{t('footer.legal')}</a>
@@ -34,7 +44,7 @@ const year = new Date().getFullYear();
   </div>
 
   <div class="container site-footer__meta">
-    <small>&copy; {year} {site.legalName}. {t('footer.rights')}</small>
+    <small>&copy; {year} {site.legalName || site.businessName}. {t('footer.rights')}</small>
   </div>
 </footer>
 

@@ -1,6 +1,7 @@
 ---
 import { LOCALES, type Locale, withLocale } from '../i18n/config';
 import { openingHoursSpecification, site } from '../data/site';
+import { jsonLd } from '../lib/json-ld';
 
 interface Props {
   title: string;
@@ -71,4 +72,37 @@ const structuredData = {
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)" />
 
-<script type="application/ld+json" set:html={JSON.stringify(structuredData)} is:inline />
+<script type="application/ld+json" set:html={jsonLd(structuredData)} is:inline />
+
+{/*
+  Without JavaScript the Vue islands never hydrate, so their server-rendered
+  closed states would be dead ends: answers hidden for good, and on phones no
+  nav at all behind a toggle that does nothing. Fall back to the static layout.
+*/}
+<noscript>
+  <style>
+    .accordion__panel[hidden] {
+      display: block;
+    }
+
+    /* Doubled-up selectors outrank the drawer's media query without !important. */
+    .accordion .accordion__icon,
+    .nav .nav__toggle {
+      display: none;
+    }
+
+    .nav .nav__bar {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: var(--space-md);
+    }
+
+    /* Three classes deep to outrank Astro's scoped `.class[data-astro-cid]`. */
+    .site-header .site-header__inner,
+    .site-header .site-header__inner .site-header__right {
+      flex-wrap: wrap;
+      flex-shrink: 1;
+      min-inline-size: 0;
+    }
+  </style>
+</noscript>

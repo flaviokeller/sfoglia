@@ -11,31 +11,43 @@ interface Props {
 }
 
 const { title, testimonials } = Astro.props;
+
+/*
+ * The design adds curly quotes around every quote. Editors often type their own,
+ * which would double up as “„Super Praxis““ — so strip any they included.
+ */
+const QUOTE_MARKS = /^["'\u201C\u201D\u201E\u00AB\u00BB\u2018\u2019\u201A\s]+|["'\u201C\u201D\u201E\u00AB\u00BB\u2018\u2019\u201A\s]+$/g;
+const items = testimonials
+  .map((item) => ({ ...item, quote: item.quote.replace(QUOTE_MARKS, '') }))
+  .filter((item) => item.quote);
 ---
 
-<section class="section">
-  <div class="container stack">
-    {title && <h2 class="heading-2">{title}</h2>}
+{/* Nothing to quote: render nothing rather than an empty band. */}
+{items.length > 0 && (
+  <section class="section">
+    <div class="container stack">
+      {title && <h2 class="heading-2">{title}</h2>}
 
-    <ul class="grid grid--auto testimonials" role="list">
-      {
-        testimonials.map((item) => (
-          <li>
-            <figure class="card testimonials__item">
-              <blockquote class="testimonials__quote">
-                <p>{item.quote}</p>
-              </blockquote>
-              <figcaption class="testimonials__author">
-                <span>{item.author}</span>
-                {item.context && <span class="text-muted"> · {item.context}</span>}
-              </figcaption>
-            </figure>
-          </li>
-        ))
-      }
-    </ul>
-  </div>
-</section>
+      <ul class="grid grid--auto testimonials" role="list">
+        {
+          items.map((item) => (
+            <li>
+              <figure class="card testimonials__item">
+                <blockquote class="testimonials__quote">
+                  <p>{item.quote}</p>
+                </blockquote>
+                <figcaption class="testimonials__author">
+                  <span>{item.author}</span>
+                  {item.context && <span class="text-muted"> · {item.context}</span>}
+                </figcaption>
+              </figure>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+)}
 
 <style>
   .testimonials {

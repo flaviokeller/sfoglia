@@ -58,7 +58,7 @@ const analyticsToken = site.analytics.cloudflareToken;
           is:inline
           defer
           src="https://static.cloudflareinsights.com/beacon.min.js"
-          data-cf-beacon={`{"token": "${analyticsToken}"}`}
+          data-cf-beacon={JSON.stringify({ token: analyticsToken.trim() })}
         />
       )
     }

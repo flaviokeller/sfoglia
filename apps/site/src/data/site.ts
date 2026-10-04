@@ -67,3 +67,12 @@ export function openingHoursSpecification() {
       closes: entry.closes,
     }));
 }
+
+/**
+ * `tel:` href from a phone number as an editor types it. Strips spaces,
+ * punctuation and the Swiss/German "(0)" trunk prefix, which is invalid after
+ * a country code: "+41 (0)44 123 45 67" -> "tel:+41441234567".
+ */
+export function telHref(phone: string): string {
+  return `tel:${phone.replace(/\(0\)/g, '').replace(/[^\d+]/g, '')}`;
+}

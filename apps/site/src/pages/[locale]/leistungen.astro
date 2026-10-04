@@ -24,6 +24,7 @@ const services = (await getCollection('services', inLocale(locale))).sort(
   locale={locale}
 >
   <ServiceGrid
+    as="h1"
     eyebrow={site.businessName}
     title={t('nav.services')}
     services={services.map((entry) => ({ title: entry.data.title, summary: entry.data.summary }))}

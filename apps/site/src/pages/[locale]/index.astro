@@ -11,6 +11,7 @@ import Testimonials from '../../sections/Testimonials.astro';
 import TextImage from '../../sections/TextImage.astro';
 import { LOCALES, type Locale } from '../../i18n/config';
 import { getTranslations } from '../../i18n/t';
+import { site } from '../../data/site';
 
 export function getStaticPaths() {
   return LOCALES.map((locale) => ({ params: { locale } }));
@@ -32,18 +33,27 @@ const ofLocale = inLocale(locale);
 const services = (await getCollection('services', ofLocale)).sort(byOrder);
 const faq = (await getCollection('faq', ofLocale)).sort(byOrder);
 const testimonials = (await getCollection('testimonials', ofLocale)).sort(byOrder);
+
+// Keystatic saves untouched SEO fields as empty strings, which would ship an
+// empty <title>. Fall back to the page's own title and the site tagline.
+const { seo } = page.data;
+const seoTitle = seo.title.trim() || `${page.data.title} — ${site.businessName}`;
+const seoDescription = seo.description.trim() || page.data.lead || site.tagline;
 ---
 
 <BaseLayout
-  title={page.data.seo.title}
-  description={page.data.seo.description}
+  title={seoTitle}
+  description={seoDescription}
   locale={locale}
-  noindex={page.data.seo.noindex}
+  ogImage={seo.ogImage?.trim() || undefined}
+  noindex={seo.noindex}
 >
   <Hero
     eyebrow={page.data.eyebrow}
     title={page.data.title}
     lead={page.data.lead}
+    image={page.data.heroImage}
+    imageAlt={page.data.heroImageAlt}
     primaryCta={{ href: `/${locale}/kontakt/`, label: t('nav.contact') }}
     secondaryCta={{ href: `/${locale}/leistungen/`, label: t('nav.services') }}
   />
