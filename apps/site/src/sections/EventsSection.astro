@@ -2,7 +2,7 @@
 import EventList from '@flaviocodes/sfoglia-ui/components/EventList.vue';
 import type { EventItem } from '@flaviocodes/sfoglia-ui';
 
-import type { Locale } from '../i18n/config';
+import { INTL_LOCALES, type Locale } from '../i18n/config';
 import { getTranslations } from '../i18n/t';
 
 interface Props {
@@ -35,7 +35,7 @@ const today = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Zurich'
         events={events}
         today={today}
         live
-        locale={locale}
+        locale={INTL_LOCALES[locale]}
         labels={{ past: t('events.past'), empty: t('events.empty') }}
       />
     </div>
