@@ -19,6 +19,6 @@ const t = getTranslations(locale);
   description={`${site.businessName}, ${site.street}, ${site.postalCode} ${site.city}`}
   locale={locale}
 >
-  <ContactSection locale={locale} />
+  <ContactSection locale={locale} as="h1" />
   <OpeningHours locale={locale} />
 </BaseLayout>

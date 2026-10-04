@@ -88,6 +88,12 @@
     font-size: var(--text-lg);
   }
 
+  /* Scroll lock while the drawer is open. Lives inside this media query, so it
+     lifts automatically if the window is widened with the drawer still open. */
+  :root:has(.nav__drawer:not([hidden])) {
+    overflow: hidden;
+  }
+
   .nav__backdrop:not([hidden]) {
     display: block;
     position: fixed;
@@ -152,6 +158,8 @@
 
 .accordion__content {
   padding-block-end: var(--space-md);
+  /* Answers come from a plain multiline field: keep the editor's line breaks. */
+  white-space: pre-line;
   color: var(--color-text-muted);
   max-inline-size: var(--measure);
 }
@@ -222,6 +230,11 @@
   max-block-size: 100svb;
   inline-size: 100%;
   block-size: 100%;
+}
+
+/* The native dialog does not stop the page behind it from scrolling. */
+:root:has(.lightbox[open]) {
+  overflow: hidden;
 }
 
 .lightbox::backdrop {

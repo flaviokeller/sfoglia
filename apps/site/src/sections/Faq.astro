@@ -1,5 +1,6 @@
 ---
 import FaqAccordion from '@flaviocodes/sfoglia-ui/components/FaqAccordion.vue';
+import { jsonLd } from '../lib/json-ld';
 
 interface FaqItem {
   question: string;
@@ -29,17 +30,21 @@ const faqSchema = {
 };
 ---
 
-<section class="section">
-  <div class="container stack" style="max-inline-size: 48rem">
-    <h2 class="heading-2">{title}</h2>
+{/* No questions yet: render nothing rather than a heading over an empty list
+    (and an empty FAQPage block, which Google flags as invalid). */}
+{items.length > 0 && (
+  <section class="section">
+    <div class="container stack" style="max-inline-size: 48rem">
+      <h2 class="heading-2">{title}</h2>
 
-    {/*
-      Astro server-renders the accordion, so the questions and answers are in the
-      HTML source for crawlers; client:visible only adds the open/close behaviour
-      once it scrolls into view.
-    */}
-    <FaqAccordion client:visible items={items} />
-  </div>
+      {/*
+        Astro server-renders the accordion, so the questions and answers are in the
+        HTML source for crawlers; client:visible only adds the open/close behaviour
+        once it scrolls into view.
+      */}
+      <FaqAccordion client:visible items={items} />
+    </div>
 
-  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />
-</section>
+    <script type="application/ld+json" set:html={jsonLd(faqSchema)} is:inline />
+  </section>
+)}

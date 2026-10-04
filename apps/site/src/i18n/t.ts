@@ -1,3 +1,4 @@
+import { site } from '../data/site';
 import { DEFAULT_LOCALE, type Locale } from './config.js';
 import de from './de.json';
 import en from './en.json';
@@ -39,7 +40,8 @@ export function contactFormLabels(locale: Locale) {
     submit: t('contact.form.submit'),
     sending: t('contact.form.sending'),
     success: t('contact.form.success'),
-    error: t('contact.form.error'),
+    // The fallback address makes a failed send recoverable rather than a dead end.
+    error: t('contact.form.error').replace('{email}', site.email),
     required: t('contact.form.required'),
     invalidEmail: t('contact.form.invalidEmail'),
   };

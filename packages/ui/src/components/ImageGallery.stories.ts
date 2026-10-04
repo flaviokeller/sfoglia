@@ -42,3 +42,18 @@ type Story = StoryObj<typeof ImageGallery>;
 
 export const Default: Story = {};
 export const SingleImage: Story = { args: { images: images.slice(0, 1) } };
+
+/**
+ * Editor mistakes: a photo uploaded twice and photos without alt text. Tiles
+ * without alt get a positional name, so no link is unnamed.
+ */
+export const EditorContent: Story = {
+  args: {
+    images: [
+      ...images.slice(0, 1),
+      ...images.slice(0, 1),
+      { src: placeholder('Ohne Alt', 90), alt: '' },
+      ...images.slice(1, 2),
+    ],
+  },
+};

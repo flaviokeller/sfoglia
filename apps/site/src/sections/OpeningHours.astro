@@ -1,7 +1,7 @@
 ---
 import type { Locale } from '../i18n/config';
 import { getTranslations } from '../i18n/t';
-import { DAY_NAMES, site } from '../data/site';
+import { DAY_NAMES, site, telHref } from '../data/site';
 
 interface Props {
   locale: Locale;
@@ -11,6 +11,7 @@ interface Props {
 const { locale, surface = true } = Astro.props;
 const t = getTranslations(locale);
 const days = DAY_NAMES[locale];
+const locality = [site.postalCode, site.city].filter(Boolean).join(' ');
 
 // NB: "today" must NOT be computed here. This is a static build — a build-time
 // date would freeze on whatever day the site was deployed. It is set at runtime
@@ -21,36 +22,60 @@ const days = DAY_NAMES[locale];
   <div class="container hours">
     <div class="stack">
       <h2 class="heading-2">{t('hours.title')}</h2>
-      <address class="hours__address">
-        {site.street}<br />
-        {site.postalCode} {site.city}
-      </address>
-      <p>
-        <a class="link" href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a>
-      </p>
-      <p><a class="link" href={site.mapUrl} rel="noopener">{site.city} · Karte öffnen</a></p>
+      {/* Every contact field is optional in Keystatic: a blank one drops out
+          instead of leaving a stray line break or an empty link. */}
+      {
+        (site.street || locality) && (
+          <address class="hours__address">
+            {site.street}
+            {site.street && locality && <br />}
+            {locality}
+          </address>
+        )
+      }
+      {
+        site.phone && (
+          <p>
+            <a class="link" href={telHref(site.phone)}>{site.phone}</a>
+          </p>
+        )
+      }
+      {
+        site.mapUrl && (
+          <p>
+            <a class="link" href={site.mapUrl}>
+              {[site.city, t('hours.map')].filter(Boolean).join(' · ')}
+            </a>
+          </p>
+        )
+      }
     </div>
 
-    <table class="hours__table">
-      <tbody>
-        {
-          site.openingHours.map((entry) => (
-            <tr data-day={entry.day}>
-              <th scope="row">{days[entry.day]}</th>
-              <td>
-                {entry.opens && entry.closes ? (
-                  <>
-                    {entry.opens}&ndash;{entry.closes}
-                  </>
-                ) : (
-                  <span class="text-muted">{t('hours.closed')}</span>
-                )}
-              </td>
-            </tr>
-          ))
-        }
-      </tbody>
-    </table>
+    {/* No hours entered yet: the address block stands alone. */}
+    {
+      site.openingHours.length > 0 && (
+        <table class="hours__table">
+          <tbody>
+            {
+              site.openingHours.map((entry) => (
+                <tr data-day={entry.day}>
+                  <th scope="row">{days[entry.day]}</th>
+                  <td>
+                    {entry.opens && entry.closes ? (
+                      <>
+                        {entry.opens}&ndash;{entry.closes}
+                      </>
+                    ) : (
+                      <span class="text-muted">{t('hours.closed')}</span>
+                    )}
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      )
+    }
   </div>
 </section>
 

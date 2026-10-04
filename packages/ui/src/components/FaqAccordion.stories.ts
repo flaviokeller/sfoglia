@@ -38,3 +38,26 @@ type Story = StoryObj<typeof FaqAccordion>;
 export const Default: Story = {};
 export const FirstOpen: Story = { args: { initialOpen: 0 } };
 export const MultipleOpen: Story = { args: { allowMultiple: true, initialOpen: 0 } };
+
+/**
+ * What an editor actually types: a long German compound, line breaks inside an
+ * answer, and the same question entered twice. All three must render cleanly.
+ */
+export const EditorContent: Story = {
+  args: {
+    initialOpen: 0,
+    items: [
+      {
+        question:
+          'Werden Behandlungen der Kieferorthopädie über die Zusatzversicherungsleistungen abgerechnet?',
+        answer:
+          'Das hängt von Ihrer Police ab.\nWir prüfen das gerne vorab mit Ihnen.\n\nBringen Sie dafür bitte Ihre Versicherungsunterlagen mit.',
+      },
+      ...items.slice(1, 2),
+      ...items.slice(1, 2),
+    ],
+  },
+};
+
+/** No questions entered yet: renders nothing rather than an empty ruled box. */
+export const Empty: Story = { args: { items: [] } };

@@ -1,0 +1,268 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-04T00:00:00Z",
+  "title": "Design System: sfoglia",
+  "extensions": {
+    "colorMeta": {
+      "brand-accent": {
+        "role": "primary",
+        "displayName": "Brand Accent",
+        "canonical": "oklch(50% 0.18 250)",
+        "tonalRamp": [
+          "oklch(26% 0.07 250)",
+          "oklch(34% 0.11 250)",
+          "oklch(42% 0.15 250)",
+          "oklch(50% 0.18 250)",
+          "oklch(58% 0.19 250)",
+          "oklch(68% 0.16 250)",
+          "oklch(87% 0.08 250)",
+          "oklch(97% 0.02 250)"
+        ]
+      },
+      "brand-accent-text": {
+        "role": "primary",
+        "displayName": "Brand Accent (text-safe)",
+        "canonical": "oklch(42% 0.15 250)"
+      },
+      "brand-accent-soft": {
+        "role": "primary",
+        "displayName": "Brand Accent Soft",
+        "canonical": "oklch(97% 0.02 250)"
+      },
+      "focus-ring": {
+        "role": "primary",
+        "displayName": "Focus Ring",
+        "canonical": "oklch(58% 0.19 250)"
+      },
+      "canvas": { "role": "neutral", "displayName": "Canvas", "canonical": "oklch(100% 0 0)" },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Tinted Paper",
+        "canonical": "oklch(98% 0.004 250)",
+        "tonalRamp": [
+          "oklch(14% 0.005 250)",
+          "oklch(19% 0.006 250)",
+          "oklch(27% 0.008 250)",
+          "oklch(38% 0.01 250)",
+          "oklch(48% 0.012 250)",
+          "oklch(70% 0.012 250)",
+          "oklch(92% 0.008 250)",
+          "oklch(98% 0.004 250)"
+        ]
+      },
+      "surface-sunken": {
+        "role": "neutral",
+        "displayName": "Sunken Paper",
+        "canonical": "oklch(96% 0.006 250)"
+      },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "oklch(19% 0.006 250)" },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Muted Ink",
+        "canonical": "oklch(48% 0.012 250)"
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "oklch(92% 0.008 250)"
+      },
+      "border-strong": {
+        "role": "neutral",
+        "displayName": "Strong Hairline",
+        "canonical": "oklch(86% 0.01 250)"
+      },
+      "success": { "role": "status", "displayName": "Success", "canonical": "oklch(58% 0.15 150)" },
+      "danger": { "role": "status", "displayName": "Danger", "canonical": "oklch(56% 0.19 27)" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero title only, once per page." },
+      "headline": { "displayName": "Headline", "purpose": "Page-level h1 without a hero." },
+      "title": { "displayName": "Title", "purpose": "Section headings (h2)." },
+      "title-sm": {
+        "displayName": "Title, small",
+        "purpose": "Card and item headings; the one sans heading."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Muted intro paragraph under a section title, 65ch max."
+      },
+      "body": { "displayName": "Body", "purpose": "Running text, 42rem prose max." },
+      "label": {
+        "displayName": "Eyebrow",
+        "purpose": "Optional uppercase tag above a heading, accent text."
+      }
+    },
+    "shadows": [
+      {
+        "name": "shadow-sm",
+        "value": "0 1px 2px oklch(0% 0 0 / 0.05), 0 1px 3px oklch(0% 0 0 / 0.06)",
+        "purpose": "Defined but rarely used; smallest lift."
+      },
+      {
+        "name": "shadow-md",
+        "value": "0 2px 4px oklch(0% 0 0 / 0.05), 0 4px 12px oklch(0% 0 0 / 0.08)",
+        "purpose": "Interactive card hover, paired with a 2px rise."
+      },
+      {
+        "name": "shadow-lg",
+        "value": "0 4px 8px oklch(0% 0 0 / 0.05), 0 12px 32px oklch(0% 0 0 / 0.1)",
+        "purpose": "Mobile nav drawer overlay."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Default easing for all state transitions."
+      },
+      {
+        "name": "ease-in-out",
+        "value": "cubic-bezier(0.65, 0, 0.35, 1)",
+        "purpose": "Symmetric movement."
+      },
+      { "name": "duration-fast", "value": "120ms", "purpose": "Colour and border changes." },
+      {
+        "name": "duration-base",
+        "value": "220ms",
+        "purpose": "Card lift, chevron rotation, drawer slide."
+      },
+      { "name": "duration-slow", "value": "400ms", "purpose": "Gallery thumbnail zoom." }
+    ],
+    "breakpoints": [{ "name": "nav-drawer", "value": "48rem" }]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one action per section; brand accent fill.",
+      "html": "<button class=\"ds-btn ds-btn-primary\">Termin vereinbaren</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs, 0.5rem); padding: var(--space-sm, 0.75rem) var(--space-lg, 1.5rem); border: 1px solid transparent; border-radius: var(--radius-md, 0.5rem); font-family: var(--font-sans, 'Inter Variable', system-ui, sans-serif); font-size: var(--text-base, 1rem); font-weight: 500; line-height: 1.2; cursor: pointer; transition: background-color 120ms cubic-bezier(0.22, 1, 0.36, 1), border-color 120ms cubic-bezier(0.22, 1, 0.36, 1), color 120ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-btn:focus-visible { outline: 2px solid var(--color-focus-ring, oklch(58% 0.19 250)); outline-offset: 2px; } .ds-btn-primary { background-color: var(--color-accent, oklch(50% 0.18 250)); color: var(--color-text-on-accent, #fff); } .ds-btn-primary:hover { background-color: var(--color-accent-hover, oklch(42% 0.15 250)); } .ds-btn-primary:active { background-color: var(--color-accent-active, oklch(34% 0.11 250)); }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Alternative action beside a primary; hairline outline.",
+      "html": "<button class=\"ds-btn-secondary\">Leistungen ansehen</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; padding: var(--space-sm, 0.75rem) var(--space-lg, 1.5rem); background: transparent; border: 1px solid var(--color-border-strong, oklch(86% 0.01 250)); border-radius: var(--radius-md, 0.5rem); color: var(--color-text, oklch(19% 0.006 250)); font-family: var(--font-sans, 'Inter Variable', system-ui, sans-serif); font-size: var(--text-base, 1rem); font-weight: 500; line-height: 1.2; cursor: pointer; transition: border-color 120ms cubic-bezier(0.22, 1, 0.36, 1), color 120ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-btn-secondary:hover { border-color: var(--color-accent, oklch(50% 0.18 250)); color: var(--color-accent-text, oklch(42% 0.15 250)); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--color-focus-ring, oklch(58% 0.19 250)); outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Low-emphasis inline action; soft tint on hover.",
+      "html": "<button class=\"ds-btn-ghost\">Mehr erfahren</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; padding: var(--space-sm, 0.75rem); background: transparent; border: 1px solid transparent; border-radius: var(--radius-md, 0.5rem); color: var(--color-accent-text, oklch(42% 0.15 250)); font-family: var(--font-sans, 'Inter Variable', system-ui, sans-serif); font-size: var(--text-base, 1rem); font-weight: 500; line-height: 1.2; cursor: pointer; transition: background-color 120ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-btn-ghost:hover { background-color: var(--color-accent-soft, oklch(97% 0.02 250)); } .ds-btn-ghost:focus-visible { outline: 2px solid var(--color-focus-ring, oklch(58% 0.19 250)); outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Labelled field with hint; accent border on hover, danger on invalid.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">E-Mail</span><input class=\"ds-input\" type=\"email\" placeholder=\"name@beispiel.ch\"><span class=\"ds-field-hint\">Wir antworten innert zwei Arbeitstagen.</span></label>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: var(--space-2xs, 0.25rem); max-width: 32rem; font-family: var(--font-sans, 'Inter Variable', system-ui, sans-serif); color: var(--color-text, oklch(19% 0.006 250)); } .ds-field-label { font-size: var(--text-sm, 0.875rem); font-weight: 500; } .ds-field-hint { font-size: var(--text-sm, 0.875rem); color: var(--color-text-muted, oklch(48% 0.012 250)); } .ds-input { width: 100%; padding: var(--space-sm, 0.75rem) var(--space-md, 1rem); background-color: var(--color-surface-raised, #fff); border: 1px solid var(--color-border-strong, oklch(86% 0.01 250)); border-radius: var(--radius-md, 0.5rem); font: inherit; font-size: var(--text-base, 1rem); color: inherit; transition: border-color 120ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-input::placeholder { color: var(--color-text-subtle, oklch(58% 0.012 250)); } .ds-input:hover { border-color: var(--color-accent, oklch(50% 0.18 250)); } .ds-input:focus-visible { outline: 2px solid var(--color-focus-ring, oklch(58% 0.19 250)); outline-offset: 2px; } .ds-input[aria-invalid='true'] { border-color: var(--color-danger, oklch(56% 0.19 27)); }"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Inline links; current page gets accent text and a 2px underline.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-link\" href=\"#\" aria-current=\"page\">Start</a><a class=\"ds-nav-link\" href=\"#\">Leistungen</a><a class=\"ds-nav-link\" href=\"#\">Team</a><a class=\"ds-nav-link\" href=\"#\">Kontakt</a></nav>",
+      "css": ".ds-nav { display: flex; gap: var(--space-lg, 1.5rem); font-family: var(--font-sans, 'Inter Variable', system-ui, sans-serif); } .ds-nav-link { color: var(--color-text, oklch(19% 0.006 250)); text-decoration: none; font-weight: 500; padding-block: var(--space-2xs, 0.25rem); border-bottom: 2px solid transparent; transition: color 120ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-nav-link:hover { color: var(--color-accent-text, oklch(42% 0.15 250)); } .ds-nav-link[aria-current='page'] { color: var(--color-accent-text, oklch(42% 0.15 250)); border-bottom-color: var(--color-accent, oklch(50% 0.18 250)); } .ds-nav-link:focus-visible { outline: 2px solid var(--color-focus-ring, oklch(58% 0.19 250)); outline-offset: 2px; border-radius: 0.25rem; }"
+    },
+    {
+      "name": "Badge",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Small pill tag; accent-soft by default.",
+      "html": "<span class=\"ds-badge\">Neu</span> <span class=\"ds-badge ds-badge-neutral\">Kassenpflichtig</span>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; padding: var(--space-3xs, 0.125rem) var(--space-xs, 0.5rem); border-radius: 9999px; font-family: var(--font-sans, 'Inter Variable', system-ui, sans-serif); font-size: var(--text-xs, 0.75rem); font-weight: 500; background-color: var(--color-accent-soft, oklch(97% 0.02 250)); color: var(--color-accent-text, oklch(42% 0.15 250)); } .ds-badge-neutral { background-color: var(--color-surface-sunken, oklch(96% 0.006 250)); color: var(--color-text-muted, oklch(48% 0.012 250)); }"
+    },
+    {
+      "name": "Service Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Flat bordered card; interactive variant lifts on hover.",
+      "html": "<article class=\"ds-card\"><h3 class=\"ds-card-title\">Dentalhygiene</h3><p class=\"ds-card-body\">Gründliche Reinigung und Beratung, in Ruhe und ohne Zeitdruck.</p></article>",
+      "css": ".ds-card { display: flex; flex-direction: column; gap: var(--space-sm, 0.75rem); max-width: 22rem; padding: var(--space-lg, 1.5rem); background-color: var(--color-surface-raised, #fff); border: 1px solid var(--color-border, oklch(92% 0.008 250)); border-radius: var(--radius-lg, 0.875rem); font-family: var(--font-sans, 'Inter Variable', system-ui, sans-serif); transition: border-color 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1), transform 220ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-card:hover { border-color: var(--color-border-strong, oklch(86% 0.01 250)); box-shadow: var(--shadow-md, 0 2px 4px oklch(0% 0 0 / 0.05), 0 4px 12px oklch(0% 0 0 / 0.08)); transform: translateY(-2px); } .ds-card-title { margin: 0; font-size: var(--text-lg, 1.125rem); font-weight: 600; line-height: 1.3; letter-spacing: -0.02em; color: var(--color-text, oklch(19% 0.006 250)); } .ds-card-body { margin: 0; color: var(--color-text-muted, oklch(48% 0.012 250)); line-height: 1.6; }"
+    },
+    {
+      "name": "Testimonial",
+      "kind": "custom",
+      "refersTo": "card",
+      "description": "Quote in the display serif with generated curly quotes.",
+      "html": "<figure class=\"ds-quote\"><blockquote class=\"ds-quote-text\"><p>Zum ersten Mal ohne Angst beim Zahnarzt.</p></blockquote><figcaption class=\"ds-quote-author\">M. Keller <span class=\"ds-quote-context\">· Patientin seit 2019</span></figcaption></figure>",
+      "css": ".ds-quote { display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-sm, 0.75rem); max-width: 22rem; margin: 0; padding: var(--space-lg, 1.5rem); background-color: var(--color-surface-raised, #fff); border: 1px solid var(--color-border, oklch(92% 0.008 250)); border-radius: var(--radius-lg, 0.875rem); } .ds-quote-text { margin: 0; font-family: var(--font-display, 'Fraunces Variable', Georgia, serif); font-size: var(--text-lg, 1.125rem); line-height: 1.3; color: var(--color-text, oklch(19% 0.006 250)); } .ds-quote-text p { margin: 0; } .ds-quote-text p::before { content: '\\201C'; } .ds-quote-text p::after { content: '\\201D'; } .ds-quote-author { font-family: var(--font-sans, 'Inter Variable', system-ui, sans-serif); font-size: var(--text-sm, 0.875rem); font-weight: 500; color: var(--color-text, oklch(19% 0.006 250)); } .ds-quote-context { color: var(--color-text-muted, oklch(48% 0.012 250)); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Fresh Sheet",
+    "overview": "Sfoglia is the thin sheet of pasta every cook rolls out differently. This system is that sheet: one well-made base layer, even in thickness and quietly finished, that each client rolls out with their own colour, fonts and photos. The craft is in its proportions: a fluid type scale, steady section rhythm, semantic roles and honest states. It is not a signature look. Swap the brand hue and fonts in `packages/ui/src/tokens/theme.css` and the whole site moves with them.\n\nThe feel is warm and approachable: a local business, not a software product. A soft variable serif (Fraunces) carries headings and quotes, and a plain humanist sans (Inter) carries everything you read or tap. Corners are gently rounded, greys lean faintly toward the brand hue so they never feel clinical, and the page is calm. A single accent marks the action; everything else is ink, paper and a hairline border.\n\nThe layer must survive its editor. A non-technical client will add long German compound words, odd photo ratios and skipped optional fields, so layouts flow rather than lock: grids auto-fit, type is fluid, and content dictates height. Dark mode is not a second design. It is the same roles remapped.",
+    "keyCharacteristics": [
+      "One brand hue as a swappable OKLCH ramp; everything downstream uses semantic roles.",
+      "Serif display over sans body, both fluid (`clamp()`), with no type breakpoints.",
+      "Flat, bordered surfaces; shadow only as a response to interaction or overlay.",
+      "Intrinsic layout: auto-fit grids, one media query in the whole system.",
+      "Light DOM components, styled by the same global tokens, readable before hydration."
+    ],
+    "rules": [
+      {
+        "name": "The Roles-Only Rule",
+        "body": "Nothing outside `theme.css` names a raw colour. A component that needs a new colour gets a new role in `theme.css`, never a hex inline.",
+        "section": "colors"
+      },
+      {
+        "name": "The Text-Safe Accent Rule",
+        "body": "Running text, links and small labels use `brand-accent-text`, never `brand-accent`. After any re-theme, re-check contrast on both, in light and dark mode.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Hue Rule",
+        "body": "The template ships one brand hue. Secondary and tertiary accents arrive only with a client who actually has them.",
+        "section": "colors"
+      },
+      {
+        "name": "The Fluid-Only Rule",
+        "body": "Type never changes size at a breakpoint. If a size looks wrong at some width, fix the `clamp()`, don't add a media query.",
+        "section": "typography"
+      },
+      {
+        "name": "The Serif-for-Voice Rule",
+        "body": "Fraunces is for headings and testimonial quotes, the moments the business speaks. UI chrome, forms and body copy stay in the sans.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Media Query Rule",
+        "body": "New layout behaviour reaches for auto-fit grids, `min()`, `clamp()` and container sizing first. A media query needs a reason as good as the nav drawer's.",
+        "section": "layout"
+      },
+      {
+        "name": "The Editor-Proof Rule",
+        "body": "No fixed heights on content. Cards stretch to the tallest sibling, images keep their own ratio or crop with `object-fit`, and every optional field can be absent without leaving a hole.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat-At-Rest Rule",
+        "body": "Nothing casts a shadow while idle. A shadow means \"this responds to you\" or \"this sits above the page\".",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use only public roles (`--color-*`, `--text-*`, `--space-*`, `--radius-*`) outside `theme.css`.",
+      "Do re-theme by changing the `--_brand-*` hue, the neutral tint, the two font families and the radii, then re-check contrast in both colour schemes.",
+      "Do use `brand-accent-text` for any accent-coloured text, and keep `brand-accent` for fills and strokes.",
+      "Do let grids auto-fit and type `clamp()`. Test every section with missing optional fields and a 30-character German compound in the title.",
+      "Do keep the single global `:focus-visible` treatment (2px focus-ring outline, 2px offset).",
+      "Do keep motion short (`--duration-fast` 120ms for colour, `--duration-base` 220ms for movement) on `--ease-out`, and let `prefers-reduced-motion` switch it off."
+    ],
+    "donts": [
+      "Don't write a raw colour, px size or font name in a component or section. Add a role to `theme.css` instead.",
+      "Don't add a dark-mode token that has no light-mode counterpart. Dark mode only remaps existing roles.",
+      "Don't give resting surfaces a shadow, or replace hairline borders with heavy outlines.",
+      "Don't introduce a second accent hue, gradients or a decorative signature into the template. Identity belongs to the client fork.",
+      "Don't add type breakpoints or new media queries where an intrinsic layout would do.",
+      "Don't fix a content height, or design a section that breaks when an optional field is empty."
+    ]
+  }
+}

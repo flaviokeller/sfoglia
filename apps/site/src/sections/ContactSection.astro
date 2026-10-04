@@ -4,19 +4,21 @@ import ContactForm from '@flaviocodes/sfoglia-ui/components/ContactForm.vue';
 import type { Locale } from '../i18n/config';
 import { contactFormLabels, getTranslations } from '../i18n/t';
 
-interface Props {
+export interface Props {
   locale: Locale;
   formName?: string;
+  /** h1 when the section is the page itself (Kontakt), h2 inside a longer page. */
+  as?: 'h1' | 'h2';
 }
 
-const { locale, formName = 'contact' } = Astro.props;
+const { locale, formName = 'contact', as: Heading = 'h2' } = Astro.props;
 const t = getTranslations(locale);
 const labels = contactFormLabels(locale);
 ---
 
 <section class="section" id="kontakt">
   <div class="container">
-    <h2 class="heading-2">{t('contact.title')}</h2>
+    <Heading class:list={[Heading === 'h1' ? 'heading-1' : 'heading-2']}>{t('contact.title')}</Heading>
 
     {/*
       Netlify discovers forms by parsing the STATIC HTML at deploy time. The Vue
@@ -33,6 +35,11 @@ const labels = contactFormLabels(locale);
       <input type="text" name="bot-field" />
     </form>
 
-    <ContactForm client:visible formName={formName} labels={labels} />
+    <ContactForm
+      client:visible
+      formName={formName}
+      successUrl={`/${locale}/danke/`}
+      labels={labels}
+    />
   </div>
 </section>
