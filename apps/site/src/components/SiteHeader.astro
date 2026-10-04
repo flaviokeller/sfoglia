@@ -62,9 +62,23 @@ const links = [
     position: sticky;
     inset-block-start: 0;
     z-index: var(--z-sticky);
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  /*
+   * The frosted background lives on a ::before, not on .site-header itself: a
+   * backdrop-filter makes its element the containing block for every
+   * position:fixed descendant, which would pin SiteNav's mobile drawer and
+   * backdrop (rendered inside this header) to the header's own box instead of
+   * the viewport. A pseudo-element is not an ancestor of them, so it cannot.
+   */
+  .site-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     background-color: color-mix(in oklab, var(--color-canvas) 88%, transparent);
     backdrop-filter: blur(8px);
-    border-block-end: 1px solid var(--color-border);
   }
 
   .site-header__inner {

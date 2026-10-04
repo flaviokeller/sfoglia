@@ -19,7 +19,7 @@ import { LOCALES } from './src/i18n/config';
  *             App. SETUP.md covers creating that app (a one-time, per-repo step).
  */
 
-const isProd = process.env.NODE_ENV === 'production';
+const isProd = import.meta.env.PROD;
 
 /** Per-locale collections. Content diverges between languages, so each gets its own tree. */
 function localisedCollections() {
@@ -146,6 +146,12 @@ export default config({
         kind: 'github',
         // SETUP: point this at the client's repo.
         repo: { owner: 'flaviocodes', name: 'sfoglia' },
+        // This repo is an npm workspaces monorepo — the collection `path`s above
+        // (e.g. `src/content/faq/de/*`) are relative to this file in local mode,
+        // but GitHub mode resolves them against the repo ROOT. Without this
+        // prefix every collection reads as empty in production and new entries
+        // land in a stray top-level `src/`.
+        pathPrefix: 'apps/site/',
       }
     : { kind: 'local' },
 
