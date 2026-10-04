@@ -1,4 +1,6 @@
 ---
+import OpeningHoursSection from '@flaviocodes/sfoglia-ui/components/OpeningHoursSection.vue';
+
 import type { Locale } from '../i18n/config';
 import { getTranslations } from '../i18n/t';
 import { DAY_NAMES, site, telHref } from '../data/site';
@@ -10,123 +12,26 @@ interface Props {
 
 const { locale, surface = true } = Astro.props;
 const t = getTranslations(locale);
-const days = DAY_NAMES[locale];
 const locality = [site.postalCode, site.city].filter(Boolean).join(' ');
-
-// NB: "today" must NOT be computed here. This is a static build — a build-time
-// date would freeze on whatever day the site was deployed. It is set at runtime
-// by the inline script below instead.
 ---
 
-<section class:list={['section', surface && 'section--surface']}>
-  <div class="container hours">
-    <div class="stack">
-      <h2 class="heading-2">{t('hours.title')}</h2>
-      {/* Every contact field is optional in Keystatic: a blank one drops out
-          instead of leaving a stray line break or an empty link. */}
-      {
-        (site.street || locality) && (
-          <address class="hours__address">
-            {site.street}
-            {site.street && locality && <br />}
-            {locality}
-          </address>
-        )
-      }
-      {
-        site.phone && (
-          <p>
-            <a class="link" href={telHref(site.phone)}>{site.phone}</a>
-          </p>
-        )
-      }
-      {
-        site.mapUrl && (
-          <p>
-            <a class="link" href={site.mapUrl}>
-              {[site.city, t('hours.map')].filter(Boolean).join(' · ')}
-            </a>
-          </p>
-        )
-      }
-    </div>
-
-    {/* No hours entered yet: the address block stands alone. */}
-    {
-      (site.openingHours ?? []).length > 0 && (
-        <table class="hours__table">
-          <tbody>
-            {
-              (site.openingHours ?? []).map((entry) => (
-                <tr data-day={entry.day}>
-                  <th scope="row">{days[entry.day]}</th>
-                  <td>
-                    {entry.opens && entry.closes ? (
-                      <>
-                        {entry.opens}&ndash;{entry.closes}
-                      </>
-                    ) : (
-                      <span class="text-muted">{t('hours.closed')}</span>
-                    )}
-                  </td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      )
-    }
-  </div>
-</section>
-
-<script>
-  // Highlights the current day. Runs on every page view, so it stays correct
-  // regardless of when the site was last built.
-  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-  const today = days[new Date().getDay()];
-  for (const row of document.querySelectorAll<HTMLTableRowElement>('.hours__table tr[data-day]')) {
-    if (row.dataset.day === today) row.dataset.today = 'true';
+{/* `live`: "today" must not be computed at build time — a static build would
+    freeze it on whatever day the site was deployed. */}
+<OpeningHoursSection
+  client:visible
+  live
+  surface={surface}
+  title={t('hours.title')}
+  street={site.street}
+  locality={locality}
+  phone={site.phone}
+  phoneHref={site.phone ? telHref(site.phone) : undefined}
+  mapLink={
+    site.mapUrl
+      ? { href: site.mapUrl, label: [site.city, t('hours.map')].filter(Boolean).join(' · ') }
+      : undefined
   }
-</script>
-
-<style>
-  .hours {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
-    gap: var(--space-2xl);
-    align-items: start;
-  }
-
-  .hours__address {
-    font-style: normal;
-    color: var(--color-text-muted);
-  }
-
-  .hours__table {
-    inline-size: 100%;
-    border-collapse: collapse;
-  }
-
-  .hours__table th,
-  .hours__table td {
-    padding-block: var(--space-sm);
-    border-block-end: 1px solid var(--color-border);
-    text-align: start;
-  }
-
-  .hours__table th {
-    font-weight: var(--weight-normal);
-    color: var(--color-text-muted);
-  }
-
-  .hours__table td {
-    text-align: end;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .hours__table tr[data-today='true'] th,
-  .hours__table tr[data-today='true'] td {
-    font-weight: var(--weight-semibold);
-    color: var(--color-text);
-  }
-</style>
+  hours={site.openingHours ?? []}
+  dayNames={DAY_NAMES[locale]}
+  closedLabel={t('hours.closed')}
+/>

@@ -58,6 +58,7 @@ const team = defineCollection({
     z.object({
       name: z.string(),
       role: z.string(),
+      bio: z.string().optional(),
       photo: image().optional(),
       photoAlt: z.string().optional(),
       order: z.number().default(0),
@@ -79,6 +80,36 @@ const testimonials = defineCollection({
     quote: z.string(),
     author: z.string(),
     context: z.string().optional(),
+    order: z.number().default(0),
+  }),
+});
+
+/**
+ * Preise. One collection feeds both layouts of `PricingTable`: `tiers` uses
+ * every field, `list` (a menu-style price list) uses `title`, `description`,
+ * `price` and groups rows by `group`. `price` is free text ("CHF 120", "ab CHF
+ * 80", "auf Anfrage") and is never parsed.
+ */
+const pricing = defineCollection({
+  loader: glob({ base: 'src/content/pricing', pattern: '**/*.yaml' }),
+  schema: z.object({
+    title: z.string(),
+    price: z.string(),
+    period: z.string().optional(),
+    description: z.string().optional(),
+    features: z.array(z.string()).default([]),
+    highlighted: z.boolean().default(false),
+    group: z.string().optional(),
+    order: z.number().default(0),
+  }),
+});
+
+/** Kennzahlen for the stats strip. `value` is shown as typed, never formatted. */
+const stats = defineCollection({
+  loader: glob({ base: 'src/content/stats', pattern: '**/*.yaml' }),
+  schema: z.object({
+    value: z.string(),
+    label: z.string(),
     order: z.number().default(0),
   }),
 });
@@ -115,4 +146,4 @@ export function inLocale(locale: string) {
   return (entry: { id: string }) => entry.id.startsWith(`${locale}/`);
 }
 
-export const collections = { pages, services, team, events, faq, testimonials };
+export const collections = { pages, services, team, events, faq, testimonials, pricing, stats };

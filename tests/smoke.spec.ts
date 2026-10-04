@@ -132,6 +132,8 @@ test.describe('components', () => {
 
   test('opening hours highlights the current day at runtime', async ({ page }) => {
     await page.goto('/de/');
+    // The section hydrates when it scrolls into view (client:visible).
+    await page.locator('.hours__table').scrollIntoViewIfNeeded();
     await expect(page.locator('.hours__table tr[data-today="true"]')).toHaveCount(1);
   });
 });
@@ -184,6 +186,16 @@ test.describe('routing', () => {
     await page.goto('/styleguide/');
     await expect(page.locator('h1')).toContainText('Design system');
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+  });
+
+  test('styleguide shows the optional sections from their collections', async ({ page }) => {
+    await page.goto('/styleguide/');
+    await expect(page.locator('.stats__item')).toHaveCount(3);
+    await expect(page.locator('.team__member').first()).toBeVisible();
+    // One tiers layout and one list layout, fed by the same pricing entries.
+    await expect(page.locator('.pricing__tier')).toHaveCount(3);
+    await expect(page.locator('.pricing__row')).toHaveCount(3);
+    await expect(page.locator('.cta .button').first()).toBeVisible();
   });
 
   test('gallery lightbox opens, steps and closes', async ({ page }) => {

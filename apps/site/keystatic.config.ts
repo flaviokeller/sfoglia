@@ -96,6 +96,7 @@ function localisedCollections() {
           schema: {
             name: fields.slug({ name: { label: 'Name' } }),
             role: fields.text({ label: 'Funktion' }),
+            bio: fields.text({ label: 'Kurzvorstellung', multiline: true }),
             photo: fields.image({
               label: 'Foto',
               directory: 'src/assets/images',
@@ -103,6 +104,48 @@ function localisedCollections() {
               description: 'Bitte vor dem Hochladen auf max. 500 KB verkleinern.',
             }),
             photoAlt: fields.text({ label: 'Bildbeschreibung (Alt-Text)' }),
+            order: fields.integer({ label: 'Reihenfolge', defaultValue: 0 }),
+          },
+        }),
+      ],
+      [
+        `pricing_${locale}`,
+        collection({
+          label: `Preise (${locale.toUpperCase()})`,
+          slugField: 'title',
+          path: `src/content/pricing/${locale}/*`,
+          format: { data: 'yaml' },
+          schema: {
+            title: fields.slug({ name: { label: 'Bezeichnung' } }),
+            // Text, not a number: "ab CHF 80" and "auf Anfrage" are valid prices.
+            price: fields.text({ label: 'Preis (z. B. CHF 120, ab CHF 80)' }),
+            period: fields.text({ label: 'Pro … (z. B. pro Termin)' }),
+            description: fields.text({ label: 'Beschreibung', multiline: true }),
+            features: fields.array(fields.text({ label: 'Punkt' }), {
+              label: 'Enthaltene Leistungen (nur Paket-Ansicht)',
+              itemLabel: (props) => props.value,
+            }),
+            highlighted: fields.checkbox({
+              label: 'Hervorheben (nur Paket-Ansicht)',
+              defaultValue: false,
+            }),
+            group: fields.text({
+              label: 'Gruppe (nur Listen-Ansicht, z. B. Vorsorge)',
+            }),
+            order: fields.integer({ label: 'Reihenfolge', defaultValue: 0 }),
+          },
+        }),
+      ],
+      [
+        `stats_${locale}`,
+        collection({
+          label: `Kennzahlen (${locale.toUpperCase()})`,
+          slugField: 'label',
+          path: `src/content/stats/${locale}/*`,
+          format: { data: 'yaml' },
+          schema: {
+            label: fields.slug({ name: { label: 'Bezeichnung (z. B. Gegründet)' } }),
+            value: fields.text({ label: 'Wert (z. B. 1998, 4 200+)' }),
             order: fields.integer({ label: 'Reihenfolge', defaultValue: 0 }),
           },
         }),

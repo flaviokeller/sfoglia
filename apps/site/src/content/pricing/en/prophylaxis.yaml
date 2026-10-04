@@ -1,0 +1,11 @@
+title: Prophylaxis
+price: CHF 210
+period: per visit
+description: Thorough cleaning and polish.
+features:
+  - Everything in Check-up
+  - Airflow cleaning
+  - Fluoride treatment
+highlighted: true
+group: Prevention
+order: 2

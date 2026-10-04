@@ -404,3 +404,586 @@
 .events__list--past .events__title {
   font-size: var(--text-base);
 }
+
+/* ------------------------------------------------------------------ *
+ * CTA band
+ * ------------------------------------------------------------------ */
+.cta {
+  padding-block: var(--space-3xl);
+}
+
+.cta--accent {
+  background-color: var(--color-accent);
+  color: var(--color-text-on-accent);
+}
+
+.cta--surface {
+  background-color: var(--color-surface-sunken);
+}
+
+.cta__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xl);
+}
+
+.cta__copy {
+  flex: 1 1 24rem;
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.cta__title {
+  margin: 0;
+}
+
+.cta__text {
+  margin: 0;
+  max-inline-size: var(--measure);
+  font-size: var(--text-lg);
+}
+
+.cta--surface .cta__text {
+  color: var(--color-text-muted);
+}
+
+.cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+/* On the accent fill the primary button inverts, or it would vanish. */
+.cta--accent .cta__primary {
+  background-color: var(--color-canvas);
+  color: var(--color-text);
+}
+
+.cta--accent .cta__primary:hover {
+  background-color: var(--color-surface);
+}
+
+.cta--accent .cta__secondary {
+  background-color: transparent;
+  color: inherit;
+  border: 1px solid currentcolor;
+}
+
+.cta--surface .cta__primary {
+  background-color: var(--color-accent);
+  color: var(--color-text-on-accent);
+}
+
+.cta--surface .cta__secondary {
+  background-color: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
+}
+
+/* ------------------------------------------------------------------ *
+ * Stats strip
+ * ------------------------------------------------------------------ */
+.stats {
+  padding-block: var(--space-3xl);
+}
+
+.stats__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: var(--space-xl);
+  margin: 0;
+}
+
+.stats__item {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--space-2xs);
+  padding-block-start: var(--space-md);
+  border-block-start: 2px solid var(--color-accent);
+}
+
+.stats__value {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--leading-tight);
+}
+
+.stats__label {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+/* ------------------------------------------------------------------ *
+ * Team
+ * ------------------------------------------------------------------ */
+.team {
+  padding-block: var(--space-section);
+}
+
+.team__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: var(--space-xl);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.team__member > * + * {
+  margin-block-start: var(--space-xs);
+}
+
+.team__photo {
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-block-end: var(--space-md);
+}
+
+.team__photo--initials {
+  display: grid;
+  place-items: center;
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent-text);
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+}
+
+.team__role {
+  margin: 0;
+  color: var(--color-accent-text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.team__bio {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+/* ------------------------------------------------------------------ *
+ * Pricing
+ * ------------------------------------------------------------------ */
+.pricing {
+  padding-block: var(--space-section);
+}
+
+.pricing__tiers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--space-lg);
+  align-items: stretch;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pricing__tier {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.pricing__tier--highlighted {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md);
+}
+
+.pricing__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-xs);
+  margin: 0;
+}
+
+.pricing__amount {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-variant-numeric: tabular-nums;
+}
+
+.pricing__period {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.pricing__features {
+  flex: 1;
+  display: grid;
+  gap: var(--space-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pricing__features li {
+  padding-inline-start: var(--space-lg);
+  position: relative;
+}
+
+.pricing__features li::before {
+  content: "✓";
+  position: absolute;
+  inset-inline-start: 0;
+  color: var(--color-accent-text);
+}
+
+.pricing__cta {
+  justify-content: center;
+}
+
+.pricing__groups {
+  display: grid;
+  gap: var(--space-2xl);
+}
+
+.pricing__rows {
+  margin: var(--space-sm) 0 0;
+}
+
+.pricing__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-2xs) var(--space-lg);
+  padding-block: var(--space-md);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.pricing__rows > .pricing__row:last-child {
+  border-block-end: 1px solid var(--color-border);
+}
+
+.pricing__name {
+  font-weight: var(--weight-medium);
+}
+
+.pricing__row-price {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.pricing__row-text {
+  grid-column: 1;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.pricing__note {
+  margin: 0;
+  color: var(--color-text-subtle);
+  font-size: var(--text-sm);
+}
+
+/* ------------------------------------------------------------------ *
+ * Hero
+ * ------------------------------------------------------------------ */
+.hero__inner {
+  display: grid;
+  gap: var(--space-2xl);
+  align-items: center;
+}
+
+.hero__inner[data-with-image="true"] {
+  grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr));
+}
+
+.hero__content {
+  --flow-space: var(--space-md);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-block-start: var(--space-lg);
+}
+
+.hero__media img {
+  inline-size: 100%;
+  border-radius: var(--radius-xl);
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+/* ------------------------------------------------------------------ *
+ * Text + image
+ * ------------------------------------------------------------------ */
+.text-image {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+  gap: var(--space-2xl);
+  align-items: center;
+}
+
+.text-image[data-reversed="true"] .text-image__media {
+  order: -1;
+}
+
+/* Reversal only makes sense side-by-side; stacked, text should always lead. */
+@media (width < 48rem) {
+  .text-image[data-reversed="true"] .text-image__media {
+    order: 0;
+  }
+}
+
+.text-image__media img {
+  inline-size: 100%;
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+}
+
+/* ------------------------------------------------------------------ *
+ * Service grid
+ * ------------------------------------------------------------------ */
+.service-grid {
+  margin-block-start: var(--space-xl);
+  padding: 0;
+}
+
+.service-grid > li {
+  display: flex;
+}
+
+.service-grid article {
+  position: relative;
+  inline-size: 100%;
+}
+
+.service-grid__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Stretch the link's hit area over the whole card. */
+.service-grid__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+/* ------------------------------------------------------------------ *
+ * Testimonials
+ * ------------------------------------------------------------------ */
+.testimonials {
+  margin-block-start: var(--space-xl);
+  padding: 0;
+}
+
+.testimonials__item {
+  block-size: 100%;
+  margin: 0;
+  justify-content: space-between;
+}
+
+.testimonials__quote {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+}
+
+.testimonials__quote p::before {
+  content: "\201C";
+}
+
+.testimonials__quote p::after {
+  content: "\201D";
+}
+
+.testimonials__author {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+/* ------------------------------------------------------------------ *
+ * Opening hours
+ * ------------------------------------------------------------------ */
+.hours {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+  gap: var(--space-2xl);
+  align-items: start;
+}
+
+.hours__address {
+  font-style: normal;
+  color: var(--color-text-muted);
+}
+
+.hours__table {
+  inline-size: 100%;
+  border-collapse: collapse;
+}
+
+.hours__table th,
+.hours__table td {
+  padding-block: var(--space-sm);
+  border-block-end: 1px solid var(--color-border);
+  text-align: start;
+}
+
+.hours__table th {
+  font-weight: var(--weight-normal);
+  color: var(--color-text-muted);
+}
+
+.hours__table td {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.hours__table tr[data-today="true"] th,
+.hours__table tr[data-today="true"] td {
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
+}
+
+/* ------------------------------------------------------------------ *
+ * FAQ and events sections
+ * ------------------------------------------------------------------ */
+.faq {
+  max-inline-size: 48rem;
+}
+
+.events-section {
+  max-inline-size: var(--width-prose);
+}
+
+/* ------------------------------------------------------------------ *
+ * Site header
+ * ------------------------------------------------------------------ */
+.site-header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--z-sticky);
+  border-block-end: 1px solid var(--color-border);
+}
+
+/*
+ * The frosted background lives on a ::before, not on .site-header itself: a
+ * backdrop-filter makes its element the containing block for every
+ * position:fixed descendant, which would pin SiteNav's mobile drawer and
+ * backdrop (rendered inside this header) to the header's own box instead of
+ * the viewport. A pseudo-element is not an ancestor of them, so it cannot.
+ */
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: color-mix(in oklab, var(--color-canvas) 88%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  padding-block: var(--space-sm);
+}
+
+/* A long business name wraps (and hyphenates) instead of pushing the menu
+   button off a phone screen. */
+.site-header__brand {
+  min-inline-size: 0;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.site-header__right {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.lang-switch {
+  font-family: var(--font-sans);
+  display: flex;
+  gap: var(--space-2xs);
+}
+
+.lang-switch__link {
+  padding-inline: var(--space-2xs);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-subtle);
+  text-decoration: none;
+}
+
+.lang-switch__link[aria-current="true"] {
+  color: var(--color-accent-text);
+}
+
+.lang-switch abbr {
+  text-decoration: none;
+}
+
+/* ------------------------------------------------------------------ *
+ * Site footer
+ * ------------------------------------------------------------------ */
+.site-footer {
+  margin-block-start: var(--space-section);
+  padding-block: var(--space-2xl) var(--space-lg);
+  background-color: var(--color-surface-sunken);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.site-footer__inner {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+  gap: var(--space-xl);
+}
+
+.site-footer__block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  align-items: start;
+}
+
+.site-footer__socials {
+  flex-direction: row;
+  gap: var(--space-sm);
+}
+
+.site-footer__social-link {
+  color: var(--color-text-subtle);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.site-footer__social-link:hover {
+  color: var(--color-accent-text);
+}
+
+.site-footer__brand {
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+}
+
+.site-footer__address {
+  font-style: normal;
+  color: var(--color-text-muted);
+}
+
+.site-footer__meta {
+  margin-block-start: var(--space-xl);
+  padding-block-start: var(--space-md);
+  border-block-start: 1px solid var(--color-border);
+  color: var(--color-text-subtle);
+}

@@ -1,5 +1,5 @@
 ---
-import EventList from '@flaviocodes/sfoglia-ui/components/EventList.vue';
+import EventsSectionView from '@flaviocodes/sfoglia-ui/components/EventsSection.vue';
 import type { EventItem } from '@flaviocodes/sfoglia-ui';
 
 import { INTL_LOCALES, type Locale } from '../i18n/config';
@@ -17,33 +17,21 @@ const { id, locale, events, surface = false } = Astro.props;
 const t = getTranslations(locale);
 
 /*
- * "Today" for the server render only. EventList gets `live`, so it re-derives
+ * "Today" for the server render only. The section gets `live`, so it re-derives
  * today from the visitor's clock on hydration and the upcoming/past split is
  * right on every load, not just as of the last deploy.
  */
 const today = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Zurich' });
 ---
 
-{/* A site that never entered an event has no Termine section. One between
-    seasons keeps it, with the empty-state message. */}
-{events.length > 0 && (
-  <section id={id} class:list={['section', surface && 'section--surface']}>
-    <div class="container stack events-section">
-      <h2 class="heading-2">{t('events.title')}</h2>
-      <EventList
-        client:visible
-        events={events}
-        today={today}
-        live
-        locale={INTL_LOCALES[locale]}
-        labels={{ past: t('events.past'), empty: t('events.empty') }}
-      />
-    </div>
-  </section>
-)}
-
-<style>
-  .events-section {
-    max-inline-size: var(--width-prose);
-  }
-</style>
+<EventsSectionView
+  client:visible
+  id={id}
+  title={t('events.title')}
+  events={events}
+  today={today}
+  live
+  locale={INTL_LOCALES[locale]}
+  labels={{ past: t('events.past'), empty: t('events.empty') }}
+  surface={surface}
+/>

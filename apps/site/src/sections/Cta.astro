@@ -1,0 +1,26 @@
+---
+import CtaBand from '@flaviocodes/sfoglia-ui/components/CtaBand.vue';
+
+import { site, telHref } from '../data/site';
+import type { Locale } from '../i18n/config';
+import { getTranslations } from '../i18n/t';
+
+interface Props {
+  locale: Locale;
+  /** Defaults to the shared "book an appointment" copy; override per page. */
+  title?: string | undefined;
+  text?: string | undefined;
+  tone?: 'accent' | 'surface';
+}
+
+const { locale, title, text, tone } = Astro.props;
+const t = getTranslations(locale);
+---
+
+<CtaBand
+  title={title ?? t('cta.title')}
+  text={title ? text : (text ?? t('cta.text'))}
+  tone={tone}
+  primary={{ label: t('cta.primary'), href: `/${locale}/kontakt/` }}
+  secondary={site.phone ? { label: site.phone, href: telHref(site.phone) } : undefined}
+/>
