@@ -83,6 +83,28 @@ const testimonials = defineCollection({
   }),
 });
 
+/**
+ * Termine. `date` is a YYYY-MM-DD string, not a YAML date: YAML would parse an
+ * unquoted date as UTC midnight and the rendered day could shift. The
+ * upcoming/past split happens in the browser (EventList `live`), so the list
+ * stays correct between deploys.
+ *
+ * Optional text fields accept '' because Keystatic saves untouched fields as
+ * empty strings — `z.string().url()` alone would fail the build on the first
+ * event entered without a link.
+ */
+const events = defineCollection({
+  loader: glob({ base: 'src/content/events', pattern: '**/*.yaml' }),
+  schema: z.object({
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use YYYY-MM-DD'),
+    time: z.string().optional(),
+    title: z.string(),
+    venue: z.string().optional(),
+    town: z.string().optional(),
+    url: z.union([z.string().url(), z.literal('')]).optional(),
+  }),
+});
+
 /** The locale of an entry, derived from its id (`de/home` -> `de`). */
 export function localeOf(entry: { id: string }): string {
   return entry.id.split('/')[0] ?? '';
@@ -93,4 +115,4 @@ export function inLocale(locale: string) {
   return (entry: { id: string }) => entry.id.startsWith(`${locale}/`);
 }
 
-export const collections = { pages, services, team, faq, testimonials };
+export const collections = { pages, services, team, events, faq, testimonials };

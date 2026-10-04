@@ -11,6 +11,8 @@ const { locale } = Astro.props;
 const t = getTranslations(locale);
 const year = new Date().getFullYear();
 const locality = [site.postalCode, site.city].filter(Boolean).join(' ');
+// A half-filled entry in the editor would otherwise render as a dead icon.
+const socials = site.socials.filter((social) => social.href);
 ---
 
 <footer class="site-footer">
@@ -34,6 +36,34 @@ const locality = [site.postalCode, site.city].filter(Boolean).join(' ');
           {site.phone && <a class="link" href={telHref(site.phone)}>{site.phone}</a>}
           {site.email && <a class="link" href={`mailto:${site.email}`}>{site.email}</a>}
         </div>
+      )
+    }
+
+    {
+      socials.length > 0 && (
+        <nav class="site-footer__block site-footer__socials" aria-label={t('footer.social')}>
+          {socials.map((social) => (
+            <a class="site-footer__social-link" href={social.href} aria-label={social.label || social.href}>
+              {social.icon === 'instagram' ? (
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle cx="17.5" cy="6.5" r="0.75" fill="currentColor" stroke="none" />
+                </svg>
+              ) : social.icon === 'youtube' ? (
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="5" width="20" height="14" rx="4" />
+                  <path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1" />
+                  <path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1" />
+                </svg>
+              )}
+            </a>
+          ))}
+        </nav>
       )
     }
 
@@ -67,6 +97,20 @@ const locality = [site.postalCode, site.city].filter(Boolean).join(' ');
     flex-direction: column;
     gap: var(--space-2xs);
     align-items: start;
+  }
+
+  .site-footer__socials {
+    flex-direction: row;
+    gap: var(--space-sm);
+  }
+
+  .site-footer__social-link {
+    color: var(--color-text-subtle);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .site-footer__social-link:hover {
+    color: var(--color-accent-text);
   }
 
   .site-footer__brand {

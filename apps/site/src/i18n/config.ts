@@ -1,7 +1,6 @@
 /**
- * SETUP: to drop a locale, remove it from LOCALES and delete
- * `src/i18n/<locale>.json` plus the matching `<locale>` folders under `src/content/`. To add one, do the
- * reverse — nothing else in the codebase enumerates locales.
+ * SETUP: to add or drop a locale, edit LOCALES, then follow SETUP.md §2 —
+ * `npm run typecheck` flags every per-locale table that no longer matches.
  */
 export const LOCALES = ['de', 'en'] as const;
 export const DEFAULT_LOCALE = 'de';
@@ -12,6 +11,12 @@ export type Locale = (typeof LOCALES)[number];
 export const LOCALE_NAMES: Record<Locale, string> = {
   de: 'Deutsch',
   en: 'English',
+};
+
+/** BCP 47 tag for Intl date/number formatting — plain `en` would format US-style. */
+export const INTL_LOCALES: Record<Locale, string> = {
+  de: 'de-CH',
+  en: 'en-GB',
 };
 
 export function isLocale(value: string | undefined): value is Locale {

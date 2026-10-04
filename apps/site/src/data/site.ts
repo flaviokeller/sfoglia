@@ -7,18 +7,34 @@ export type OpeningHour = {
   closes: string;
 };
 
+export type SocialIcon = 'instagram' | 'youtube' | 'link';
+
 export type SiteSettings = {
+  /**
+   * schema.org type for the structured data: `LocalBusiness` or a subtype
+   * (`Dentist`, `Restaurant` …, see schema.org/LocalBusiness) for anything with
+   * premises, `Person` for an individual (performer, freelancer) — a
+   * LocalBusiness without premises or opening hours is worse than no markup.
+   */
+  schemaType: string;
   businessName: string;
   legalName: string;
   tagline: string;
+  /** Person only: the role, emitted as schema.org `jobTitle`. */
+  jobTitle: string;
   email: string;
   phone: string;
   street: string;
   postalCode: string;
   city: string;
   country: string;
-  mapUrl: string;
-  openingHours: OpeningHour[];
+  /** Swiss UID (CHE-…). Empty hides the Impressum block — never invent one. */
+  uid: string;
+  /** Optional: a client without premises (schemaType Person) omits both. */
+  mapUrl?: string;
+  openingHours?: OpeningHour[];
+  /** Footer profile links. Their hrefs double as schema.org `sameAs`. */
+  socials: { icon: SocialIcon; label: string; href: string }[];
   analytics: { cloudflareToken: string };
 };
 
@@ -58,7 +74,7 @@ const SCHEMA_DAYS: Record<OpeningHour['day'], string> = {
 };
 
 export function openingHoursSpecification() {
-  return site.openingHours
+  return (site.openingHours ?? [])
     .filter((entry) => entry.opens && entry.closes)
     .map((entry) => ({
       '@type': 'OpeningHoursSpecification',
@@ -66,6 +82,50 @@ export function openingHoursSpecification() {
       opens: entry.opens,
       closes: entry.closes,
     }));
+}
+
+/** schema.org JSON-LD for the whole site, shaped by `site.schemaType`. */
+export function structuredData(description: string, url?: string) {
+  // Absolute URLs only: a placeholder like "#" is not a profile.
+  const sameAs = site.socials
+    .map((social) => social.href)
+    .filter((href) => /^https?:\/\//.test(href));
+  const common = {
+    '@context': 'https://schema.org',
+    '@type': site.schemaType,
+    name: site.businessName,
+    description,
+    url,
+    email: site.email || undefined,
+    sameAs: sameAs.length > 0 ? sameAs : undefined,
+  };
+
+  // An individual: no premises to publish, so only the locality.
+  if (site.schemaType === 'Person') {
+    return {
+      ...common,
+      jobTitle: site.jobTitle || undefined,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: site.city,
+        addressCountry: site.country,
+      },
+    };
+  }
+
+  return {
+    ...common,
+    legalName: site.legalName || undefined,
+    telephone: site.phone || undefined,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: site.street,
+      postalCode: site.postalCode,
+      addressLocality: site.city,
+      addressCountry: site.country,
+    },
+    openingHoursSpecification: openingHoursSpecification(),
+  };
 }
 
 /**

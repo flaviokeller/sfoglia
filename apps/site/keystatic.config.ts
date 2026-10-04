@@ -19,7 +19,7 @@ import { LOCALES } from './src/i18n/config';
  *             App. SETUP.md covers creating that app (a one-time, per-repo step).
  */
 
-const isProd = process.env.NODE_ENV === 'production';
+const isProd = import.meta.env.PROD;
 
 /** Per-locale collections. Content diverges between languages, so each gets its own tree. */
 function localisedCollections() {
@@ -108,6 +108,34 @@ function localisedCollections() {
         }),
       ],
       [
+        `events_${locale}`,
+        collection({
+          label: `Termine (${locale.toUpperCase()})`,
+          slugField: 'title',
+          path: `src/content/events/${locale}/*`,
+          format: { data: 'yaml' },
+          schema: {
+            title: fields.slug({ name: { label: 'Titel' } }),
+            // Text, not fields.date: the date must stay a string (see content.config.ts).
+            date: fields.text({
+              label: 'Datum (JJJJ-MM-TT)',
+              description: 'Genau in diesem Format, z. B. 2026-10-09.',
+              validation: {
+                isRequired: true,
+                pattern: {
+                  regex: /^\d{4}-\d{2}-\d{2}$/,
+                  message: 'Format JJJJ-MM-TT, z. B. 2026-10-09',
+                },
+              },
+            }),
+            time: fields.text({ label: 'Uhrzeit (z. B. 19:00)' }),
+            venue: fields.text({ label: 'Ort / Lokal' }),
+            town: fields.text({ label: 'Stadt' }),
+            url: fields.text({ label: 'Link (Anmeldung oder Details)' }),
+          },
+        }),
+      ],
+      [
         `faq_${locale}`,
         collection({
           label: `FAQ (${locale.toUpperCase()})`,
@@ -146,6 +174,12 @@ export default config({
         kind: 'github',
         // SETUP: point this at the client's repo.
         repo: { owner: 'flaviocodes', name: 'sfoglia' },
+        // This repo is an npm workspaces monorepo — the collection `path`s above
+        // (e.g. `src/content/faq/de/*`) are relative to this file in local mode,
+        // but GitHub mode resolves them against the repo ROOT. Without this
+        // prefix every collection reads as empty in production and new entries
+        // land in a stray top-level `src/`.
+        pathPrefix: 'apps/site/',
       }
     : { kind: 'local' },
 
@@ -159,15 +193,27 @@ export default config({
       path: 'src/data/site',
       format: { data: 'json' },
       schema: {
+        schemaType: fields.text({
+          label: 'Typ für Suchmaschinen',
+          description:
+            'schema.org-Typ: LocalBusiness oder eine Unterart (Dentist, Restaurant …) — oder Person für Einzelpersonen.',
+          defaultValue: 'LocalBusiness',
+        }),
         businessName: fields.text({ label: 'Name' }),
         legalName: fields.text({ label: 'Firma (rechtlich)' }),
         tagline: fields.text({ label: 'Slogan' }),
+        jobTitle: fields.text({ label: 'Beruf (nur bei Typ Person)' }),
         email: fields.text({ label: 'E-Mail' }),
         phone: fields.text({ label: 'Telefon' }),
         street: fields.text({ label: 'Strasse' }),
         postalCode: fields.text({ label: 'PLZ' }),
         city: fields.text({ label: 'Ort' }),
         country: fields.text({ label: 'Land (2 Buchstaben)', defaultValue: 'CH' }),
+        uid: fields.text({
+          label: 'UID (CHE-…)',
+          description:
+            'Nur falls im Handelsregister eingetragen. Leer = wird im Impressum nicht angezeigt.',
+        }),
         mapUrl: fields.url({ label: 'Link zur Karte' }),
         openingHours: fields.array(
           fields.object({
@@ -188,6 +234,22 @@ export default config({
             closes: fields.text({ label: 'Bis (z. B. 17:00)' }),
           }),
           { label: 'Öffnungszeiten', itemLabel: (props) => props.fields.day.value },
+        ),
+        socials: fields.array(
+          fields.object({
+            icon: fields.select({
+              label: 'Symbol',
+              options: [
+                { label: 'Instagram', value: 'instagram' },
+                { label: 'YouTube', value: 'youtube' },
+                { label: 'Anderer Link', value: 'link' },
+              ],
+              defaultValue: 'instagram',
+            }),
+            label: fields.text({ label: 'Bezeichnung (für Screenreader)' }),
+            href: fields.url({ label: 'Profil-URL' }),
+          }),
+          { label: 'Social-Media-Profile', itemLabel: (props) => props.fields.label.value },
         ),
         analytics: fields.object(
           {
