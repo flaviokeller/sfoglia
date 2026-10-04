@@ -14,9 +14,11 @@ interface Props {
   locale?: Locale;
   ogImage?: string | undefined;
   noindex?: boolean;
+  /** 'minimal' drops the page nav from the header, see SiteHeader. */
+  header?: 'full' | 'minimal';
 }
 
-const { title, description, ogImage, noindex = false } = Astro.props;
+const { title, description, ogImage, noindex = false, header = 'full' } = Astro.props;
 // Astro.currentLocale is set by the i18n routing config; the path is the fallback
 // for routes outside the locale tree (e.g. the 404 page).
 const locale = (Astro.props.locale ?? Astro.currentLocale ?? localeFromPath(Astro.url.pathname)) as Locale;
@@ -39,7 +41,7 @@ const analyticsToken = site.analytics.cloudflareToken;
   <body>
     <a class="skip-link" href="#main">{t('nav.skipToContent')}</a>
 
-    <SiteHeader locale={locale} />
+    <SiteHeader locale={locale} minimal={header === 'minimal'} />
 
     <main id="main">
       <slot />
