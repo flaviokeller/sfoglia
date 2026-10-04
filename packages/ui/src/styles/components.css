@@ -41,6 +41,8 @@
 
 .nav__toggle {
   display: none;
+  /* Never squeezed below a usable tap target by a long brand name. */
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   padding: var(--space-2xs);
