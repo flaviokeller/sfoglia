@@ -1,8 +1,6 @@
 ---
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
-import { inLocale } from '../../content.config';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Team from '../../sections/Team.astro';
 import { LOCALES, type Locale } from '../../i18n/config';
 import { getTranslations } from '../../i18n/t';
 import { site } from '../../data/site';
@@ -13,97 +11,8 @@ export function getStaticPaths() {
 
 const locale = Astro.params.locale as Locale;
 const t = getTranslations(locale);
-const team = (await getCollection('team', inLocale(locale))).sort(
-  (a, b) => a.data.order - b.data.order,
-);
-
-/*
- * Photos are optional per person. If nobody has one, the cards stay text-only.
- * If only some do, the rest get an initials tile of the same shape, so one
- * missing upload does not leave a ragged grid.
- */
-const withPhotos = team.some((member) => member.data.photo);
-
-/** "Dr. med. dent. Anna Meier" -> "AM". Abbreviated titles are skipped. */
-function initials(name: string): string {
-  const words = name.split(/\s+/).filter((word) => word && !word.endsWith('.'));
-  const picked = words.length > 1 ? [words[0], words.at(-1)] : words;
-  return picked.map((word) => word?.charAt(0).toUpperCase()).join('');
-}
 ---
 
 <BaseLayout title={`${t('nav.team')} — ${site.businessName}`} description={site.tagline} locale={locale}>
-  <section class="section">
-    <div class="container stack">
-      <h1 class="heading-1">{t('nav.team')}</h1>
-      {
-        team.length > 0 && (
-          <ul class="grid grid--auto team" role="list">
-            {team.map((member) => (
-              <li>
-                <article class="card team__member">
-                  {member.data.photo ? (
-                    <Image
-                      class="team__photo"
-                      src={member.data.photo}
-                      alt={member.data.photoAlt ?? ''}
-                      widths={[320, 480, 720]}
-                      sizes="(width >= 48rem) 22rem, 100vw"
-                      loading="lazy"
-                    />
-                  ) : (
-                    withPhotos && (
-                      <div class="team__photo team__initials" aria-hidden="true">
-                        {initials(member.data.name)}
-                      </div>
-                    )
-                  )}
-                  <h2 class="heading-4">{member.data.name}</h2>
-                  {member.data.role && <p class="text-muted">{member.data.role}</p>}
-                </article>
-              </li>
-            ))}
-          </ul>
-        )
-      }
-    </div>
-  </section>
+  <Team locale={locale} title={t('nav.team')} as="h1" />
 </BaseLayout>
-
-<style>
-  /* auto-fill, not auto-fit: a team of two keeps column-sized cards instead of
-     stretching into two half-page portraits. */
-  .team {
-    grid-template-columns: repeat(auto-fill, minmax(min(16rem, 100%), 1fr));
-    margin-block-start: var(--space-xl);
-    padding: 0;
-  }
-
-  .team > li {
-    display: flex;
-  }
-
-  .team__member {
-    inline-size: 100%;
-  }
-
-  /* Phone uploads arrive in every ratio; crop them all to one portrait frame. */
-  .team__photo {
-    inline-size: 100%;
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
-    border-radius: var(--radius-md);
-    margin-block-end: var(--space-xs);
-  }
-
-  .team__initials {
-    display: grid;
-    place-items: center;
-    background-color: var(--color-surface-sunken);
-    color: var(--color-text-subtle);
-    font-family: var(--font-display);
-    font-size: var(--text-4xl);
-    font-weight: var(--weight-semibold);
-    letter-spacing: var(--tracking-tight);
-  }
-</style>

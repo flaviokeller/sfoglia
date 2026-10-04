@@ -1,0 +1,11 @@
+title: Check-up
+price: CHF 120
+period: per visit
+description: For the yearly check.
+features:
+  - Examination
+  - Scale removal
+  - Advice
+highlighted: false
+group: Prevention
+order: 1

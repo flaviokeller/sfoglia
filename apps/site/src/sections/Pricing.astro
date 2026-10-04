@@ -1,0 +1,65 @@
+---
+import PricingTable from '@flaviocodes/sfoglia-ui/components/PricingTable.vue';
+import { getCollection } from 'astro:content';
+
+import { inLocale } from '../content.config';
+import type { Locale } from '../i18n/config';
+import { getTranslations } from '../i18n/t';
+
+interface Props {
+  locale: Locale;
+  /** `tiers`: a few packages side by side. `list`: a menu-style price list. */
+  variant?: 'tiers' | 'list';
+  intro?: string | undefined;
+  note?: string | undefined;
+  surface?: boolean;
+}
+
+const { locale, variant = 'tiers', intro, note, surface } = Astro.props;
+const t = getTranslations(locale);
+
+const entries = (await getCollection('pricing', inLocale(locale))).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const tiers = entries.map(({ data }) => ({
+  name: data.title,
+  price: data.price,
+  ...(data.period ? { period: data.period } : {}),
+  ...(data.description ? { description: data.description } : {}),
+  features: data.features,
+  highlighted: data.highlighted,
+  cta: { label: t('pricing.cta'), href: `/${locale}/kontakt/` },
+}));
+
+/** Rows grouped by `group`, in order of first appearance; ungrouped rows share one untitled group. */
+const groups: { title?: string; items: { name: string; description?: string; price: string }[] }[] =
+  [];
+for (const { data } of entries) {
+  const title = data.group?.trim() || undefined;
+  let group = groups.find((candidate) => candidate.title === title);
+  if (!group) {
+    group = title ? { title, items: [] } : { items: [] };
+    groups.push(group);
+  }
+  group.items.push({
+    name: data.title,
+    price: data.price,
+    ...(data.description ? { description: data.description } : {}),
+  });
+}
+---
+
+{/* No prices entered: no section — a site that does not show prices should not
+    carry an empty "Preise" heading. */}
+{entries.length > 0 && (
+  <PricingTable
+    variant={variant}
+    title={t('pricing.title')}
+    intro={intro}
+    note={note}
+    surface={surface}
+    tiers={tiers}
+    groups={groups}
+  />
+)}

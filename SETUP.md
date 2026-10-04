@@ -67,6 +67,13 @@ role.
       socials, and `schemaType`: the schema.org type (`Dentist`, `Restaurant` …,
       or `Person` for an individual with no premises — then set `jobTitle`)
 - [ ] `apps/site/src/content/**` — replace the sample content
+- [ ] Optional sections — `Cta`, `Stats`, `Pricing` and `Team` in
+      `apps/site/src/sections/` are not on the homepage by default; they all
+      render nothing when their collection is empty. Add the ones the client
+      needs to `pages/[locale]/index.astro` (see `/styleguide` for each), and
+      delete the sample `content/pricing` and `content/stats` entries of the
+      ones you skip. `Pricing` has two layouts: `variant="tiers"` (packages) or
+      `variant="list"` (menu-style, grouped by each entry's `group`)
 - [ ] `apps/site/public/favicon.svg`
 - [ ] `uid` in `site.json` — only if the client is in the Handelsregister;
       empty hides the Impressum block. Never invent one.

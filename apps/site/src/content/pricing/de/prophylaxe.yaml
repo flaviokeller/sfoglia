@@ -1,0 +1,11 @@
+title: Prophylaxe
+price: CHF 210
+period: pro Termin
+description: Gründliche Reinigung mit Politur.
+features:
+  - Alles aus Kontrolle
+  - Airflow-Reinigung
+  - Fluoridierung
+highlighted: true
+group: Vorsorge
+order: 2

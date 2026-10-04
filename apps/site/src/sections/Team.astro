@@ -1,0 +1,42 @@
+---
+import TeamGridView from '@flaviocodes/sfoglia-ui/components/TeamGrid.vue';
+import { getCollection } from 'astro:content';
+
+import { inLocale } from '../content.config';
+import type { Locale } from '../i18n/config';
+import { resolveImage } from '../lib/image';
+
+export interface Props {
+  locale: Locale;
+  title?: string | undefined;
+  /** h1 when the grid is the page itself (Team), h2 as a section of a longer page. */
+  as?: 'h1' | 'h2';
+  surface?: boolean;
+}
+
+const { locale, title, as, surface } = Astro.props;
+
+const entries = (await getCollection('team', inLocale(locale))).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const members = await Promise.all(
+  entries.map(async ({ data }) => ({
+    name: data.name,
+    // Keystatic saves untouched text fields as '' — drop them so the card has no empty line.
+    ...(data.role ? { role: data.role } : {}),
+    ...(data.bio ? { bio: data.bio } : {}),
+    ...(data.photo
+      ? {
+          photo: await resolveImage(data.photo, {
+            alt: data.photoAlt,
+            widths: [320, 480, 720],
+            sizes: '(width >= 48rem) 22rem, 100vw',
+          }),
+        }
+      : {}),
+  })),
+);
+---
+
+<TeamGridView title={title} as={as} surface={surface} members={members} />

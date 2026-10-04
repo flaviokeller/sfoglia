@@ -1,5 +1,5 @@
 ---
-import SiteNav from '@flaviocodes/sfoglia-ui/components/SiteNav.vue';
+import SiteHeaderView from '@flaviocodes/sfoglia-ui/components/SiteHeader.vue';
 
 import { LOCALE_NAMES, LOCALES, type Locale, withLocale } from '../i18n/config';
 import { getTranslations } from '../i18n/t';
@@ -24,119 +24,29 @@ const links = [
   { href: `/${locale}/team/`, label: t('nav.team') },
   { href: `/${locale}/kontakt/`, label: t('nav.contact') },
 ];
+
+const languages = LOCALES.map((code) => ({
+  code,
+  name: LOCALE_NAMES[code],
+  href: withLocale(path, code),
+  current: code === locale,
+}));
 ---
 
-<header class="site-header">
-  <div class="container site-header__inner">
-    <a class="site-header__brand" href={`/${locale}/`}>{site.businessName}</a>
-
-    <div class="site-header__right">
-      {/*
-        client:load rather than client:visible — the header is above the fold, and
-        a hamburger that does nothing for the first moments is worse than the few
-        extra kilobytes of eager hydration.
-      */}
-      {
-        !minimal && (
-          <SiteNav
-            client:load
-            links={links}
-            current={path}
-            menuLabel={t('nav.menu')}
-            closeLabel={t('nav.close')}
-          />
-        )
-      }
-
-      <nav class="lang-switch" aria-label={t('language.switch')}>
-        {
-          LOCALES.map((code) => (
-            <a
-              class="lang-switch__link"
-              href={withLocale(path, code)}
-              hreflang={code}
-              aria-current={code === locale ? 'true' : 'false'}
-            >
-              <abbr title={LOCALE_NAMES[code]}>{code.toUpperCase()}</abbr>
-            </a>
-          ))
-        }
-      </nav>
-    </div>
-  </div>
-</header>
-
-<style>
-  .site-header {
-    position: sticky;
-    inset-block-start: 0;
-    z-index: var(--z-sticky);
-    border-block-end: 1px solid var(--color-border);
-  }
-
-  /*
-   * The frosted background lives on a ::before, not on .site-header itself: a
-   * backdrop-filter makes its element the containing block for every
-   * position:fixed descendant, which would pin SiteNav's mobile drawer and
-   * backdrop (rendered inside this header) to the header's own box instead of
-   * the viewport. A pseudo-element is not an ancestor of them, so it cannot.
-   */
-  .site-header::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-color: color-mix(in oklab, var(--color-canvas) 88%, transparent);
-    backdrop-filter: blur(8px);
-  }
-
-  .site-header__inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-lg);
-    padding-block: var(--space-sm);
-  }
-
-  /* A long business name wraps (and hyphenates) instead of pushing the menu
-     button off a phone screen. */
-  .site-header__brand {
-    min-inline-size: 0;
-    hyphens: auto;
-    overflow-wrap: break-word;
-    font-family: var(--font-display);
-    font-size: var(--text-lg);
-    font-weight: var(--weight-semibold);
-    color: var(--color-text);
-    text-decoration: none;
-  }
-
-  .site-header__right {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    gap: var(--space-lg);
-  }
-
-  .lang-switch {
-    font-family: var(--font-sans);
-    display: flex;
-    gap: var(--space-2xs);
-  }
-
-  .lang-switch__link {
-    padding-inline: var(--space-2xs);
-    font-size: var(--text-sm);
-    font-weight: var(--weight-medium);
-    color: var(--color-text-subtle);
-    text-decoration: none;
-  }
-
-  .lang-switch__link[aria-current='true'] {
-    color: var(--color-accent-text);
-  }
-
-  .lang-switch abbr {
-    text-decoration: none;
-  }
-</style>
+{/*
+  client:load rather than client:visible — the header is above the fold, and
+  a hamburger that does nothing for the first moments is worse than the few
+  extra kilobytes of eager hydration.
+*/}
+<SiteHeaderView
+  client:load
+  businessName={site.businessName}
+  homeHref={`/${locale}/`}
+  links={links}
+  current={path}
+  languages={languages}
+  languageSwitchLabel={t('language.switch')}
+  menuLabel={t('nav.menu')}
+  closeLabel={t('nav.close')}
+  minimal={minimal}
+/>

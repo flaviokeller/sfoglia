@@ -13,11 +13,15 @@ import ImageGallery from '@flaviocodes/sfoglia-ui/components/ImageGallery.vue';
 
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { placeholderImage } from '../lib/placeholder';
+import Cta from '../sections/Cta.astro';
 import EventsSection from '../sections/EventsSection.astro';
 import Faq from '../sections/Faq.astro';
 import Hero from '../sections/Hero.astro';
 import OpeningHours from '../sections/OpeningHours.astro';
+import Pricing from '../sections/Pricing.astro';
 import ServiceGrid from '../sections/ServiceGrid.astro';
+import Stats from '../sections/Stats.astro';
+import Team from '../sections/Team.astro';
 import Testimonials from '../sections/Testimonials.astro';
 import TextImage from '../sections/TextImage.astro';
 import { DEFAULT_LOCALE } from '../i18n/config';
@@ -193,6 +197,22 @@ const directions = [
       { quote: 'Another short quote.', author: 'B. Wyss', context: 'Zurich' },
     ]}
   />
+
+  <Stats locale={DEFAULT_LOCALE} title="Stats strip" surface />
+
+  <Team locale={DEFAULT_LOCALE} title="Team grid" />
+
+  <Pricing
+    locale={DEFAULT_LOCALE}
+    variant="tiers"
+    intro="Packages side by side, one highlighted."
+    note="Prices in CHF. A quote is given before any treatment."
+    surface
+  />
+
+  <Pricing locale={DEFAULT_LOCALE} variant="list" intro="The same prices as a menu-style list." />
+
+  <Cta locale={DEFAULT_LOCALE} />
 
   <OpeningHours locale={DEFAULT_LOCALE} />
 

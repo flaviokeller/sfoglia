@@ -1,5 +1,5 @@
 ---
-import ContactForm from '@flaviocodes/sfoglia-ui/components/ContactForm.vue';
+import ContactSectionView from '@flaviocodes/sfoglia-ui/components/ContactSection.vue';
 
 import type { Locale } from '../i18n/config';
 import { contactFormLabels, getTranslations } from '../i18n/t';
@@ -13,33 +13,29 @@ export interface Props {
 
 const { locale, formName = 'contact', as: Heading = 'h2' } = Astro.props;
 const t = getTranslations(locale);
-const labels = contactFormLabels(locale);
 ---
 
-<section class="section" id="kontakt">
-  <div class="container">
-    <Heading class:list={[Heading === 'h1' ? 'heading-1' : 'heading-2']}>{t('contact.title')}</Heading>
+{/*
+  Netlify discovers forms by parsing the STATIC HTML at deploy time. The Vue
+  component is hydrated client-side and posts via fetch, so Netlify would
+  never register it — hence this hidden plain-HTML twin. It must keep the
+  same `name` and the same field names as ContactForm.vue, or submissions 404.
+  It sits outside the island so hydration never touches it.
+  Ref: https://docs.netlify.com/manage/forms/setup/
+*/}
+<form name={formName} data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value={formName} />
+  <input type="text" name="name" />
+  <input type="email" name="email" />
+  <textarea name="message"></textarea>
+  <input type="text" name="bot-field" />
+</form>
 
-    {/*
-      Netlify discovers forms by parsing the STATIC HTML at deploy time. The Vue
-      component is hydrated client-side and posts via fetch, so Netlify would
-      never register it — hence this hidden plain-HTML twin. It must keep the
-      same `name` and the same field names as ContactForm.vue, or submissions 404.
-      Ref: https://docs.netlify.com/manage/forms/setup/
-    */}
-    <form name={formName} data-netlify="true" netlify-honeypot="bot-field" hidden>
-      <input type="hidden" name="form-name" value={formName} />
-      <input type="text" name="name" />
-      <input type="email" name="email" />
-      <textarea name="message"></textarea>
-      <input type="text" name="bot-field" />
-    </form>
-
-    <ContactForm
-      client:visible
-      formName={formName}
-      successUrl={`/${locale}/danke/`}
-      labels={labels}
-    />
-  </div>
-</section>
+<ContactSectionView
+  client:visible
+  title={t('contact.title')}
+  as={Heading}
+  formName={formName}
+  successUrl={`/${locale}/danke/`}
+  labels={contactFormLabels(locale)}
+/>
