@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+/*
+ * `useId` is imported under another name on purpose. Fast Refresh (present for
+ * the Keystatic admin) treats any call spelled `use*` as a React hook — see the
+ * `triggers` note below. Astro gives every island its own id prefix, so the ids
+ * stay unique when two accordions share a page and match between SSR and
+ * hydration.
+ */
+import { useId as createId, ref } from 'vue';
 
 export interface AccordionItem {
   question: string;
@@ -29,6 +36,8 @@ const open = ref(new Set<number>(props.initialOpen >= 0 ? [props.initialOpen] : 
  * `ref="triggers"` inside the v-for.
  */
 const triggers = ref<HTMLButtonElement[]>([]);
+
+const idBase = createId();
 
 function isOpen(index: number) {
   return open.value.has(index);
@@ -63,21 +72,21 @@ function onKeydown(event: KeyboardEvent, index: number) {
 </script>
 
 <template>
-  <div class="accordion">
+  <div v-if="props.items.length" class="accordion">
     <div
       v-for="(item, index) in props.items"
-      :key="item.question"
+      :key="index"
       class="accordion__item"
       :data-open="isOpen(index) ? '' : null"
     >
       <h3 class="accordion__heading">
         <button
-          :id="`accordion-trigger-${index}`"
+          :id="`${idBase}-trigger-${index}`"
           ref="triggers"
           class="accordion__trigger"
           type="button"
           :aria-expanded="isOpen(index) ? 'true' : 'false'"
-          :aria-controls="`accordion-panel-${index}`"
+          :aria-controls="`${idBase}-panel-${index}`"
           @click="toggle(index)"
           @keydown="onKeydown($event, index)"
         >
@@ -98,10 +107,10 @@ function onKeydown(event: KeyboardEvent, index: number) {
         </button>
       </h3>
       <div
-        :id="`accordion-panel-${index}`"
+        :id="`${idBase}-panel-${index}`"
         class="accordion__panel"
         role="region"
-        :aria-labelledby="`accordion-trigger-${index}`"
+        :aria-labelledby="`${idBase}-trigger-${index}`"
         :hidden="!isOpen(index)"
       >
         <div class="accordion__content">{{ item.answer }}</div>

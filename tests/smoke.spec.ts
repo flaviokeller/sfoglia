@@ -113,11 +113,15 @@ test.describe('components', () => {
     await expect(page.locator('form.form .field__error')).toHaveCount(3);
     await expect(page).toHaveURL(/\/de\/kontakt\//);
 
-    await form.locator('#contact-email').fill('not-an-email');
-    await form.locator('#contact-name').fill('Maria Muster');
-    await form.locator('#contact-message').fill('Guten Tag');
+    // Fixing a field clears its error while typing, before the next submit.
+    await form.getByLabel('Name').fill('Maria Muster');
+    await form.getByLabel('Nachricht').fill('Guten Tag');
+    await expect(page.locator('form.form .field__error')).toHaveCount(1);
+
+    const email = form.getByLabel('E-Mail');
+    await email.fill('not-an-email');
     await form.locator('button[type="submit"]').click();
-    await expect(page.locator('#contact-email-error')).toBeVisible();
+    await expect(email).toHaveAccessibleDescription(/gültige E-Mail/);
   });
 
   test('opening hours highlights the current day at runtime', async ({ page }) => {

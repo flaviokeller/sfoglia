@@ -126,6 +126,8 @@
   font-size: var(--text-base);
   font-weight: var(--weight-medium);
   line-height: 1.2;
+  /* A long label wraps in a narrow column; keep every line centred. */
+  text-align: center;
   text-decoration: none;
   cursor: pointer;
   transition:

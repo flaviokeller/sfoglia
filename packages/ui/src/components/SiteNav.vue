@@ -38,16 +38,18 @@ function onDocumentKeydown(event: KeyboardEvent) {
   }
 }
 
+/*
+ * The page behind the open drawer is scroll-locked in CSS (components.css,
+ * `:root:has(...)` inside the drawer's media query), not here: widening the
+ * window past the breakpoint then releases the lock by itself instead of
+ * leaving a desktop page that cannot scroll.
+ */
 function close() {
   open.value = false;
-  // Release the scroll lock applied when the drawer opened.
-  document.body.style.removeProperty('overflow');
 }
 
 async function openDrawer() {
   open.value = true;
-  // The drawer is a fixed overlay — the page behind it must not scroll.
-  document.body.style.overflow = 'hidden';
   await nextTick();
   drawer.value?.querySelector<HTMLAnchorElement>('a')?.focus();
 }
@@ -57,10 +59,22 @@ function toggle() {
   else void openDrawer();
 }
 
-/** Keeps Tab cycling inside the drawer while it is open. */
-function onDrawerKeydown(event: KeyboardEvent) {
-  if (event.key !== 'Tab' || !drawer.value) return;
-  const focusables = [...drawer.value.querySelectorAll<HTMLElement>('a, button')];
+/** Trailing-slash-insensitive, so `/de/team` and `/de/team/` both mark Team. */
+function isCurrent(href: string) {
+  const strip = (path: string) => path.replace(/\/+$/, '');
+  return strip(props.current) === strip(href);
+}
+
+/**
+ * Keeps Tab cycling inside the open drawer. The toggle sits outside the drawer
+ * in the DOM but is its close button, so it is part of the cycle.
+ */
+function onNavKeydown(event: KeyboardEvent) {
+  if (event.key !== 'Tab' || !open.value || !drawer.value) return;
+  const focusables = [
+    toggleButton.value,
+    ...drawer.value.querySelectorAll<HTMLElement>('a, button'),
+  ].filter((element): element is HTMLElement => element !== null);
   const first = focusables[0];
   const last = focusables[focusables.length - 1];
   if (!first || !last) return;
@@ -77,19 +91,18 @@ function onDrawerKeydown(event: KeyboardEvent) {
 onMounted(() => document.addEventListener('keydown', onDocumentKeydown));
 onBeforeUnmount(() => {
   document.removeEventListener('keydown', onDocumentKeydown);
-  document.body.style.removeProperty('overflow');
 });
 </script>
 
 <template>
-  <nav class="nav" aria-label="Navigation">
+  <nav class="nav" aria-label="Navigation" @keydown="onNavKeydown">
     <div class="nav__bar">
       <a
         v-for="link in props.links"
         :key="link.href"
         class="nav__link"
         :href="link.href"
-        :aria-current="props.current === link.href ? 'page' : 'false'"
+        :aria-current="isCurrent(link.href) ? 'page' : 'false'"
         >{{ link.label }}</a
       >
     </div>
@@ -123,14 +136,13 @@ onBeforeUnmount(() => {
       ref="drawer"
       class="nav__drawer"
       :hidden="!open"
-      @keydown="onDrawerKeydown"
     >
       <a
         v-for="link in props.links"
         :key="link.href"
         class="nav__link"
         :href="link.href"
-        :aria-current="props.current === link.href ? 'page' : 'false'"
+        :aria-current="isCurrent(link.href) ? 'page' : 'false'"
         @click="close"
         >{{ link.label }}</a
       >

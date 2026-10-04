@@ -81,6 +81,10 @@ h2,
 h3,
 h4 {
   text-wrap: balance;
+  /* Long German compounds ("Kieferorthopädie") overflow large headings on
+     phones. Hyphenate by dictionary (needs <html lang>), long words only. */
+  hyphens: auto;
+  hyphenate-limit-chars: 10 4 4;
 }
 
 p {
