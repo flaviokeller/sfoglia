@@ -11,6 +11,7 @@
  * fk-nav
  * ------------------------------------------------------------------ */
 .nav {
+  font-family: var(--font-sans);
   display: flex;
   align-items: center;
 }

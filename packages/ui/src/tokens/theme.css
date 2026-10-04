@@ -91,6 +91,12 @@
    * ---------------------------------------------------------------- */
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-display: "Fraunces Variable", ui-serif, Georgia, "Times New Roman", serif;
+  /*
+   * The reading surface (body copy, prose). Separate from --font-sans, which is
+   * chrome: nav, buttons, labels, eyebrows. Point this at a serif for an
+   * editorial site and only running text changes.
+   */
+  --font-body: var(--font-sans);
   --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
 
   /* Scale is ~1.25 (major third) at mobile, widening to ~1.333 at desktop. */
