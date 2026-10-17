@@ -24,7 +24,7 @@
     "@biomejs/biome": "^2.5.15",
     "@playwright/test": "^1.63.0",
     "lefthook": "^2.1.15",
-    "typescript": "^5.9.3"
+    "typescript": "^7.0.2"
   },
   "allowScripts": {
     "lefthook@2.1.12": true,
