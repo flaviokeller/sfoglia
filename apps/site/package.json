@@ -10,18 +10,18 @@
     "typecheck": "astro check"
   },
   "dependencies": {
-    "@astrojs/markdoc": "^2.0.9",
-    "@astrojs/netlify": "^8.2.6",
-    "@astrojs/react": "^6.0.5",
+    "@astrojs/markdoc": "^2.1.0",
+    "@astrojs/netlify": "^8.2.10",
+    "@astrojs/react": "^7.1.0",
     "@astrojs/sitemap": "^3.7.4",
-    "@astrojs/vue": "^7.0.3",
+    "@astrojs/vue": "^7.1.0",
     "@keystatic/astro": "^6.0.0",
     "@keystatic/core": "^0.6.9",
     "astro": "^7.3.5",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "sharp": "^0.35.5",
-    "vue": "^3.5.43"
+    "vue": "^3.5.44"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
