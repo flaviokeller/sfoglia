@@ -44,7 +44,10 @@ editing one token file, because every colour and size is a semantic role.
   Datenschutz) and handover (`docs/03-handover.md`) are part of the product.
 - Editing happens in Keystatic at `/keystatic`. In production that requires the
   client to have a GitHub account.
-- Hosting is Netlify. The site ships as static HTML and Vue islands.
+- Hosting is Cloudflare Workers. The site ships as static HTML and Vue islands;
+  only the CMS, the contact form endpoint and the `/` redirect run on demand.
+- The contact form mails through Lettermint (EU), or the site shows a mailto link
+  instead — a per-site choice.
 - Two design-review surfaces: Storybook in `packages/ui` for the builder, and
   `/styleguide` on the site, which shows the client the real sections in context.
 

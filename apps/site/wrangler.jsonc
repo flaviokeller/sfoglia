@@ -1,0 +1,10 @@
+// The client site on Cloudflare Workers. Prerendered pages are served as static
+// assets; only on-demand routes (the Keystatic admin and the `/` language
+// redirect) run the Worker. @astrojs/cloudflare fills in `main` and the assets
+// binding at build time.
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "sfoglia-site",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat"]
+}

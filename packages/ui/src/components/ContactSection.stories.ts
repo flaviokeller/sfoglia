@@ -6,7 +6,7 @@ const meta: Meta<typeof ContactSection> = {
   component: ContactSection,
   parameters: { layout: 'fullscreen' },
   argTypes: { as: { control: 'inline-radio', options: ['h1', 'h2'] } },
-  args: { title: 'Kontakt', as: 'h2', formName: 'contact', successUrl: '/de/danke/' },
+  args: { title: 'Kontakt', as: 'h2', successUrl: '/de/danke/' },
 };
 export default meta;
 type Story = StoryObj<typeof ContactSection>;
@@ -21,4 +21,9 @@ export const English: Story = {
     title: 'Contact',
     labels: { name: 'Name', email: 'Email', message: 'Message', submit: 'Send' },
   },
+};
+
+/** `contactMode: "mailto"` sites: a mailto link instead of the form. */
+export const Mailto: Story = {
+  args: { mailto: 'hallo@example.ch', mailtoLabel: 'E-Mail schreiben' },
 };

@@ -78,14 +78,9 @@ one: the same tokens and the real Astro sections, in context, on the real site.
   automatic middleware 404s every non-locale route — including Keystatic's
   admin. [`src/middleware.ts`](./apps/site/src/middleware.ts) re-applies the
   stock middleware with exceptions.
-- **TypeScript is pinned to 5.x.** TS 7 breaks the Netlify adapter's dependency
-  chain.
-- **`npm audit` reports 10 high findings.** All ten come from one chain:
-  `@astrojs/netlify` → `@netlify/vite-plugin` → `@netlify/dev`, Netlify's local
-  emulation stack (`ipx`, `sharp`, `extract-zip`, `image-size`). None of it is
-  served to browsers — verified absent from the client bundles. `npm audit fix
-  --force` would downgrade the adapter across a major version and break the
-  build, so it is deliberately not applied. It clears when Netlify updates
-  `@netlify/dev`; re-check with `npm audit --omit=dev` after adapter upgrades.
+- **TypeScript is pinned to 5.x.** The pin was for the Netlify adapter, which is
+  gone; re-check before bumping.
+- **Hosting is Cloudflare Workers.** Public pages are static assets; only
+  Keystatic, the contact form endpoint and the `/` language redirect run on demand.
 - **Biome does not lint `.astro` files.** It parses only the frontmatter and
   reports template-used imports as unused; `astro check` covers them instead.

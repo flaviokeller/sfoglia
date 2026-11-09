@@ -9,11 +9,11 @@ const meta: Meta<typeof ContactForm> = {
     docs: {
       description: {
         component:
-          'Submits to Netlify Forms via fetch. In Storybook the POST to `/` fails, which is the intended way to exercise the error state. Validation runs entirely client-side and is fully testable here.',
+          "Submits to the site's `/api/contact` endpoint via fetch. In Storybook that POST fails, which is the intended way to exercise the error state. Validation runs entirely client-side and is fully testable here.",
       },
     },
   },
-  args: { formName: 'contact', labels: {} },
+  args: { labels: {} },
   render: (args) => ({
     components: { ContactForm },
     setup: () => ({ args }),

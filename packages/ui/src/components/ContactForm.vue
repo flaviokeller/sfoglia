@@ -28,19 +28,19 @@ const DEFAULT_LABELS: ContactFormLabels = {
 
 const props = withDefaults(
   defineProps<{
-    /** Must match the `name` on the hidden static twin form that Netlify parses. */
-    formName?: string;
+    /** The endpoint that receives the submission (the site's `/api/contact`). */
+    action?: string;
     /**
-     * Where a no-JS submission lands. Netlify serves this path after the native
-     * POST; without it the visitor gets Netlify's generic confirmation page.
+     * Where a no-JS submission lands. The endpoint redirects there after the
+     * native POST; it must be a same-site path.
      */
     successUrl?: string;
     labels?: Partial<ContactFormLabels>;
   }>(),
-  { formName: 'contact', successUrl: undefined, labels: () => ({}) },
+  { action: '/api/contact', successUrl: undefined, labels: () => ({}) },
 );
 
-/** How long to wait on Netlify before telling the visitor it failed. */
+/** How long to wait on the endpoint before telling the visitor it failed. */
 const SUBMIT_TIMEOUT_MS = 15_000;
 
 const t = computed<ContactFormLabels>(() => ({ ...DEFAULT_LABELS, ...props.labels }));
@@ -122,18 +122,20 @@ async function onSubmit() {
   status.value = 'sending';
 
   try {
-    const body = new URLSearchParams({
-      'form-name': props.formName,
-      ...values.value,
-    });
-    const response = await fetch('/', {
+    const body = new URLSearchParams(values.value);
+    const response = await fetch(props.action, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      // `Accept: application/json` asks for a status reply instead of the
+      // redirect a native (no-JS) POST gets.
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Accept: 'application/json',
+      },
       body: body.toString(),
       // A stalled request must not leave the button on "Sending …" forever.
       signal: AbortSignal.timeout(SUBMIT_TIMEOUT_MS),
     });
-    if (!response.ok) throw new Error(`Netlify responded ${response.status}`);
+    if (!response.ok) throw new Error(`Contact endpoint responded ${response.status}`);
     status.value = 'sent';
     values.value = { name: '', email: '', message: '' };
     // The form (and the focused button) is replaced by the confirmation; move
@@ -163,13 +165,12 @@ async function onSubmit() {
     v-else
     ref="form"
     class="form stack"
-    :name="props.formName"
     method="POST"
-    :action="props.successUrl"
+    :action="props.action"
     :novalidate="hydrated"
     @submit.prevent="onSubmit"
   >
-    <input type="hidden" name="form-name" :value="props.formName" />
+    <input v-if="props.successUrl" type="hidden" name="success-url" :value="props.successUrl" />
     <p hidden>
       <label>Bitte leer lassen <input v-model="botField" name="bot-field" /></label>
     </p>

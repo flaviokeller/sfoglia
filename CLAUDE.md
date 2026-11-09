@@ -71,7 +71,8 @@ client-facing equivalent — same tokens, real Astro sections, in context.
 `apps/site/src/i18n/config.ts` is the single source of truth. Per-locale
 tables elsewhere (`t.ts` dictionaries, legal page copy, day names) are typed
 `Record<Locale, …>`, so changing `LOCALES` fails `astro check` until they
-match; `netlify.toml`'s `/` redirects are the one untyped list. `LOCALES` currently ships `['de', 'en']`
+match. `/` redirects to the visitor's preferred locale on demand
+(`src/pages/index.ts`), so it needs no list either. `LOCALES` currently ships `['de', 'en']`
 with `de` as default. Routing uses `prefixDefaultLocale: true` with Astro's
 i18n `routing: 'manual'`, because Astro's automatic i18n middleware would 404
 every non-locale route including Keystatic's admin —
@@ -103,18 +104,20 @@ routing or adding pages, check this middleware.
   For `.vue`, Biome parses `<script>` but not `<template>`, so
   `noUnusedVariables`/`noUnusedImports` are disabled for `.vue` in
   `biome.json` — `vue-tsc` is the real check there.
-- **TypeScript is pinned to `^5.9`** — TS 7 breaks `@astrojs/netlify`'s
-  dependency chain. Don't bump the major without checking that adapter.
-- **`npm audit` reports findings from `@astrojs/netlify`'s local-emulation
-  chain** (`ipx`, `sharp`, `extract-zip`, `image-size` via `@netlify/dev`) —
-  none of it ships to browsers. Don't run `npm audit fix --force`; it
-  downgrades the adapter across a major and breaks the build. Re-check with
-  `npm audit --omit=dev` after adapter upgrades instead.
+- **TypeScript is pinned to `^5.9`.** The pin was for `@astrojs/netlify`, which is
+  gone; check `astro check` and the Cloudflare adapter before bumping the major.
+- **Hosting is Cloudflare Workers** (`@astrojs/cloudflare`). Public pages are
+  prerendered static assets; only Keystatic, `/api/contact` and the `/` redirect
+  run in the Worker. Prerendering runs in Node (`prerenderEnvironment: 'node'`)
+  because build-time content code reads files by path, which workerd cannot.
+- **The contact form mails through Lettermint** (`src/pages/api/contact.ts`), or
+  the site shows a mailto link instead (`contactMode` in `site.json`). Both
+  `ContactForm.vue`'s client checks and the endpoint validate; keep them in step.
 
 ## Working across the two workspaces
 
 `packages/ui` is deployable and testable standalone (its own Storybook,
-Netlify site, `typecheck` script). `apps/site` depends on it as a workspace
+Cloudflare Worker, `typecheck` script). `apps/site` depends on it as a workspace
 package (imported via `@flaviocodes/sfoglia-ui`'s exports:
 `.`, `./components/*`, `./styles/*`, `./tokens/*`). When changing a shared
 component or token, verify both the Storybook story and the real usage in

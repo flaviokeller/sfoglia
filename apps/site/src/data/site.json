@@ -5,6 +5,7 @@
   "tagline": "Zahnmedizin mit Ruhe und Zeit",
   "jobTitle": "",
   "email": "hallo@example.ch",
+  "contactMode": "form",
   "phone": "+41 44 123 45 67",
   "street": "Seestrasse 12",
   "postalCode": "8002",

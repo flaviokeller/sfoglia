@@ -15,6 +15,7 @@
   "hours.closed": "Closed",
   "hours.map": "Open map",
   "contact.title": "Contact",
+  "contact.mailto": "Send us an email",
   "contact.form.name": "Name",
   "contact.form.email": "Email",
   "contact.form.message": "Message",

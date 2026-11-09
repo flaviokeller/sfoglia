@@ -35,10 +35,13 @@ const copy = {
     fonts:
       'Alle Schriftarten werden von unserem eigenen Server ausgeliefert. Es werden keine Daten an Google Fonts oder ein anderes CDN übertragen.',
     formTitle: 'Kontaktformular',
-    form: 'Wenn Sie uns über das Kontaktformular schreiben, werden Name, E-Mail-Adresse und Nachricht über unseren Hosting-Anbieter Netlify (Netlify, Inc., USA) übermittelt und uns per E-Mail zugestellt. Netlify prüft eingehende Nachrichten automatisiert auf Spam mithilfe von Akismet (Automattic Inc., USA). Wir verwenden Ihre Angaben ausschliesslich zur Beantwortung Ihrer Anfrage. Anfragen werden nach 90 Tagen gelöscht.',
+    form: 'Wenn Sie uns über das Kontaktformular schreiben, werden Name, E-Mail-Adresse und Nachricht von unserem Hosting-Anbieter Cloudflare (Cloudflare, Inc., USA) entgegengenommen und über den E-Mail-Versanddienst Lettermint (Niederlande, Datenverarbeitung ausschliesslich in der EU) per E-Mail an uns zugestellt. Lettermint löscht die Nachricht nach 28 Tagen. Wir verwenden Ihre Angaben ausschliesslich zur Beantwortung Ihrer Anfrage. Anfragen werden nach 90 Tagen gelöscht.',
+    mailtoTitle: 'Kontakt per E-Mail',
+    mailto:
+      'Wenn Sie uns per E-Mail schreiben, verwenden wir Ihre Angaben ausschliesslich zur Beantwortung Ihrer Anfrage. Anfragen werden nach 90 Tagen gelöscht.',
     hostingTitle: 'Hosting',
     hosting:
-      'Diese Website wird bei Netlify gehostet. Netlify speichert Server-Logdaten (u.a. IP-Adresse, Zeitpunkt, abgerufene Seite) zur Sicherstellung des Betriebs.',
+      'Diese Website wird bei Cloudflare (Cloudflare, Inc., USA) gehostet. Cloudflare verarbeitet Server-Logdaten (u.a. IP-Adresse, Zeitpunkt, abgerufene Seite) zur Sicherstellung des Betriebs und zum Schutz vor Angriffen.',
     analyticsTitle: 'Statistik',
     analytics:
       'Wir verwenden Cloudflare Web Analytics. Dabei werden keine Cookies gesetzt und keine Besucherinnen und Besucher über Websites hinweg verfolgt.',
@@ -53,10 +56,12 @@ const copy = {
     fontsTitle: 'Fonts',
     fonts: 'All fonts are served from our own server. No data is transmitted to Google Fonts or any other CDN.',
     formTitle: 'Contact form',
-    form: 'If you write to us through the contact form, your name, email address and message are transmitted via our hosting provider Netlify (Netlify, Inc., USA) and delivered to us by email. Netlify automatically screens incoming messages for spam using Akismet (Automattic Inc., USA). We use this information solely to answer your enquiry. Enquiries are deleted after 90 days.',
+    form: 'If you write to us through the contact form, your name, email address and message are received by our hosting provider Cloudflare (Cloudflare, Inc., USA) and delivered to us by email through the email service Lettermint (Netherlands, data processed only in the EU). Lettermint deletes the message after 28 days. We use this information solely to answer your enquiry. Enquiries are deleted after 90 days.',
+    mailtoTitle: 'Contact by email',
+    mailto: 'If you email us, we use your details solely to answer your enquiry. Enquiries are deleted after 90 days.',
     hostingTitle: 'Hosting',
     hosting:
-      'This website is hosted by Netlify. Netlify stores server log data (including IP address, timestamp and requested page) to keep the service running.',
+      'This website is hosted by Cloudflare (Cloudflare, Inc., USA). Cloudflare processes server log data (including IP address, timestamp and requested page) to keep the service running and protect it against attacks.',
     analyticsTitle: 'Analytics',
     analytics: 'We use Cloudflare Web Analytics. It sets no cookies and does not track visitors across websites.',
     rightsTitle: 'Your rights',
@@ -88,8 +93,8 @@ const c = copy[locale];
       <h2 class="heading-3">{c.fontsTitle}</h2>
       <p>{c.fonts}</p>
 
-      <h2 class="heading-3">{c.formTitle}</h2>
-      <p>{c.form}</p>
+      <h2 class="heading-3">{site.contactMode === 'form' ? c.formTitle : c.mailtoTitle}</h2>
+      <p>{site.contactMode === 'form' ? c.form : c.mailto}</p>
 
       <h2 class="heading-3">{c.hostingTitle}</h2>
       <p>{c.hosting}</p>

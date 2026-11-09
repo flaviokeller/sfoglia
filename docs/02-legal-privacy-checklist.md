@@ -19,8 +19,8 @@ This matters because it is the reason the checklist is short:
 | Fonts | self-hosted via npm | no Google Fonts request, nothing to declare |
 | Analytics | off; Cloudflare (cookieless) when on | still no banner |
 | Third-party scripts | none | nothing shared with anyone |
-| Forms | Netlify Forms | one processor to name, and we name it |
-| Hosting | Netlify (US company) | named in the privacy policy |
+| Forms | Lettermint (EU), or a mailto link instead | one processor to name (none with mailto), and we name it |
+| Hosting | Cloudflare (US company) | named in the privacy policy |
 
 A smoke test (`tests/smoke.spec.ts`) asserts the homepage makes **zero**
 third-party requests. If someone adds an embed, that test fails — by design.
@@ -48,10 +48,10 @@ Template: `apps/site/src/pages/[locale]/datenschutz.astro`.
 
 - [ ] Who the controller is, with contact details
 - [ ] What is collected and why (contact form: name, email, message)
-- [ ] Where it goes — Netlify, US-based; say so
+- [ ] Where it goes — Cloudflare (US) receives it, Lettermint (EU) delivers it; say so
 - [ ] How long it is kept
 - [ ] Data subject rights: access, correction, deletion
-- [ ] Server log files (Netlify keeps them)
+- [ ] Server log files (Cloudflare processes them)
 - [ ] Analytics section — the page renders this **automatically** when a
       Cloudflare token is set in `site.json`, so do not forget to look at it
 

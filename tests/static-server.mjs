@@ -1,20 +1,20 @@
 /**
  * Minimal static server for the smoke tests.
  *
- * `astro preview` delegates to the Netlify CLI when the Netlify adapter is in
- * use, which is too heavy (and too network-dependent) for CI. This serves the
- * real production build and reproduces the two Netlify behaviours the tests
- * care about: the root redirect from `netlify.toml`, and 404.html served with
- * an actual 404 status.
+ * `astro preview` runs the Cloudflare adapter's Worker in workerd, which is
+ * heavier than CI needs. This serves the prerendered pages of the real
+ * production build (`dist/client`) and reproduces the two behaviours the tests
+ * care about: the root redirect (a simplified `src/pages/index.ts`, always to
+ * the default locale), and 404.html served with an actual 404 status.
  *
- * It intentionally does NOT emulate the Keystatic SSR function — that is
- * verified by hand in dev, per SETUP.md.
+ * It intentionally does NOT emulate the on-demand routes (Keystatic,
+ * /api/contact) — check those with `npx wrangler dev`, per SETUP.md.
  */
 import { createReadStream, existsSync, statSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { extname, join, normalize } from 'node:path';
 
-const ROOT = new URL('../apps/site/dist/', import.meta.url).pathname;
+const ROOT = new URL('../apps/site/dist/client/', import.meta.url).pathname;
 const PORT = Number(process.env.PORT ?? 4321);
 const DEFAULT_LOCALE = 'de';
 
@@ -53,7 +53,7 @@ function resolve(pathname) {
 createServer((req, res) => {
   const { pathname } = new URL(req.url ?? '/', `http://localhost:${PORT}`);
 
-  // Mirrors the root redirect in apps/site/netlify.toml.
+  // Stands in for src/pages/index.ts, which runs on demand.
   if (pathname === '/') {
     res.writeHead(302, { location: `/${DEFAULT_LOCALE}/` });
     res.end();
