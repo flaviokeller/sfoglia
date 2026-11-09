@@ -62,7 +62,7 @@ These need a developer — just get in touch:
 Form submissions go to **<email address>**. Please check that this mailbox is
 actually monitored — a contact form nobody reads is worse than no contact form.
 
-You can also see every submission in the Netlify dashboard.
+Submissions are not stored on the website itself — the email is your record of them.
 
 ## Your domain
 
@@ -81,8 +81,8 @@ first — that changes the situation and the privacy policy has to be updated.
 
 ## Hosting and costs
 
-- Hosted on **Netlify**, currently within the free tier.
-- Currently under **<your name>'s** Netlify account.
+- Hosted on **Cloudflare**, currently within the free tier.
+- Currently under **<your name>'s** Cloudflare account.
 - The site is **static** — there is no database and no server to maintain, which
   is why it needs so little looking after and why it is hard to break.
 
@@ -103,6 +103,6 @@ are not locked in. We mention this up front so you never have to ask.
 ## Technical details (for whoever comes after)
 
 - Code repository: <github url>
-- Built with: Astro, Vue components, Keystatic CMS, hosted on Netlify
+- Built with: Astro, Vue components, Keystatic CMS, hosted on Cloudflare Workers
 - Content lives in the repo as files — there is no database
 - Setup and deployment: see `SETUP.md` in the repository

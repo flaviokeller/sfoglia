@@ -1,2 +1,2 @@
-# Local Netlify folder
-.netlify
+# Local Cloudflare secrets for `wrangler dev`
+.dev.vars

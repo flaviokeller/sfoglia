@@ -1,4 +1,4 @@
-# Netlify deploys production from the `release` branch, not `main`.
+# Cloudflare Workers Builds deploys production from the `release` branch, not `main`.
 # Run this workflow to ship: it fast-forwards `release` to the selected branch.
 name: Release
 

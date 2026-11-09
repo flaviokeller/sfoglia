@@ -23,6 +23,11 @@ export type SiteSettings = {
   /** Person only: the role, emitted as schema.org `jobTitle`. */
   jobTitle: string;
   email: string;
+  /**
+   * `form`: the contact form, sent by `/api/contact` (needs the Lettermint env
+   * vars, see SETUP.md). `mailto`: a plain mailto link to `email`, no form mail.
+   */
+  contactMode: 'form' | 'mailto';
   phone: string;
   street: string;
   postalCode: string;

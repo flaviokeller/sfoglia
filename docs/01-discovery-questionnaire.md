@@ -42,7 +42,7 @@ because the relationship is informal, nobody raises them unprompted.
 
 - **Who owns the domain?** Which registrar? Who has the login?
 - Is there email on that domain? With whom?
-  → this decides whether we can point nameservers at Netlify (we usually should
+  → this decides whether we can point nameservers at Cloudflare (we usually should
   not) or must add individual DNS records (we usually should)
 - Where is the current site hosted, and can it be switched off?
 - Does the client have a GitHub account, or are they willing to create one?

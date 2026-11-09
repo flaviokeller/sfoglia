@@ -1,0 +1,10 @@
+// The Storybook site (the design-system showcase), served as Cloudflare Workers
+// static assets. A separate Worker from the client site, deployed from the same repo.
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "sfoglia-storybook",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./storybook-static"
+  }
+}

@@ -11,6 +11,7 @@ import { defineMiddleware } from 'astro:middleware';
  *
  *   /keystatic, /api/keystatic  the CMS admin UI and its API (injected by the
  *                               Keystatic integration; cannot be moved)
+ *   /api/contact                the contact form endpoint
  *   /styleguide                 an internal design reference, not a public page
  *
  * So we switch `i18n.routing` to 'manual' in astro.config.mjs and re-apply the
@@ -24,10 +25,16 @@ const i18nMiddleware = middleware({
 });
 
 /** Paths that must bypass locale routing entirely. */
-const UNLOCALISED = ['/keystatic', '/api/keystatic', '/styleguide'];
+const UNLOCALISED = ['/keystatic', '/api/keystatic', '/api/contact', '/styleguide'];
 
 export const onRequest = defineMiddleware((context, next) => {
   const { pathname } = context.url;
+
+  // `/` picks the visitor's language itself (src/pages/index.ts); the stock
+  // middleware would always send it to the default locale.
+  if (pathname === '/') {
+    return next();
+  }
 
   if (UNLOCALISED.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`))) {
     return next();

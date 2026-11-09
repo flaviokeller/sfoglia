@@ -247,6 +247,15 @@ export default config({
         tagline: fields.text({ label: 'Slogan' }),
         jobTitle: fields.text({ label: 'Beruf (nur bei Typ Person)' }),
         email: fields.text({ label: 'E-Mail' }),
+        contactMode: fields.select({
+          label: 'Kontakt',
+          description: 'Formular (Nachricht wird per E-Mail zugestellt) oder nur ein E-Mail-Link.',
+          options: [
+            { label: 'Kontaktformular', value: 'form' },
+            { label: 'E-Mail-Link', value: 'mailto' },
+          ],
+          defaultValue: 'form',
+        }),
         phone: fields.text({ label: 'Telefon' }),
         street: fields.text({ label: 'Strasse' }),
         postalCode: fields.text({ label: 'PLZ' }),

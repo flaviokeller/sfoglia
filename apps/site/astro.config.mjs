@@ -1,11 +1,11 @@
 // @ts-check
+import cloudflare from '@astrojs/cloudflare';
 import markdoc from '@astrojs/markdoc';
-import netlify from '@astrojs/netlify';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import vue from '@astrojs/vue';
 import keystatic from '@keystatic/astro';
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 
 import { DEFAULT_LOCALE, LOCALES } from './src/i18n/config.js';
 
@@ -18,19 +18,32 @@ export default defineConfig({
 
   // Static by default — every public page is prerendered HTML. The adapter exists
   // only so the Keystatic admin routes (which opt out via `prerender = false`)
-  // can run on demand. No public page is server-rendered.
+  // and the `/` language redirect can run on demand. No public page is server-rendered.
   output: 'static',
-  adapter: netlify({
-    // Netlify's dev emulation boots a Deno-based Edge Functions server, which
-    // fails with an unhandled rejection when Deno is not installed. This project
-    // has no netlify/edge-functions directory and uses none, so emulating them
-    // is pure noise. Pages served fine regardless — this just silences it.
-    devFeatures: {
-      environmentVariables: false,
-      images: true,
-      edgeFunctions: false,
-    },
+  // No feature uses Astro sessions; without this the Cloudflare adapter would
+  // provision a KV namespace for them on every deploy.
+  session: false,
+  adapter: cloudflare({
+    // Images are resized at build time (see `image` below); no runtime image service.
+    imageService: 'compile',
+    // Prerender in Node, as before the move: build-time content and image code
+    // reads files by path, which Cloudflare's workerd prerenderer cannot do.
+    prerenderEnvironment: 'node',
   }),
+
+  // Read at request time by /api/contact. All optional, so a `mailto` site (or a
+  // local build) needs none of them; the endpoint answers 503 when one is missing.
+  env: {
+    schema: {
+      LETTERMINT_PROJECT_TOKEN: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+      }),
+      CONTACT_FROM_EMAIL: envField.string({ context: 'server', access: 'secret', optional: true }),
+      CONTACT_TO_EMAIL: envField.string({ context: 'server', access: 'secret', optional: true }),
+    },
+  },
 
   i18n: {
     locales: [...LOCALES],

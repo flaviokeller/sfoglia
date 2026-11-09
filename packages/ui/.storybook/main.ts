@@ -9,7 +9,8 @@ const config: StorybookConfig = {
     name: '@storybook/vue3-vite',
     options: {},
   },
-  // Storybook is deployed as its own Netlify site, served from the root.
+  // Storybook is deployed as its own Cloudflare Worker, served from the root.
+  // `public/_headers` sets its response headers there.
   staticDirs: ['./public'],
 
   // @storybook/vue3-vite does not ship @vitejs/plugin-vue itself — without this,
